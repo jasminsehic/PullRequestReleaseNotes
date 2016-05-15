@@ -38,6 +38,9 @@ Utility will use GitHub pull request titles and labels to group and sort the rel
 ```{r, engine='bash', count_lines}
 $ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ghld "CompA=Component A,CompZ=Component Z" -gho organisation -ghr repo -ghb "refs/heads/master" -grp "D:\Dev\Repo" -ptc -cpp 328432 -cu confluenceUser -cp confluencePwd -csk SPCKEY -cau "https://company.atlassian.net/wiki/rest/api"
 ```
+
+Only required parameter is the GitHubToken. It can be supplied via command line or via UNRELEASED_HISTORY_GITHUB_TOKEN environment variable. Other parameters will be automatically determined from the Git repository if you run UnreleasedGitHubHistory application within a directory inside a Git working directory.
+
 ### Command Line Arguments
 - GitHubToken (-ghpt)
 - GitHubOwner (-gho)
