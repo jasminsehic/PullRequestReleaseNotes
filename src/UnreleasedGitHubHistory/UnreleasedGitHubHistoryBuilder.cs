@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnreleasedGitHubHistory.Models;
@@ -15,12 +16,38 @@ namespace UnreleasedGitHubHistory
     {
         public static List<PullRequestDto> BuildReleaseHistory(ProgramArgs programArgs)
         {
+            if (string.IsNullOrWhiteSpace(programArgs.GitHubToken))
+            {
+                if (programArgs.VerboseOutput)
+                    Console.WriteLine($"GitHubToken was not supplied. Trying UNRELEASED_HISTORY_GITHUB_TOKEN environment variable.");
+                programArgs.GitHubToken = Environment.GetEnvironmentVariable("UNRELEASED_HISTORY_GITHUB_TOKEN");
+                if (string.IsNullOrWhiteSpace(programArgs.GitHubToken))
+                {
+                    if (programArgs.VerboseOutput)
+                        Console.WriteLine($"GitHubToken was not found. Exiting.");
+                    return null;
+                }
+            }
+
             var gitHubCredentials = new InMemoryCredentialStore(new Octokit.Credentials(programArgs.GitHubToken));
             var gitHubClient = new GitHubClient(new ProductHeaderValue("UnreleasedGitHubHistory"), gitHubCredentials);
             var releaseHistory = new List<PullRequestDto>();
 
-            using (var localGitRepository = new Repository(programArgs.GitRepositoryPath))
+            if (string.IsNullOrWhiteSpace(programArgs.GitRepositoryPath))
             {
+                if (programArgs.VerboseOutput)
+                    Console.WriteLine($"GitRepositoryPath was not supplied. Trying to discover the Git repository from the current directory.");
+                programArgs.GitRepositoryPath = Directory.GetCurrentDirectory();
+            }
+
+            using (var localGitRepository = new Repository(Repository.Discover(programArgs.GitRepositoryPath)))
+            {
+                if (string.IsNullOrWhiteSpace(programArgs.ReleaseBranchRef))
+                {
+                    if (programArgs.VerboseOutput)
+                        Console.WriteLine($"ReleaseBranchRef was not supplied. Using the current HEAD branch.");
+                    programArgs.ReleaseBranchRef = localGitRepository.Head.CanonicalName;
+                }
                 var startingCommit = GetLastTaggedCommit(localGitRepository, programArgs.ReleaseBranchRef);
                 if (programArgs.VerboseOutput)
                     Console.WriteLine($"Building history for {programArgs.ReleaseBranchRef} down to commit {startingCommit.Sha}");

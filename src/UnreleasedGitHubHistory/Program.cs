@@ -30,34 +30,41 @@ namespace UnreleasedGitHubHistory
                 ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 
             var releaseHistory = UnreleasedGitHubHistoryBuilder.BuildReleaseHistory(programArgs);
-            var releaseHistoryMarkdown = ReleaseNoteFormatter.Markdown(releaseHistory, programArgs);
 
-            // always output markdown to stdout by default
-            Console.WriteLine(releaseHistoryMarkdown);
-
-            exitCode = successExitCode;
-
-            // optionally publish to file
-            if (programArgs.PublishToFile)
+            if (releaseHistory == null)
             {
-                if (FilePublisher.PublishMarkdownReleaseHistoryFile(releaseHistoryMarkdown, programArgs))
-                    exitCode = successExitCode;
-                else
-                    exitCode = failureExitCode;
+                exitCode = failureExitCode;
             }
-
-            if (exitCode == failureExitCode)
-                Environment.Exit(exitCode);
-
-            // optionally publish to Confluence
-            if (programArgs.PublishToConfluence)
+            else if (releaseHistory.Count == 0)
             {
-                if (ConfluencePublisher.PublishMarkdownReleaseHistoryPage(releaseHistoryMarkdown, programArgs))
-                    exitCode = successExitCode;
-                else
-                    exitCode = failureExitCode;
+                exitCode = successExitCode;
             }
+            else
+            {
+                exitCode = successExitCode;
+                var releaseHistoryMarkdown = ReleaseNoteFormatter.Markdown(releaseHistory, programArgs);
 
+                // always output markdown to stdout by default
+                Console.WriteLine(releaseHistoryMarkdown);
+
+                // optionally publish to file
+                if (programArgs.PublishToFile)
+                {
+                    if (FilePublisher.PublishMarkdownReleaseHistoryFile(releaseHistoryMarkdown, programArgs))
+                        exitCode = successExitCode;
+                    else
+                        exitCode = failureExitCode;
+                }
+
+                // optionally publish to Confluence
+                if (exitCode == successExitCode && programArgs.PublishToConfluence)
+                {
+                    if (ConfluencePublisher.PublishMarkdownReleaseHistoryPage(releaseHistoryMarkdown, programArgs))
+                        exitCode = successExitCode;
+                    else
+                        exitCode = failureExitCode;
+                }
+            }
             Environment.Exit(exitCode);
         }
     }

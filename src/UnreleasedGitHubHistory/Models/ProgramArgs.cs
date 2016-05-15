@@ -6,7 +6,6 @@ namespace UnreleasedGitHubHistory.Models
 {
     public class ProgramArgs
     {
-        [ArgRequired]
         [ArgShortcut("-ghpt")]
         [ArgExample("30aee2825c48560da50732c4f849bfbfd24c091e", "GitHub Personal Token")]
         public string GitHubToken { get; set; }
@@ -25,13 +24,10 @@ namespace UnreleasedGitHubHistory.Models
         [ArgExample("'Label1=Description For Label1,Label2=Description For Label2'", "Hash map of GitHub Pull Request Labels and their descriptions")]
         public List<string> GitHubLabelDescriptionList { get; set; }
 
-        [ArgRequired]
-        [DefaultValue("refs/heads/master")]
         [ArgShortcut("-ghb")]
         [ArgExample("refs/heads/master", "Git head branch reference")]
         public string ReleaseBranchRef { get; set; }
 
-        [DefaultValue(".")]
         [ArgShortcut("-grp")]
         [ArgExample(@"D:\Dev\Repo", "Local Git repository path")]
         public string GitRepositoryPath { get; set; }
