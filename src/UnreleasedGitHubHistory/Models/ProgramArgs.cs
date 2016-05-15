@@ -10,12 +10,10 @@ namespace UnreleasedGitHubHistory.Models
         [ArgExample("30aee2825c48560da50732c4f849bfbfd24c091e", "GitHub Personal Token")]
         public string GitHubToken { get; set; }
 
-        [ArgRequired]
         [ArgShortcut("-gho")]
         [ArgExample("company", "GitHub Organisational Account")]
         public string GitHubOwner { get; set; }
 
-        [ArgRequired]
         [ArgShortcut("-ghr")]
         [ArgExample("repo", "GitHub Repository Name")]
         public string GitHubRepository { get; set; }
@@ -69,5 +67,9 @@ namespace UnreleasedGitHubHistory.Models
 
         [ArgShortcut("-cau")]
         public Uri ConfluenceApiUrl { get; set; }
+
+        [DefaultValue("origin")]
+        [ArgShortcut("-gr")]
+        public string GitRemote { get; set; }
     }
 }

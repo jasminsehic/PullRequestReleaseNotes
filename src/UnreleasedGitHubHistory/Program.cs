@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using UnreleasedGitHubHistory.Models;
 using UnreleasedGitHubHistory.Publishers;
@@ -35,7 +36,7 @@ namespace UnreleasedGitHubHistory
             {
                 exitCode = failureExitCode;
             }
-            else if (releaseHistory.Count == 0)
+            else if (!releaseHistory.Any())
             {
                 exitCode = successExitCode;
             }
