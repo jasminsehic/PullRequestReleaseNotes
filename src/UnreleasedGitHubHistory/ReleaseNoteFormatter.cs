@@ -16,7 +16,9 @@ namespace UnreleasedGitHubHistory
             var releasedApplications = releaseHistory.SelectMany(c => c.Labels).Distinct().Where(c => c.StartsWith("#"));
 
             var releasedApplicationLabelDescriptionMap = new Dictionary<string, string>();
-            var userSuppliedLabelDescriptionMap = programArgs.GitHubLabelDescriptionList.ToDictionary(label => label.Split('=').First(), label => label.Split('=').Last());
+            var userSuppliedLabelDescriptionMap = new Dictionary<string, string>();
+            if (programArgs.GitHubLabelDescriptionList != null)
+              userSuppliedLabelDescriptionMap = programArgs.GitHubLabelDescriptionList.ToDictionary(label => label.Split('=').First(), label => label.Split('=').Last());
 
             foreach (var releasedApp in releasedApplications.Select(releasedApp => releasedApp.Replace("#", string.Empty)))
             {

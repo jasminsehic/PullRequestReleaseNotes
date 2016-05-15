@@ -45,6 +45,7 @@ $ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ghld "
 - GitHubLabelDescriptionList (-ghld)
 - ReleaseBranchRef (-ghb)
 - GitRepositoryPath (-grp)
+- GitRemote (-gr)
 - PublishToConfluence (-ptc)
 - ConfluenceReleaseParentPageId (-cpp)
 - ConfluenceSpaceKey (-csk)
