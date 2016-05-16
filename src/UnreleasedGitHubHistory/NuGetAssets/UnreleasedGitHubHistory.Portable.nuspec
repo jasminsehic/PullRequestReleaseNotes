@@ -15,7 +15,7 @@
     <summary>Builds release history notes from unreleased GitHub pull requests and optionally posts them to Atlassian Confluence page
     </summary>
     <language>en-AU</language>
-    <releaseNotes>Initial release
+    <releaseNotes>Auto dicovering all Git and GitHub related options to simplify application execution
     </releaseNotes>
     <tags>Git UnreleasedGitHubHistory GitHub History RelaseNotes Changelog Confluence Markdown Pull Request</tags>
   </metadata>

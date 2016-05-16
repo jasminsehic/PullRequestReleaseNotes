@@ -71,5 +71,9 @@ namespace UnreleasedGitHubHistory.Models
         [DefaultValue("origin")]
         [ArgShortcut("-gr")]
         public string GitRemote { get; set; }
+
+        [DefaultValue("Exclude Note")]
+        [ArgShortcut("-el")]
+        public string ExcludeLabel { get; set; }
     }
 }
