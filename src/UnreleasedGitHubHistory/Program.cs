@@ -43,15 +43,18 @@ namespace UnreleasedGitHubHistory
             else
             {
                 exitCode = successExitCode;
-                var releaseHistoryMarkdown = ReleaseNoteFormatter.Markdown(releaseHistory, programArgs);
+
+                var buildVersion = BuildVersion(programArgs);
+                var releaseHistoryMarkdown = ReleaseNoteFormatter.MarkdownNotes(releaseHistory, programArgs);
+                var combinedMarkdown = $"# {ReleaseNoteFormatter.EscapeMarkdown(buildVersion)}\n{releaseHistoryMarkdown}";
 
                 // always output markdown to stdout by default
-                Console.WriteLine(releaseHistoryMarkdown);
+                Console.WriteLine(combinedMarkdown);
 
                 // optionally publish to file
                 if (programArgs.PublishToFile)
                 {
-                    if (FilePublisher.PublishMarkdownReleaseHistoryFile(releaseHistoryMarkdown, programArgs))
+                    if (FilePublisher.PublishMarkdownReleaseHistoryFile(combinedMarkdown, programArgs))
                         exitCode = successExitCode;
                     else
                         exitCode = failureExitCode;
@@ -60,13 +63,21 @@ namespace UnreleasedGitHubHistory
                 // optionally publish to Confluence
                 if (exitCode == successExitCode && programArgs.PublishToConfluence)
                 {
-                    if (ConfluencePublisher.PublishMarkdownReleaseHistoryPage(releaseHistoryMarkdown, programArgs))
+                    if (ConfluencePublisher.PublishMarkdownReleaseHistoryPage(buildVersion, releaseHistoryMarkdown, programArgs))
                         exitCode = successExitCode;
                     else
                         exitCode = failureExitCode;
                 }
             }
             Environment.Exit(exitCode);
+        }
+
+        private static string BuildVersion(ProgramArgs programArgs)
+        {
+            if (string.IsNullOrWhiteSpace(programArgs.GitVersion))
+                programArgs.GitVersion = Environment.GetEnvironmentVariable("GITVERSION_MAJORMINORPATCH");
+            var versionText = !string.IsNullOrWhiteSpace(programArgs.GitVersion) ? programArgs.GitVersion : "Unreleased";
+            return $"{versionText} ({programArgs.ReleaseBranchRef.Replace("refs/heads/", string.Empty).ToUpper()}) - {$"XX XXX {DateTime.Now:yyyy}"}";
         }
     }
 }

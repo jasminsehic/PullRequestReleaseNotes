@@ -7,7 +7,7 @@ namespace UnreleasedGitHubHistory
 {
     public static class ReleaseNoteFormatter
     {
-        public static string Markdown(List<PullRequestDto> releaseHistory, ProgramArgs programArgs)
+        public static string MarkdownNotes(List<PullRequestDto> releaseHistory, ProgramArgs programArgs)
         {
             var markdown = new StringBuilder();
             var enhancements = releaseHistory.Where(n => n.Enhancement()).ToList();
@@ -35,7 +35,7 @@ namespace UnreleasedGitHubHistory
             return markdown.ToString();
         }
 
-        private static string EscapeMarkdown(string markdown)
+        public static string EscapeMarkdown(string markdown)
         {
             const string specialMarkdownCharaters = @"\`*_{}[]()#>+-.!";
             var escapedMarkdown = string.Empty;
