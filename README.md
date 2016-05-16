@@ -59,3 +59,4 @@ Only required parameter is the GitHubToken. It can be supplied via command line 
 - AcceptInvalidCertificates (-aic)
 - PublishToFile (-ptf)
 - OutputFileName (-o)
+- ExcludeLabel (-el)
