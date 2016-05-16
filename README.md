@@ -1,7 +1,7 @@
 # UnreleasedGitHubHistory
 
 [![Build status](https://ci.appveyor.com/api/projects/status/github/jasminsehic/unreleasedgithubhistory?svg=true)](https://ci.appveyor.com/project/jasminsehic/unreleasedgithubhistory)
-[![Chocolatey](https://img.shields.io/chocolatey/v/unreleasedgithubhistory.portable.svg)](https://chocolatey.org/packages/UnreleasedGitHubHistory.Portable)
+[![Chocolatey](https://img.shields.io/chocolatey/vpre/unreleasedgithubhistory.portable.svg)](https://chocolatey.org/packages/UnreleasedGitHubHistory.Portable)
 [![Release](https://img.shields.io/github/release/jasminsehic/unreleasedgithubhistory.svg)]()
 [![License](https://img.shields.io/github/license/jasminsehic/unreleasedgithubhistory.svg)]()
 
@@ -12,6 +12,7 @@ Utility will use GitHub pull request titles and labels to group and sort the rel
 ## Sample output
 
 ```markdown
+# 1.2.1 (MASTER) - XX XXX 2016
 ## Enhancements
 ### Component A
 - Awesome new feature [\#1854](https://github.com/org/repo/pull/1854)
@@ -39,7 +40,7 @@ Utility will use GitHub pull request titles and labels to group and sort the rel
 $ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ghld "CompA=Component A,CompZ=Component Z" -gho organisation -ghr repo -ghb "refs/heads/master" -grp "D:\Dev\Repo" -ptc -cpp 328432 -cu confluenceUser -cp confluencePwd -csk SPCKEY -cau "https://company.atlassian.net/wiki/rest/api"
 ```
 
-Only required parameter is the GitHubToken. It can be supplied via command line or via UNRELEASED_HISTORY_GITHUB_TOKEN environment variable. Other parameters will be automatically determined from the Git repository if you run UnreleasedGitHubHistory application within a directory inside a Git working directory.
+Only required parameter is the GitHubToken. It can be supplied via command line or via UNRELEASED_HISTORY_GITHUB_TOKEN environment variable. Other parameters will be automatically determined from the Git repository if you run UnreleasedGitHubHistory application within a directory inside a Git working directory. GitVersion parameter can also be supplied via a GITVERSION_MAJORMINORPATCH environment variable.
 
 ### Command Line Arguments
 - GitHubToken (-ghpt)
@@ -60,3 +61,4 @@ Only required parameter is the GitHubToken. It can be supplied via command line 
 - PublishToFile (-ptf)
 - OutputFileName (-o)
 - ExcludeLabel (-el)
+- GitVersion (-gv)

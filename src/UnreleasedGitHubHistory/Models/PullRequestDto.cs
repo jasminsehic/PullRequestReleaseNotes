@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace UnreleasedGitHubHistory.Models
 {
@@ -9,11 +11,11 @@ namespace UnreleasedGitHubHistory.Models
         public List<string> Labels { get; set; }
         public bool Bug()
         {
-            return Labels.Contains("Bug");
+            return Labels.Any(l => l.IndexOf("bug", StringComparison.InvariantCultureIgnoreCase) >= 0);
         }
         public bool Enhancement()
         {
-            return Labels.Contains("Enhancement");
+            return Labels.Any(l => l.IndexOf("enhancement", StringComparison.InvariantCultureIgnoreCase) >= 0);
         }
         public bool Unclassified()
         {

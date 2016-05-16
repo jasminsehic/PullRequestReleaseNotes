@@ -75,5 +75,8 @@ namespace UnreleasedGitHubHistory.Models
         [DefaultValue("Exclude Note")]
         [ArgShortcut("-el")]
         public string ExcludeLabel { get; set; }
+
+        [ArgShortcut("-gv")]
+        public string GitVersion { get; set; }
     }
 }
