@@ -10,13 +10,12 @@ namespace UnreleasedGitHubHistory.Publishers
 {
     public static class ConfluencePublisher
     {
-        public static bool PublishMarkdownReleaseHistoryPage(string markdown, ProgramArgs programArgs)
+        public static bool PublishMarkdownReleaseHistoryPage(string pageTitle, string markdownNotes, ProgramArgs programArgs)
         {
-            var pageTitle = $"Unreleased {programArgs.GitHubRepository} ({programArgs.ReleaseBranchRef.Replace("refs/heads/", string.Empty).ToUpper()})";
             var existingPage = FindConfluencePage(programArgs, pageTitle);
             if (existingPage == null)
-                return PostConfluencePage(programArgs, pageTitle, markdown);
-            return UpdateConfluencePage(programArgs, existingPage, markdown);
+                return PostConfluencePage(programArgs, pageTitle, markdownNotes);
+            return UpdateConfluencePage(programArgs, existingPage, markdownNotes);
         }
 
         private static Content FindConfluencePage(ProgramArgs programArgs, string pageTitle)
