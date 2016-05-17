@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using UnreleasedGitHubHistory.Models;
 using Newtonsoft.Json;
@@ -27,8 +28,17 @@ namespace UnreleasedGitHubHistory.Publishers
             request.AddQueryParameter("title", pageTitle);
             request.AddQueryParameter("limit", "1");
             var response = client.Execute(request);
-            var contentResult = JsonConvert.DeserializeObject<ContentResults>(response.Content);
-            if (response.StatusCode != HttpStatusCode.OK || contentResult == null || !contentResult.Results.Any() ||contentResult.Results.First().Id == null)
+            ContentResults contentResult;
+            try
+            {
+                contentResult = JsonConvert.DeserializeObject<ContentResults>(response.Content);
+            }
+            catch (JsonReaderException)
+            {
+                Console.WriteLine($"Error finding Confluence page. Response content:\n{response.Content}");
+                throw;
+            }
+            if (response.StatusCode != HttpStatusCode.OK || contentResult == null || !contentResult.Results.Any() || contentResult.Results.First().Id == null)
                 return null;
             request = PrepareConfluenceRequest(new RestRequest("content/{id}", Method.GET));
             request.AddUrlSegment("id", contentResult.Results.First().Id);
