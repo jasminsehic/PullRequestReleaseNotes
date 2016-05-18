@@ -54,6 +54,8 @@ namespace UnreleasedGitHubHistory
                         if (programArgs.VerboseOutput)
                             Console.WriteLine($"Found #{pullRequest.Number}: {pullRequest.Title}: {mergeCommit.Sha}");
                         var pullRequestDto = GetPullRequestWithLabels(programArgs, pullRequest, gitHubClient);
+                        if (pullRequestDto == null)
+                            continue;
                         releaseHistory.Add(pullRequestDto);
                     }
                     return releaseHistory;
@@ -113,7 +115,7 @@ namespace UnreleasedGitHubHistory
             {
                 // filter out any unwanted pull requests
                 if (label.Name.IndexOf(programArgs.ExcludeLabel, StringComparison.InvariantCultureIgnoreCase) >= 0)
-                    continue;
+                    return null;
                 pullRequestDto.Labels.Add(label.Name);
                 if (programArgs.VerboseOutput)
                     Console.WriteLine($"   - Label : {label.Name}");
