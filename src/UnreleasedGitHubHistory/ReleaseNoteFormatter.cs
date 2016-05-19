@@ -97,8 +97,8 @@ namespace UnreleasedGitHubHistory
             int firstOpen = title.IndexOf("[", StringComparison.Ordinal);
             int lastClose = title.LastIndexOf("]", StringComparison.Ordinal);
 
-            if (firstOpen > 0 && lastClose > 0)
-                title = title.Insert(firstOpen, "**").Insert(lastClose + 1, "**");
+            if (firstOpen >= 0 && lastClose > 0)
+                title = title.Insert(firstOpen, "**").Insert(lastClose + 3, "**"); // 1 to move the index after the ']', 2 for the added '**'
 
             return title;
         }
