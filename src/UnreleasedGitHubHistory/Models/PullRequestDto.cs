@@ -11,11 +11,11 @@ namespace UnreleasedGitHubHistory.Models
         public List<string> Labels { get; set; }
         public bool Bug()
         {
-            return Labels.Any(l => l.IndexOf("bug", StringComparison.InvariantCultureIgnoreCase) >= 0);
+            return Labels.Any(l => l.CaseInsensitiveContains("bug"));
         }
         public bool Enhancement()
         {
-            return Labels.Any(l => l.IndexOf("enhancement", StringComparison.InvariantCultureIgnoreCase) >= 0);
+            return Labels.Any(l => l.CaseInsensitiveContains("enhancement"));
         }
         public bool Unclassified()
         {

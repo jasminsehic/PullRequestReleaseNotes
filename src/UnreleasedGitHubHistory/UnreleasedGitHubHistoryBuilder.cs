@@ -45,18 +45,15 @@ namespace UnreleasedGitHubHistory
                     var unreleasedCommits = GetUnreleasedCommits(programArgs, localGitRepository, startingCommit);
                     foreach (var mergeCommit in unreleasedCommits.Where(commit => commit.Parents.Count() > 1))
                     {
-                        var pullRequestNumber = ExtractPullRequestNumber(programArgs, mergeCommit);
-                        var pullRequest = new PullRequest();
-                        if (pullRequestNumber != null)
-                            pullRequest = gitHubClient.PullRequest.Get(programArgs.GitHubOwner, programArgs.GitHubRepository, (int)pullRequestNumber).Result;
-                        if (pullRequest != null && pullRequest.Number > 0)
-                        {
-                            if (programArgs.VerboseOutput)
-                                Console.WriteLine($"Found #{pullRequest.Number}: {pullRequest.Title}: {mergeCommit.Sha}");
-                            var pullRequestDto = GetPullRequestWithLabels(programArgs, pullRequest, gitHubClient);
-                            if (pullRequestDto != null)
-                                releaseHistory.Add(pullRequestDto);
-                        }
+                        var pullRequestNumber = ExtractPullRequestNumber(mergeCommit);
+                        if (pullRequestNumber == null) continue;
+                        var pullRequest = gitHubClient.PullRequest.Get(programArgs.GitHubOwner, programArgs.GitHubRepository, (int)pullRequestNumber).Result;
+                        if (pullRequest == null) continue;
+                        if (programArgs.VerboseOutput)
+                            Console.WriteLine($"Found #{pullRequest.Number}: {pullRequest.Title}: {mergeCommit.Sha}");
+                        var pullRequestDto = GetPullRequestWithLabels(programArgs, pullRequest, gitHubClient);
+                        if (pullRequestDto != null)
+                            releaseHistory.Add(pullRequestDto);
                     }
                     return releaseHistory;
                 }
@@ -75,7 +72,7 @@ namespace UnreleasedGitHubHistory
 
             Remote remote = null;
             if (localGitRepository.Network.Remotes.Any())
-                remote = localGitRepository.Network.Remotes[programArgs.GitRemote] ?? localGitRepository.Network.Remotes.First(r => r.Url.IndexOf("github.com", StringComparison.InvariantCultureIgnoreCase) >= 0);
+                remote = localGitRepository.Network.Remotes[programArgs.GitRemote] ?? localGitRepository.Network.Remotes.First(r => r.Url.CaseInsensitiveContains("github.com"));
             if (remote == null)
             {
                 Console.WriteLine($"GitHubOwner and GitHubRepository were not supplied and could not be discovered");
@@ -114,7 +111,7 @@ namespace UnreleasedGitHubHistory
             foreach (var label in issue.Labels)
             {
                 // filter out any unwanted pull requests
-                if (label.Name.IndexOf(programArgs.ExcludeLabel, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                if (label.Name.CaseInsensitiveContains(programArgs.ExcludeLabel))
                     return null;
                 pullRequestDto.Labels.Add(label.Name);
                 if (programArgs.VerboseOutput)
@@ -123,7 +120,7 @@ namespace UnreleasedGitHubHistory
             return pullRequestDto;
         }
 
-        private static int? ExtractPullRequestNumber(ProgramArgs programArgs, Commit commit)
+        private static int? ExtractPullRequestNumber(Commit commit)
         {
             var pattern = new Regex(@"Merge pull request #(?<pullRequestNumber>\d+) from .*");
             var match = pattern.Match(commit.Message);
