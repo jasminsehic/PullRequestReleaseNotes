@@ -49,14 +49,14 @@ namespace UnreleasedGitHubHistory
                         var pullRequest = new PullRequest();
                         if (pullRequestNumber != null)
                             pullRequest = gitHubClient.PullRequest.Get(programArgs.GitHubOwner, programArgs.GitHubRepository, (int)pullRequestNumber).Result;
-                        if (pullRequest == null)
-                            continue;
-                        if (programArgs.VerboseOutput)
-                            Console.WriteLine($"Found #{pullRequest.Number}: {pullRequest.Title}: {mergeCommit.Sha}");
-                        var pullRequestDto = GetPullRequestWithLabels(programArgs, pullRequest, gitHubClient);
-                        if (pullRequestDto == null)
-                            continue;
-                        releaseHistory.Add(pullRequestDto);
+                        if (pullRequest != null && pullRequest.Number > 0)
+                        {
+                            if (programArgs.VerboseOutput)
+                                Console.WriteLine($"Found #{pullRequest.Number}: {pullRequest.Title}: {mergeCommit.Sha}");
+                            var pullRequestDto = GetPullRequestWithLabels(programArgs, pullRequest, gitHubClient);
+                            if (pullRequestDto != null)
+                                releaseHistory.Add(pullRequestDto);
+                        }
                     }
                     return releaseHistory;
                 }

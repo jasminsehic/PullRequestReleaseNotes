@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -55,7 +56,14 @@ namespace UnreleasedGitHubHistory
             var markdown = new StringBuilder();
 
             if (pullRequests.Any())
+            {
                 markdown.AppendLine($"## {classificationHeading}");
+                foreach (PullRequestDto pullRequest in pullRequests)
+                {
+                    if (pullRequest.Title.Contains("[") && pullRequest.Title.Contains("]"))
+                        pullRequest.Title = EmphasiseSquareBraces(pullRequest.Title);
+                }
+            }
 
             foreach (var app in applicationsLabelMap.OrderBy(a => a.Value))
             {
@@ -77,6 +85,22 @@ namespace UnreleasedGitHubHistory
                     markdown.AppendLine($@"- {EscapeMarkdown(note.Title)} [\#{note.Number}]({gitHubPullRequestUrl}{note.Number})");
             }
             return markdown.ToString();
+        }
+
+        /// <summary>
+        /// Add markup to the outermost square braces.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        private static string EmphasiseSquareBraces(string title)
+        {
+            int firstOpen = title.IndexOf("[", StringComparison.Ordinal);
+            int lastClose = title.LastIndexOf("]", StringComparison.Ordinal);
+
+            if (firstOpen >= 0 && lastClose > 0)
+                title = title.Insert(firstOpen, "**").Insert(lastClose + 3, "**"); // 1 to move the index after the ']', 2 for the added '**'
+
+            return title;
         }
     }
 }
