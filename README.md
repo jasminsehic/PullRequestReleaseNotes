@@ -9,6 +9,39 @@ UnreleasedGitHubHistory is a utility which generates release notes for all merge
 
 Utility will use GitHub pull request titles and labels to group and sort the release notes. For example all pull requests with Bug label will be grouped under Fixes section in notes and pull requests with Enhancement label will be grouped under Enhancements section. Secondary level of grouping is possible through use of the #Label where # character is used to signify second level of grouping. You can supply the utility with secondary label descriptions so that you can turn label CompA into Component A description. Pull requests without relevant labels will be grouped under Unclassified and Undefined sections. Pull requests labeled with multiple secondary labels will cause notes to appear in multiple sections.
 
+
+## Install
+
+    choco install UnreleasedGitHubHistory.Portable
+    
+## Usage
+```{r, engine='bat', count_lines}
+$ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ptc -cpp 328432 -cu confluenceUser -cp confluencePwd -csk SPCKEY -cau "https://company.atlassian.net/wiki/rest/api"
+```
+
+Only required parameter is the GitHubToken. It can be supplied via command line or via UNRELEASED_HISTORY_GITHUB_TOKEN environment variable. Other parameters will be automatically determined from the Git repository if you run UnreleasedGitHubHistory application within a directory inside a Git working directory. GitVersion parameter can also be supplied via a GITVERSION_MAJORMINORPATCH environment variable.
+
+### Command Line Arguments
+- GitHubToken (-ghpt)
+- GitHubOwner (-gho)
+- GitHubRepository (-ghr)
+- GitHubLabelDescriptionList (-ghld)
+- ReleaseBranchRef (-ghb)
+- GitRepositoryPath (-grp)
+- GitRemote (-gr)
+- PublishToConfluence (-ptc)
+- ConfluenceReleaseParentPageId (-cpp)
+- ConfluenceSpaceKey (-csk)
+- ConfluenceUser (-cu)
+- ConfluencePassword (-cp)
+- ConfluenceApiUrl (-cau)
+- VerboseOutput (-v)
+- AcceptInvalidCertificates (-aic)
+- PublishToFile (-ptf)
+- OutputFileName (-o)
+- ExcludeLabel (-el)
+- GitVersion (-gv)
+
 ## Sample output
 
 ```markdown
@@ -35,30 +68,3 @@ Utility will use GitHub pull request titles and labels to group and sort the rel
 ### Undefined
 - Added new Component H [\#1843](https://github.com/org/repo/pull/1843)
 ```
-## Usage
-```{r, engine='bash', count_lines}
-$ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ghld "CompA=Component A,CompZ=Component Z" -gho organisation -ghr repo -ghb "refs/heads/master" -grp "D:\Dev\Repo" -ptc -cpp 328432 -cu confluenceUser -cp confluencePwd -csk SPCKEY -cau "https://company.atlassian.net/wiki/rest/api"
-```
-
-Only required parameter is the GitHubToken. It can be supplied via command line or via UNRELEASED_HISTORY_GITHUB_TOKEN environment variable. Other parameters will be automatically determined from the Git repository if you run UnreleasedGitHubHistory application within a directory inside a Git working directory. GitVersion parameter can also be supplied via a GITVERSION_MAJORMINORPATCH environment variable.
-
-### Command Line Arguments
-- GitHubToken (-ghpt)
-- GitHubOwner (-gho)
-- GitHubRepository (-ghr)
-- GitHubLabelDescriptionList (-ghld)
-- ReleaseBranchRef (-ghb)
-- GitRepositoryPath (-grp)
-- GitRemote (-gr)
-- PublishToConfluence (-ptc)
-- ConfluenceReleaseParentPageId (-cpp)
-- ConfluenceSpaceKey (-csk)
-- ConfluenceUser (-cu)
-- ConfluencePassword (-cp)
-- ConfluenceApiUrl (-cau)
-- VerboseOutput (-v)
-- AcceptInvalidCertificates (-aic)
-- PublishToFile (-ptf)
-- OutputFileName (-o)
-- ExcludeLabel (-el)
-- GitVersion (-gv)
