@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using UnreleasedGitHubHistory.Models;
 
 namespace UnreleasedGitHubHistory
@@ -56,14 +56,7 @@ namespace UnreleasedGitHubHistory
             var markdown = new StringBuilder();
 
             if (pullRequests.Any())
-            {
                 markdown.AppendLine($"## {classificationHeading}");
-                foreach (PullRequestDto pullRequest in pullRequests)
-                {
-                    if (pullRequest.Title.Contains("[") && pullRequest.Title.Contains("]"))
-                        pullRequest.Title = EmphasiseSquareBraces(pullRequest.Title);
-                }
-            }
 
             foreach (var app in applicationsLabelMap.OrderBy(a => a.Value))
             {
@@ -74,7 +67,7 @@ namespace UnreleasedGitHubHistory
                     if (pullRequestsWithLabelsThatContainApplication.Any())
                         markdown.AppendLine().AppendLine($@"### {app.Value}");
                     foreach (var pullRequest in pullRequestsWithLabelsThatContainApplication)
-                        markdown.AppendLine($@"- {EscapeMarkdown(pullRequest.Title)} [\#{pullRequest.Number}]({gitHubPullRequestUrl}{pullRequest.Number})");
+                        markdown.AppendLine($@"- {EmphasiseSquareBraces(EscapeMarkdown(pullRequest.Title))} [\#{pullRequest.Number}]({gitHubPullRequestUrl}{pullRequest.Number})");
                 }
             }
             var pullRequestsWithoutComponents = pullRequests.Where(n => n.Applicationless()).ToList();
@@ -82,7 +75,7 @@ namespace UnreleasedGitHubHistory
             {
                 markdown.AppendLine().AppendLine(@"### Undefined");
                 foreach (var note in pullRequestsWithoutComponents)
-                    markdown.AppendLine($@"- {EscapeMarkdown(note.Title)} [\#{note.Number}]({gitHubPullRequestUrl}{note.Number})");
+                    markdown.AppendLine($@"- {EmphasiseSquareBraces(EscapeMarkdown(note.Title))} [\#{note.Number}]({gitHubPullRequestUrl}{note.Number})");
             }
             return markdown.ToString();
         }
@@ -94,11 +87,11 @@ namespace UnreleasedGitHubHistory
         /// <returns></returns>
         private static string EmphasiseSquareBraces(string title)
         {
-            int firstOpen = title.IndexOf("[", StringComparison.Ordinal);
-            int lastClose = title.LastIndexOf("]", StringComparison.Ordinal);
-
-            if (firstOpen >= 0 && lastClose > 0)
-                title = title.Insert(firstOpen, "**").Insert(lastClose + 3, "**"); // 1 to move the index after the ']', 2 for the added '**'
+            // Lazily match the first pair of square braces. Test / explanation here; https://regex101.com/r/kU1pJ7/2
+            Regex braceFinder = new Regex(@"(?<prefix>.*)\[(?<contents>.*?)\](?<suffix>.*)");
+            Match match = braceFinder.Match(title);
+            if (match.Success)
+                title = string.Format($"{match.Groups["prefix"]}**[{match.Groups["contents"]}]**{match.Groups["suffix"]}");
 
             return title;
         }
