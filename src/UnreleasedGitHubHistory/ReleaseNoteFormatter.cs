@@ -88,7 +88,7 @@ namespace UnreleasedGitHubHistory
         private static string EmphasiseSquareBraces(string title)
         {
             // Lazily match the first pair of square braces. Test / explanation here; https://regex101.com/r/kU1pJ7/2
-            Regex braceFinder = new Regex(@"(?<prefix>.*)\[(?<contents>.*?)\](?<suffix>.*)");
+            Regex braceFinder = new Regex(@"(?<Prefix>.*)\\\[(?<contents>.*?)\\\](?<suffix>.*)");
             Match match = braceFinder.Match(title);
             if (match.Success)
                 title = string.Format($"{match.Groups["prefix"]}**[{match.Groups["contents"]}]**{match.Groups["suffix"]}");
