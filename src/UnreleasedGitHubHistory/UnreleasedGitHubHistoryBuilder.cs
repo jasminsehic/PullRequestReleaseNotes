@@ -39,10 +39,15 @@ namespace UnreleasedGitHubHistory
                     }
                     if (!DiscoverGitHubSettings(programArgs, localGitRepository))
                         return null;
-                    var startingCommit = GetLastTaggedCommit(localGitRepository, programArgs.ReleaseBranchRef);
+                    var lastCommit = GetLastTaggedCommit(localGitRepository, programArgs.ReleaseBranchRef);
+                    if (lastCommit == null)
+                    {
+                        Console.WriteLine($"Couldn't find the last commit to build history from");
+                        return null;
+                    }
                     if (programArgs.VerboseOutput)
-                        Console.WriteLine($"Building history for {programArgs.ReleaseBranchRef} down to commit {startingCommit.Sha}");
-                    var unreleasedCommits = GetUnreleasedCommits(programArgs, localGitRepository, startingCommit);
+                        Console.WriteLine($"Building history for {programArgs.ReleaseBranchRef} down to commit {lastCommit.Sha}");
+                    var unreleasedCommits = GetUnreleasedCommits(programArgs, localGitRepository, lastCommit);
                     foreach (var mergeCommit in unreleasedCommits.Where(commit => commit.Parents.Count() > 1))
                     {
                         var pullRequestNumber = ExtractPullRequestNumber(mergeCommit);
@@ -112,7 +117,11 @@ namespace UnreleasedGitHubHistory
             {
                 // filter out any unwanted pull requests
                 if (label.Name.CaseInsensitiveContains(programArgs.ExcludeLabel))
+                {
+                    if (programArgs.VerboseOutput)
+                        Console.WriteLine($"   - Excluding Pull Request");
                     return null;
+                }
                 pullRequestDto.Labels.Add(label.Name);
                 if (programArgs.VerboseOutput)
                     Console.WriteLine($"   - Label : {label.Name}");
@@ -149,18 +158,11 @@ namespace UnreleasedGitHubHistory
         {
             var branch = repository.Branches.FirstOrDefault(b => b.CanonicalName == branchName);
             var tags = repository.Tags.ToArray();
-            var olderThan = branch.Tip.Author.When;
-            var commitFilter = new CommitFilter
-            {
-                FirstParentOnly = true
-            };
-            var queriableCommits = branch.Commits as IQueryableCommitLog;
-            var lastTaggedCommit = queriableCommits.QueryBy(commitFilter).FirstOrDefault(c => c.Author.When <= olderThan && tags.Any(a => a.Target.Sha == c.Sha));
-            if (lastTaggedCommit != null)
-            {
-                return lastTaggedCommit;
-            }
-            return branch.Commits.Last();
+            var olderThan = branch?.Tip.Author.When;
+            var commitFilter = new CommitFilter { FirstParentOnly = true };
+            var queriableCommits = branch?.Commits as IQueryableCommitLog;
+            var lastTaggedCommit = queriableCommits?.QueryBy(commitFilter).FirstOrDefault(c => c.Author.When <= olderThan && tags.Any(a => a.Target.Sha == c.Sha));
+            return lastTaggedCommit ?? branch?.Commits.Last();
         }
     }
 }

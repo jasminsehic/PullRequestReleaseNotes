@@ -7,7 +7,7 @@
 
 UnreleasedGitHubHistory is a utility which generates release notes for all merged GitHub pull requests that have not yet been released (since last tag) from a specific branch and optionally publishes it to a markdown file and/or posts it to Atlassian Confluence page which is then rendered using the Render Markdown plugin. Intention is to run this utility as part of a CI process and generate notes automatically as part of every build of a head branch.
 
-Utility will use GitHub pull request titles and labels to group and sort the release notes. For example all pull requests with Bug label will be grouped under Fixes section in notes and pull requests with Enhancement label will be grouped under Enhancements section. Secondary level of grouping is possible through use of the #Label where # character is used to signify second level of grouping. You can supply the utility with secondary label descriptions so that you can turn label CompA into Component A description. Pull requests without relevant labels will be grouped under Unclassified and Undefined sections. Pull requests labeled with multiple secondary labels will cause notes to appear in multiple sections.
+Utility will use GitHub pull request titles and labels to group and sort the release notes. For example all pull requests with Bug label will be grouped under Fixes section in notes and pull requests with Enhancement label will be grouped under Enhancements section. Secondary level (categories) of grouping is possible through use of the #Label where # character is used to signify second level of grouping. You can supply the utility with category descriptions so that you can turn label CategoryA into Category A description. Pull requests without relevant labels will be grouped under Unclassified and Undefined sections. Pull requests labeled with multiple category labels will cause notes to appear in multiple categories.
 
 
 ## Install
@@ -19,45 +19,48 @@ Utility will use GitHub pull request titles and labels to group and sort the rel
 $ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ptc -cpp 328432 -cu confluenceUser -cp confluencePwd -csk SPCKEY -cau "https://company.atlassian.net/wiki/rest/api"
 ```
 
-Only required parameter is the GitHubToken. It can be supplied via command line or via UNRELEASED_HISTORY_GITHUB_TOKEN environment variable. Other parameters will be automatically determined from the Git repository if you run UnreleasedGitHubHistory application within a directory inside a Git working directory. GitVersion parameter can also be supplied via a GITVERSION_MAJORMINORPATCH environment variable.
-
-### Command Line Arguments
-- GitHubToken (-ghpt)
-- GitHubOwner (-gho)
-- GitHubRepository (-ghr)
-- GitHubLabelDescriptionList (-ghld)
-- ReleaseBranchRef (-ghb)
-- GitRepositoryPath (-grp)
-- GitRemote (-gr)
-- PublishToConfluence (-ptc)
+### Command Line Parameters
+- GitHubToken (-ghpt) : Required parameter. Can be supplied as parameter or UNRELEASED_HISTORY_GITHUB_TOKEN environment variable.
+- GitHubOwner (-gho) : Default is extracted from remote url
+- GitHubRepository (-ghr) : Default is extracted from remote url
+- GitRepositoryPath (-grp) : Default is current working directory
+- GitRemote (-gr) : Default ("origin")
+- GitVersion (-gv) : Default ("Unreleased"). Can be supplied as parameter or GITVERSION_MAJORMINORPATCH environment variable.
+- ReleaseBranchRef (-ghb) : Default is head branch
+- ReleaseNoteSections (-rns) : Default ("bug=Fixes,enhancement=Enhancements")
+- ReleaseNoteSectionlessDescription (-rnsd) : Default ("Undefined")
+- ReleaseNoteUncategorisedDescription (-rnud) : Default ("Unclassified")
+- ReleaseNoteCategorised (-rnc) : Default (true)
+- ReleaseNoteCategories (-rncl)
+- ReleaseNoteCategoryPrefix (-rncp) : Default ("#")
+- PublishToConfluence (-ptc) : Default (false)
 - ConfluenceReleaseParentPageId (-cpp)
 - ConfluenceSpaceKey (-csk)
 - ConfluenceUser (-cu)
 - ConfluencePassword (-cp)
 - ConfluenceApiUrl (-cau)
-- VerboseOutput (-v)
-- AcceptInvalidCertificates (-aic)
-- PublishToFile (-ptf)
-- OutputFileName (-o)
-- ExcludeLabel (-el)
-- GitVersion (-gv)
+- VerboseOutput (-v) : Default (false)
+- AcceptInvalidCertificates (-aic) : Default (false)
+- PublishToFile (-ptf) : Default (false)
+- OutputFileName (-o) : Default ("Unreleased.md")
+- ExcludeLabel (-el) : Default ("Exclude Note")
 
 ## Sample output
 
 ```markdown
 # 1.2.1 (MASTER) - XX XXX 2016
 ## Enhancements
-### Component A
+### Category A
 - Awesome new feature [\#1854](https://github.com/org/repo/pull/1854)
 
 ### Undefined
 - Special feature for Acme Co [\#1855](https://github.com/org/repo/pull/1855)
 
 ## Fixes
-### Component Z
+### Category Z
 - Fixed problem with widget [\#1792](https://github.com/org/repo/pull/1792)
 
-### Component Y
+### Category Y
 - Fixed problem with widget [\#1792](https://github.com/org/repo/pull/1792)
 - Fixed exception with view layout [\#1848](https://github.com/org/repo/pull/1848)
 
@@ -66,5 +69,5 @@ Only required parameter is the GitHubToken. It can be supplied via command line 
 
 ## Unclassified
 ### Undefined
-- Added new Component H [\#1843](https://github.com/org/repo/pull/1843)
+- Added new Category H [\#1843](https://github.com/org/repo/pull/1843)
 ```

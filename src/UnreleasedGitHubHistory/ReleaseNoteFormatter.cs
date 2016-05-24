@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,30 +9,30 @@ namespace UnreleasedGitHubHistory
 {
     public static class ReleaseNoteFormatter
     {
-        public static string MarkdownNotes(List<PullRequestDto> releaseHistory, ProgramArgs programArgs)
+        public static string MarkdownNotes(List<PullRequestDto> pullRequests, ProgramArgs programArgs)
         {
             var markdown = new StringBuilder();
-            var enhancements = releaseHistory.Where(n => n.Enhancement()).ToList();
-            var fixes = releaseHistory.Where(n => n.Bug()).ToList();
-            var unclassified = releaseHistory.Where(n => n.Unclassified()).ToList();
-            var releasedApplications = releaseHistory.SelectMany(c => c.Labels).Distinct().Where(c => c.StartsWith("#"));
 
-            var releasedApplicationLabelDescriptionMap = new Dictionary<string, string>();
-            var userSuppliedLabelDescriptionMap = new Dictionary<string, string>();
-            if (programArgs.GitHubLabelDescriptionList != null)
-              userSuppliedLabelDescriptionMap = programArgs.GitHubLabelDescriptionList.ToDictionary(label => label.Split('=').First(), label => label.Split('=').Last());
-
-            foreach (var releasedApp in releasedApplications.Select(releasedApp => releasedApp.Replace("#", string.Empty)))
+            var userSuppliedSectionDescriptions = new Dictionary<string, string>();
+            if (programArgs.ReleaseNoteSections != null && programArgs.ReleaseNoteSections.Any())
+                userSuppliedSectionDescriptions = programArgs.ReleaseNoteSections.ToDictionary(label => label.Split('=').First(), label => label.Split('=').Last(), StringComparer.InvariantCultureIgnoreCase);
+            var sections = pullRequests.SelectMany(c => c.Labels).Distinct().Where(c => userSuppliedSectionDescriptions.ContainsKey(c)).OrderBy(c => c).ToList();
+            var pullRequestsWithoutSection = pullRequests.Where(pr => !userSuppliedSectionDescriptions.Keys.Intersect(pr.Labels, StringComparer.InvariantCultureIgnoreCase).Any()).ToList();
+            if (pullRequestsWithoutSection.Any())
             {
-                if (userSuppliedLabelDescriptionMap.ContainsKey(releasedApp))
-                    releasedApplicationLabelDescriptionMap.Add(releasedApp, userSuppliedLabelDescriptionMap[releasedApp]);
-                else
-                    releasedApplicationLabelDescriptionMap.Add(releasedApp, releasedApp); // if no label description was supplied then default to label itself
+                foreach (var pullRequestWithoutSection in pullRequestsWithoutSection)
+                    pullRequestWithoutSection.Labels.Add(programArgs.ReleaseNoteSectionlessDescription);
+                sections.Add(programArgs.ReleaseNoteSectionlessDescription);
+                userSuppliedSectionDescriptions.Add(programArgs.ReleaseNoteSectionlessDescription, programArgs.ReleaseNoteSectionlessDescription);
             }
 
-            markdown.AppendLine(FormatReleaseNotes(enhancements, releasedApplicationLabelDescriptionMap, "Enhancements", programArgs.GitHubOwner, programArgs.GitHubRepository));
-            markdown.AppendLine(FormatReleaseNotes(fixes, releasedApplicationLabelDescriptionMap, "Fixes", programArgs.GitHubOwner, programArgs.GitHubRepository));
-            markdown.AppendLine(FormatReleaseNotes(unclassified, releasedApplicationLabelDescriptionMap, "Unclassified", programArgs.GitHubOwner, programArgs.GitHubRepository));
+            var categoryDescriptions = BuildCategoryDescriptions(pullRequests, programArgs);
+            foreach (var sectionDescription in sections.Select(section => userSuppliedSectionDescriptions[section]).OrderBy(d => d).ToList())
+            {
+                var section = userSuppliedSectionDescriptions.FirstOrDefault(x => x.Value == sectionDescription).Key;
+                var sectionPullRequests = pullRequests.Where(pr => pr.Labels.Contains(section, StringComparer.InvariantCultureIgnoreCase)).ToList();
+                markdown.AppendLine(FormatReleaseNotes(sectionPullRequests, sectionDescription, categoryDescriptions, programArgs));
+            }
 
             return markdown.ToString();
         }
@@ -39,44 +40,70 @@ namespace UnreleasedGitHubHistory
         public static string EscapeMarkdown(string markdown)
         {
             const string specialMarkdownCharaters = @"\`*_{}[]()#>+-.!";
-            var escapedMarkdown = string.Empty;
-            foreach (var character in markdown.ToCharArray())
+            var escapedMarkdown = new StringBuilder();
+            foreach (var character in markdown)
             {
                 if (specialMarkdownCharaters.Contains(character))
-                    escapedMarkdown += $@"\{character}";
+                    escapedMarkdown.Append($@"\{character}");
                 else
-                    escapedMarkdown += character;
+                    escapedMarkdown.Append(character);
             }
-            return escapedMarkdown;
+            return escapedMarkdown.ToString();
         }
 
-        private static string FormatReleaseNotes(List<PullRequestDto> pullRequests, Dictionary<string, string> applicationsLabelMap, string classificationHeading, string owner, string repoName)
+        private static Dictionary<string, string> BuildCategoryDescriptions(List<PullRequestDto> pullRequests, ProgramArgs programArgs)
         {
-            var gitHubPullRequestUrl = $@"https://github.com/{owner}/{repoName}/pull/";
+            var categoryDescriptions = new Dictionary<string, string>();
+            var userSuppliedCategoryDescriptions = new Dictionary<string, string>();
+            var categories = pullRequests.SelectMany(c => c.Labels).Distinct().Where(c => c.StartsWith(programArgs.ReleaseNoteCategoryPrefix));
+            if (programArgs.ReleaseNoteCategories != null && programArgs.ReleaseNoteCategories.Any())
+              userSuppliedCategoryDescriptions = programArgs.ReleaseNoteCategories.ToDictionary(label => label.Split('=').First(), label => label.Split('=').Last(), StringComparer.InvariantCultureIgnoreCase);
+
+            foreach (var category in categories.Select(c => c.Replace(programArgs.ReleaseNoteCategoryPrefix, string.Empty)))
+            {
+                if (userSuppliedCategoryDescriptions.ContainsKey(category))
+                    categoryDescriptions.Add(category, userSuppliedCategoryDescriptions[category]);
+                else
+                    categoryDescriptions.Add(category, category); // if no label description was supplied then default to label itself
+            }
+            return categoryDescriptions;
+        }
+
+        private static string FormatReleaseNotes(IReadOnlyCollection<PullRequestDto> pullRequests, string sectionDescription, Dictionary<string, string> categories, ProgramArgs programArgs)
+        {
+            var gitHubPullRequestUrl = $@"https://github.com/{programArgs.GitHubOwner}/{programArgs.GitHubRepository}/pull/";
             var markdown = new StringBuilder();
 
             if (pullRequests.Any())
-                markdown.AppendLine($"## {classificationHeading}");
+                markdown.AppendLine($"## {sectionDescription}");
+            else
+                return string.Empty;
 
-            foreach (var app in applicationsLabelMap.OrderBy(a => a.Value))
+            if (!programArgs.ReleaseNoteCategorised)
             {
-                var pullRequestsWithApplicationLabels = pullRequests.Where(n => !n.Applicationless()).ToList();
-                if (pullRequestsWithApplicationLabels.Any())
-                {
-                    var pullRequestsWithLabelsThatContainApplication = pullRequestsWithApplicationLabels.Where(pr => pr.Labels.Contains($"#{app.Key}")).ToList();
-                    if (pullRequestsWithLabelsThatContainApplication.Any())
-                        markdown.AppendLine().AppendLine($@"### {app.Value}");
-                    foreach (var pullRequest in pullRequestsWithLabelsThatContainApplication)
-                        markdown.AppendLine($@"- {EmphasiseSquareBraces(EscapeMarkdown(pullRequest.Title))} [\#{pullRequest.Number}]({gitHubPullRequestUrl}{pullRequest.Number})");
-                }
+                foreach (var pullRequest in pullRequests)
+                    markdown.AppendLine($@"- {EmphasiseSquareBraces(EscapeMarkdown(pullRequest.Title))} [\#{pullRequest.Number}]({gitHubPullRequestUrl}{pullRequest.Number})");
+                return markdown.ToString();
             }
-            var pullRequestsWithoutComponents = pullRequests.Where(n => n.Applicationless()).ToList();
-            if (pullRequestsWithoutComponents.Any())
+
+            foreach (var category in categories.OrderBy(a => a.Value))
             {
-                markdown.AppendLine().AppendLine(@"### Undefined");
-                foreach (var note in pullRequestsWithoutComponents)
-                    markdown.AppendLine($@"- {EmphasiseSquareBraces(EscapeMarkdown(note.Title))} [\#{note.Number}]({gitHubPullRequestUrl}{note.Number})");
+                var pullRequestsWithCategories = pullRequests.Where(c => c.Labels.Any(label => categories.ContainsKey(label.Replace(programArgs.ReleaseNoteCategoryPrefix, string.Empty)))).ToList();
+                if (!pullRequestsWithCategories.Any())
+                    continue;
+                var pullRequestsWithLabelsThatContainCategory = pullRequestsWithCategories.Where(pr => pr.Labels.Contains($"#{category.Key}")).ToList();
+                if (pullRequestsWithLabelsThatContainCategory.Any())
+                    markdown.AppendLine().AppendLine($@"### {category.Value}");
+                foreach (var pullRequest in pullRequestsWithLabelsThatContainCategory)
+                    markdown.AppendLine($@"- {EmphasiseSquareBraces(EscapeMarkdown(pullRequest.Title))} [\#{pullRequest.Number}]({gitHubPullRequestUrl}{pullRequest.Number})");
             }
+            var pullRequestsWithoutCategories = pullRequests.Where(c => !c.Labels.Any(label => categories.ContainsKey(label.Replace(programArgs.ReleaseNoteCategoryPrefix, string.Empty)))).ToList();
+            if (!pullRequestsWithoutCategories.Any())
+                return markdown.ToString();
+
+            markdown.AppendLine().AppendLine($@"### {programArgs.ReleaseNoteUncategorisedDescription}");
+            foreach (var note in pullRequestsWithoutCategories)
+                markdown.AppendLine($@"- {EmphasiseSquareBraces(EscapeMarkdown(note.Title))} [\#{note.Number}]({gitHubPullRequestUrl}{note.Number})");
             return markdown.ToString();
         }
 
@@ -88,11 +115,10 @@ namespace UnreleasedGitHubHistory
         private static string EmphasiseSquareBraces(string title)
         {
             // Lazily match the first pair of square braces. Test / explanation here; https://regex101.com/r/kU1pJ7/2
-            Regex braceFinder = new Regex(@"(?<Prefix>.*)\\\[(?<contents>.*?)\\\](?<suffix>.*)");
-            Match match = braceFinder.Match(title);
+            var braceFinder = new Regex(@"(?<Prefix>.*)\\\[(?<contents>.*?)\\\](?<suffix>.*)");
+            var match = braceFinder.Match(title);
             if (match.Success)
                 title = string.Format($"{match.Groups["prefix"]}**[{match.Groups["contents"]}]**{match.Groups["suffix"]}");
-
             return title;
         }
     }
