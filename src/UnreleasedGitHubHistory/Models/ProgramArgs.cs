@@ -6,6 +6,31 @@ namespace UnreleasedGitHubHistory.Models
 {
     public class ProgramArgs
     {
+        [ArgShortcut("-rns")]
+        [DefaultValue("bug=Fixes,enhancement=Enhancements")]
+        [ArgExample("'Section1=Description For Section1,Section2=Description For Section2'", "Dictionary of GitHub Pull Request Labels and their descriptions which will be used for release note sections")]
+        public List<string> ReleaseNoteSections { get; set; }
+
+        [ArgShortcut("-rnsd")]
+        [DefaultValue("Undefined")]
+        public string ReleaseNoteSectionlessDescription { get; set; }
+
+        [ArgShortcut("-rnud")]
+        [DefaultValue("Unclassified")]
+        public string ReleaseNoteUncategorisedDescription { get; set; }
+
+        [DefaultValue(true)]
+        [ArgShortcut("-rnc")]
+        public bool ReleaseNoteCategorised { get; set; }
+
+        [ArgShortcut("-rncl")]
+        [ArgExample("'Category1=Description For Category1,Category2=Description For Category2'", "Dictionary of GitHub Pull Request Labels and their descriptions which will be used for release note categorisation")]
+        public List<string> ReleaseNoteCategories { get; set; }
+
+        [DefaultValue("#")]
+        [ArgShortcut("-rncp")]
+        public string ReleaseNoteCategoryPrefix { get; set; }
+
         [ArgShortcut("-ghpt")]
         [ArgExample("30aee2825c48560da50732c4f849bfbfd24c091e", "GitHub Personal Token")]
         public string GitHubToken { get; set; }
@@ -17,10 +42,6 @@ namespace UnreleasedGitHubHistory.Models
         [ArgShortcut("-ghr")]
         [ArgExample("repo", "GitHub Repository Name")]
         public string GitHubRepository { get; set; }
-
-        [ArgShortcut("-ghld")]
-        [ArgExample("'Label1=Description For Label1,Label2=Description For Label2'", "Hash map of GitHub Pull Request Labels and their descriptions")]
-        public List<string> GitHubLabelDescriptionList { get; set; }
 
         [ArgShortcut("-ghb")]
         [ArgExample("refs/heads/master", "Git head branch reference")]
