@@ -6,7 +6,7 @@ namespace UnreleasedGitHubHistory.Models
 {
     public class ProgramArgs
     {
-        [ArgShortcut("-rns")]
+        [ArgShortcut("-rnsl")]
         [DefaultValue("bug=Fixes,enhancement=Enhancements")]
         [ArgExample("'Section1=Description For Section1,Section2=Description For Section2'", "Dictionary of GitHub Pull Request Labels and their descriptions which will be used for release note sections")]
         public List<string> ReleaseNoteSections { get; set; }
@@ -20,6 +20,10 @@ namespace UnreleasedGitHubHistory.Models
         public string ReleaseNoteUncategorisedDescription { get; set; }
 
         [DefaultValue(true)]
+        [ArgShortcut("-rns")]
+        public bool ReleaseNoteSectioned { get; set; }
+
+        [DefaultValue(true)]
         [ArgShortcut("-rnc")]
         public bool ReleaseNoteCategorised { get; set; }
 
@@ -30,6 +34,14 @@ namespace UnreleasedGitHubHistory.Models
         [DefaultValue("#")]
         [ArgShortcut("-rncp")]
         public string ReleaseNoteCategoryPrefix { get; set; }
+
+        [DefaultValue(true)]
+        [ArgShortcut("-rnod")]
+        public bool ReleaseNoteOrderDescending { get; set; }
+
+        [DefaultValue("merged")] // or created
+        [ArgShortcut("-rnow")]
+        public string ReleaseNoteOrderWhen { get; set; }
 
         [ArgShortcut("-ghpt")]
         [ArgExample("30aee2825c48560da50732c4f849bfbfd24c091e", "GitHub Personal Token")]

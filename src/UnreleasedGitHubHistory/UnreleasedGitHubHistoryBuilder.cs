@@ -60,7 +60,7 @@ namespace UnreleasedGitHubHistory
                         if (pullRequestDto != null)
                             releaseHistory.Add(pullRequestDto);
                     }
-                    return releaseHistory;
+                    return OrderReleaseNotes(releaseHistory, programArgs);
                 }
             }
             catch (Exception ex) when (ex is ArgumentNullException || ex is ArgumentException || ex is RepositoryNotFoundException)
@@ -68,6 +68,21 @@ namespace UnreleasedGitHubHistory
                 Console.WriteLine("GitRepositoryPath was not supplied or is invalid.");
                 return null;
             }
+        }
+
+        private static List<PullRequestDto> OrderReleaseNotes(List<PullRequestDto> releaseHistory, ProgramArgs programArgs)
+        {
+            var orderWhenKey = OrderWhenKey(programArgs);
+            if (programArgs.ReleaseNoteOrderDescending)
+                return releaseHistory.OrderByDescending(orderWhenKey).ToList();
+            return releaseHistory.OrderBy(orderWhenKey).ToList();
+        }
+
+        private static Func<PullRequestDto, DateTimeOffset?> OrderWhenKey(ProgramArgs programArgs)
+        {
+            if (programArgs.ReleaseNoteOrderWhen.CaseInsensitiveContains("created"))
+                return r => r.CreatedAt;
+            return r => r.MergedAt;
         }
 
         private static bool DiscoverGitHubSettings(ProgramArgs programArgs, IRepository localGitRepository)
@@ -111,6 +126,8 @@ namespace UnreleasedGitHubHistory
             {
                 Number = pullRequest.Number,
                 Title = pullRequest.Title,
+                CreatedAt = pullRequest.CreatedAt,
+                MergedAt = pullRequest.MergedAt,
                 Labels = new List<string>()
             };
             foreach (var label in issue.Labels)

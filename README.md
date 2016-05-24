@@ -21,29 +21,32 @@ $ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ptc -c
 
 ### Command Line Parameters
 - GitHubToken (-ghpt) : Required parameter. Can be supplied as parameter or UNRELEASED_HISTORY_GITHUB_TOKEN environment variable.
-- GitHubOwner (-gho) : Default is extracted from remote url
-- GitHubRepository (-ghr) : Default is extracted from remote url
-- GitRepositoryPath (-grp) : Default is current working directory
-- GitRemote (-gr) : Default ("origin")
+- GitHubOwner (-gho) : Default is extracted from remote url.
+- GitHubRepository (-ghr) : Default is extracted from remote url.
+- GitRepositoryPath (-grp) : Default is current working directory.
+- GitRemote (-gr) : Default ("origin"). If not found it will search through all remotes.
 - GitVersion (-gv) : Default ("Unreleased"). Can be supplied as parameter or GITVERSION_MAJORMINORPATCH environment variable.
-- ReleaseBranchRef (-ghb) : Default is head branch
-- ReleaseNoteSections (-rns) : Default ("bug=Fixes,enhancement=Enhancements")
-- ReleaseNoteSectionlessDescription (-rnsd) : Default ("Undefined")
-- ReleaseNoteUncategorisedDescription (-rnud) : Default ("Unclassified")
-- ReleaseNoteCategorised (-rnc) : Default (true)
-- ReleaseNoteCategories (-rncl)
-- ReleaseNoteCategoryPrefix (-rncp) : Default ("#")
-- PublishToConfluence (-ptc) : Default (false)
-- ConfluenceReleaseParentPageId (-cpp)
-- ConfluenceSpaceKey (-csk)
-- ConfluenceUser (-cu)
-- ConfluencePassword (-cp)
-- ConfluenceApiUrl (-cau)
-- VerboseOutput (-v) : Default (false)
-- AcceptInvalidCertificates (-aic) : Default (false)
-- PublishToFile (-ptf) : Default (false)
-- OutputFileName (-o) : Default ("Unreleased.md")
-- ExcludeLabel (-el) : Default ("Exclude Note")
+- ReleaseBranchRef (-ghb) : Default is head branch.
+- ReleaseNoteSectioned (-rns) : Default ("true"). Set to "false" to disable note sections.
+- ReleaseNoteSections (-rnsl) : Default ("bug=Fixes,enhancement=Enhancements"). Key value pairs of pull request labels and their descriptions used for note sections.
+- ReleaseNoteSectionlessDescription (-rnsd) : Default ("Undefined").
+- ReleaseNoteUncategorisedDescription (-rnud) : Default ("Unclassified").
+- ReleaseNoteCategorised (-rnc) : Default ("true"). Set to "false" to disable note categorisation.
+- ReleaseNoteCategories (-rncl) : Example ("CatA=Category A,catB=Category B"). Key value pairs of pull request labels and their descriptions used for note categorisation.
+- ReleaseNoteCategoryPrefix (-rncp) : Default ("#"). Used to differentiate category labels from section labels.
+- ReleaseNoteOrderDescending (-rnod) : Default ("true"). Used to determine the sort order of the release notes.
+- ReleaseNoteOrderWhen (-rnow) : Default ("merged"). Set to "created" to order release notes based on pull request creation time rather than merge time.
+- PublishToConfluence (-ptc) : Default ("false"). Set to "true" for all other Confluence related parameters to become active.
+- ConfluenceReleaseParentPageId (-cpp) : Confluence parent page identifer. Pulished page will be its child page.
+- ConfluenceSpaceKey (-csk) : Required parameter if PublishToConfluence is true.
+- ConfluenceUser (-cu) : Required parameter if PublishToConfluence is true.
+- ConfluencePassword (-cp) : Required parameter if PublishToConfluence is true.
+- ConfluenceApiUrl (-cau) : Required parameter if PublishToConfluence is true.
+- VerboseOutput (-v) : Default ("false"). Set to "true" to output more information about what the utility is doing.
+- AcceptInvalidCertificates (-aic) : Default ("false"). Set to "true" to help when using Fiddler to debug HTTP responses.
+- PublishToFile (-ptf) : Default ("false"). Set to "true" to output markdown to a local filename supplied by OutputFileName parameter.
+- OutputFileName (-o) : Default ("Unreleased.md").
+- ExcludeLabel (-el) : Default ("Exclude Note"). Pull request label which once found will cause the entire pull request to be excluded from release notes.
 
 ## Sample output
 

@@ -13,6 +13,9 @@ namespace UnreleasedGitHubHistory
         {
             var markdown = new StringBuilder();
 
+            if (!programArgs.ReleaseNoteSectioned)
+                return markdown.AppendLine(FormatReleaseNotes(pullRequests, null, null, programArgs)).ToString();
+
             var userSuppliedSectionDescriptions = new Dictionary<string, string>();
             if (programArgs.ReleaseNoteSections != null && programArgs.ReleaseNoteSections.Any())
                 userSuppliedSectionDescriptions = programArgs.ReleaseNoteSections.ToDictionary(label => label.Split('=').First(), label => label.Split('=').Last(), StringComparer.InvariantCultureIgnoreCase);
@@ -73,6 +76,13 @@ namespace UnreleasedGitHubHistory
         {
             var gitHubPullRequestUrl = $@"https://github.com/{programArgs.GitHubOwner}/{programArgs.GitHubRepository}/pull/";
             var markdown = new StringBuilder();
+
+            if (string.IsNullOrWhiteSpace(sectionDescription) && categories == null)
+            {
+                foreach (var pullRequest in pullRequests)
+                    markdown.AppendLine($@"- {EmphasiseSquareBraces(EscapeMarkdown(pullRequest.Title))} [\#{pullRequest.Number}]({gitHubPullRequestUrl}{pullRequest.Number})");
+                return markdown.ToString();
+            }
 
             if (pullRequests.Any())
                 markdown.AppendLine($"## {sectionDescription}");

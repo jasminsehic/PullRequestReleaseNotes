@@ -7,6 +7,14 @@ using PowerArgs;
 
 namespace UnreleasedGitHubHistory
 {
+    // FEATURE: have a yml settings option so that we can version parameters
+    // FEATURE: follow large pull requests if they have a follow label so we can get to their children to build notes from
+    // FEATURE: find page on confluence based on partial name so we can have actual date in title
+    // FEATURE: add note format template so things like dates, contributors, pull request properties can be controlled to customise the note format
+    // FEATURE: add support for other pull request services (TFS, GitLab, BitBucket/Stash)
+    // FEATURE: publish notes to (TFS, GitLab, GitHub)
+    // FEATURE: rename to GitPullRequestNotes
+
     public static class Program
     {
         private static void Main(string[] args)
