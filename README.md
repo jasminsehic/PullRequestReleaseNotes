@@ -9,7 +9,6 @@ UnreleasedGitHubHistory is a utility which generates release notes for all merge
 
 Utility will use GitHub pull request titles and labels to group and sort the release notes. For example all pull requests with Bug label will be grouped under Fixes section in notes and pull requests with Enhancement label will be grouped under Enhancements section. Secondary level (categories) of grouping is possible through use of the #Label where # character is used to signify second level of grouping. You can supply the utility with category descriptions so that you can turn label CategoryA into Category A description. Pull requests without relevant labels will be grouped under Unclassified and Undefined sections. Pull requests labeled with multiple category labels will cause notes to appear in multiple categories.
 
-
 ## Install
 
     choco install UnreleasedGitHubHistory.Portable
@@ -47,6 +46,7 @@ $ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ptc -c
 - PublishToFile (-ptf) : Default ("false"). Set to "true" to output markdown to a local filename supplied by OutputFileName parameter.
 - OutputFileName (-o) : Default ("Unreleased.md").
 - ExcludeLabel (-el) : Default ("Exclude Note"). Pull request label which once found will cause the entire pull request to be excluded from release notes.
+- FollowLabel (-fl) : Default ("Follow Note"). Pull request label which once found will cause the tool to recursively follow all other pull request merge commits within the pull request.
 
 ## Sample output
 

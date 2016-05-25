@@ -109,6 +109,10 @@ namespace UnreleasedGitHubHistory.Models
         [ArgShortcut("-el")]
         public string ExcludeLabel { get; set; }
 
+        [DefaultValue("Follow Note")]
+        [ArgShortcut("-fl")]
+        public string FollowLabel { get; set; }
+
         [ArgShortcut("-gv")]
         public string GitVersion { get; set; }
     }

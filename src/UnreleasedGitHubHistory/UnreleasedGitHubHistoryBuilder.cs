@@ -50,23 +50,48 @@ namespace UnreleasedGitHubHistory
                     var unreleasedCommits = GetUnreleasedCommits(programArgs, localGitRepository, lastCommit);
                     foreach (var mergeCommit in unreleasedCommits.Where(commit => commit.Parents.Count() > 1))
                     {
-                        var pullRequestNumber = ExtractPullRequestNumber(mergeCommit);
-                        if (pullRequestNumber == null) continue;
-                        var pullRequest = gitHubClient.PullRequest.Get(programArgs.GitHubOwner, programArgs.GitHubRepository, (int)pullRequestNumber).Result;
-                        if (pullRequest == null) continue;
-                        if (programArgs.VerboseOutput)
-                            Console.WriteLine($"Found #{pullRequest.Number}: {pullRequest.Title}: {mergeCommit.Sha}");
-                        var pullRequestDto = GetPullRequestWithLabels(programArgs, pullRequest, gitHubClient);
-                        if (pullRequestDto != null)
+                        PullRequest pullRequest;
+                        var pullRequestDto = RetrieveGitHubPullRequest(gitHubClient, mergeCommit.Message, mergeCommit.Sha, programArgs, out pullRequest);
+                        if (pullRequestDto == null) continue;
+                        if (pullRequestDto.Labels.Contains(programArgs.FollowLabel, StringComparer.InvariantCultureIgnoreCase))
+                            FollowChildPullRequests(programArgs, gitHubClient, pullRequest, releaseHistory);
+                        else
                             releaseHistory.Add(pullRequestDto);
                     }
-                    return OrderReleaseNotes(releaseHistory, programArgs);
+                    return OrderReleaseNotes(releaseHistory.Distinct(new PullRequestDtoEqualityComparer()).ToList(), programArgs);
                 }
             }
             catch (Exception ex) when (ex is ArgumentNullException || ex is ArgumentException || ex is RepositoryNotFoundException)
             {
                 Console.WriteLine("GitRepositoryPath was not supplied or is invalid.");
                 return null;
+            }
+        }
+
+        private static PullRequestDto RetrieveGitHubPullRequest(GitHubClient gitHubClient, string commitMessage, string commitSha, ProgramArgs programArgs, out PullRequest pullRequest)
+        {
+            pullRequest = null;
+            var pullRequestNumber = ExtractPullRequestNumber(commitMessage);
+            if (pullRequestNumber == null) return null;
+            pullRequest = gitHubClient.PullRequest.Get(programArgs.GitHubOwner, programArgs.GitHubRepository, (int)pullRequestNumber).Result;
+            if (pullRequest == null) return null;
+            if (programArgs.VerboseOutput)
+                Console.WriteLine($"Found #{pullRequest.Number}: {pullRequest.Title}: {commitSha}");
+            return GetPullRequestWithLabels(programArgs, pullRequest, gitHubClient);
+        }
+
+        private static void FollowChildPullRequests(ProgramArgs programArgs, GitHubClient gitHubClient, PullRequest parentPullRequest, List<PullRequestDto> releaseHistory)
+        {
+            var commits = gitHubClient.PullRequest.Commits(programArgs.GitHubOwner, programArgs.GitHubRepository, parentPullRequest.Number).Result;
+            foreach (var commit in commits.Where(c => c.Parents.Count > 1))
+            {
+                var pullRequestDto = RetrieveGitHubPullRequest(gitHubClient, commit.Commit.Message, commit.Sha, programArgs, out parentPullRequest);
+                if (pullRequestDto == null)
+                    continue;
+                if (pullRequestDto.Labels.Contains(programArgs.FollowLabel, StringComparer.InvariantCultureIgnoreCase))
+                    FollowChildPullRequests(programArgs, gitHubClient, parentPullRequest, releaseHistory);
+                else
+                    releaseHistory.Add(pullRequestDto);
             }
         }
 
@@ -146,10 +171,10 @@ namespace UnreleasedGitHubHistory
             return pullRequestDto;
         }
 
-        private static int? ExtractPullRequestNumber(Commit commit)
+        private static int? ExtractPullRequestNumber(string commitMessage)
         {
             var pattern = new Regex(@"Merge pull request #(?<pullRequestNumber>\d+) from .*");
-            var match = pattern.Match(commit.Message);
+            var match = pattern.Match(commitMessage);
             if (match.Groups.Count <= 0 || !match.Groups["pullRequestNumber"].Success)
                 return null;
             return int.Parse(match.Groups["pullRequestNumber"].Value);
