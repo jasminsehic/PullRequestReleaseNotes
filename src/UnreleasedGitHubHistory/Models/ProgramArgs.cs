@@ -115,5 +115,13 @@ namespace UnreleasedGitHubHistory.Models
 
         [ArgShortcut("-gv")]
         public string GitVersion { get; set; }
+
+        [DefaultValue("MMM dd, yyyy HH:mm")]
+        [ArgShortcut("-rndf")]
+        public string ReleaseNoteDateFormat { get; set; }
+
+        [DefaultValue("{0} {1}")]
+        [ArgShortcut("-rnf")]
+        public string ReleaseNoteFormat { get; set; }
     }
 }

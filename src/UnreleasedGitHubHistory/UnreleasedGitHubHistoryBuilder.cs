@@ -153,6 +153,8 @@ namespace UnreleasedGitHubHistory
                 Title = pullRequest.Title,
                 CreatedAt = pullRequest.CreatedAt,
                 MergedAt = pullRequest.MergedAt,
+                Author = pullRequest.User.Name,
+                AuthorUrl = pullRequest.User.Url,
                 Labels = new List<string>()
             };
             foreach (var label in issue.Labels)
