@@ -7,30 +7,34 @@ using PowerArgs;
 
 namespace UnreleasedGitHubHistory
 {
-    // FEATURE: have a yml settings option so that we can version parameters
     // FEATURE: find page on confluence based on partial name so we can have actual date in title
     // FEATURE: add support for other pull request services (TFS, GitLab, BitBucket/Stash)
     // FEATURE: publish notes to (TFS, GitLab, GitHub)
-    // FEATURE: rename to GitPullRequestNotes
+    // FEATURE: rename to GitPullRequestNotes?
 
     public static class Program
     {
         private static void Main(string[] args)
         {
-            ProgramArgs programArgs = null;
+            int exitCode;
             const int successExitCode = 0;
             const int failureExitCode = -1;
-            var exitCode = failureExitCode;
+            ProgramArgs programArgs;
 
-            try
+            if (!RetrieveProgramArgs(args, out programArgs))
+                Environment.Exit(failureExitCode);
+
+            if (programArgs.InitConfig)
             {
-                programArgs = Args.Parse<ProgramArgs>(args);
+                new Config(programArgs).WriteSampleConfig();
+                Console.WriteLine($"Created a sample UnreleasedGitHubHistory.yml file ...");
+                Environment.Exit(successExitCode);
             }
-            catch (ArgException e)
+
+            if (programArgs.HeadBranchRestrictionApplies())
             {
-                Console.WriteLine($"Error: {e.Message}");
-                Console.WriteLine(ArgUsage.GenerateUsageFromTemplate<ProgramArgs>());
-                Environment.Exit(exitCode);
+                Console.WriteLine($"Detected a non-head branch {programArgs.ReleaseBranchRef}. Aborting ...");
+                Environment.Exit(successExitCode);
             }
 
             if (programArgs.AcceptInvalidCertificates)
@@ -76,6 +80,22 @@ namespace UnreleasedGitHubHistory
                 }
             }
             Environment.Exit(exitCode);
+        }
+
+        private static bool RetrieveProgramArgs(string[] args, out ProgramArgs programArgs)
+        {
+            try
+            {
+                programArgs = Args.Parse<ProgramArgs>(args);
+            }
+            catch (ArgException e)
+            {
+                Console.WriteLine($"Error: {e.Message}");
+                Console.WriteLine(ArgUsage.GenerateUsageFromTemplate<ProgramArgs>());
+                programArgs = null;
+                return false;
+            }
+            return new Config(programArgs).MergeWithDefaults();
         }
 
         private static string BuildVersion(ProgramArgs programArgs)

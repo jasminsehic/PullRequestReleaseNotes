@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnreleasedGitHubHistory.Models;
@@ -8,7 +7,6 @@ using LibGit2Sharp;
 using Octokit;
 using Octokit.Internal;
 using Commit = LibGit2Sharp.Commit;
-using Repository = LibGit2Sharp.Repository;
 
 namespace UnreleasedGitHubHistory
 {
@@ -16,56 +14,30 @@ namespace UnreleasedGitHubHistory
     {
         public static List<PullRequestDto> BuildReleaseHistory(ProgramArgs programArgs)
         {
-            if (!DiscoverGitHubToken(programArgs))
-                return null;
             var gitHubCredentials = new InMemoryCredentialStore(new Octokit.Credentials(programArgs.GitHubToken));
             var gitHubClient = new GitHubClient(new ProductHeaderValue("UnreleasedGitHubHistory"), gitHubCredentials);
             var releaseHistory = new List<PullRequestDto>();
-            if (string.IsNullOrWhiteSpace(programArgs.GitRepositoryPath))
+
+            var lastCommit = GetLastTaggedCommit(programArgs.LocalGitRepository, programArgs.ReleaseBranchRef);
+            if (lastCommit == null)
             {
-                if (programArgs.VerboseOutput)
-                    Console.WriteLine($"GitRepositoryPath was not supplied. Trying to discover the Git repository from the current directory.");
-                programArgs.GitRepositoryPath = Directory.GetCurrentDirectory();
-            }
-            try
-            {
-                using (var localGitRepository = new Repository(Repository.Discover(programArgs.GitRepositoryPath)))
-                {
-                    if (string.IsNullOrWhiteSpace(programArgs.ReleaseBranchRef))
-                    {
-                        if (programArgs.VerboseOutput)
-                            Console.WriteLine($"ReleaseBranchRef was not supplied. Using the current HEAD branch.");
-                        programArgs.ReleaseBranchRef = localGitRepository.Head.CanonicalName;
-                    }
-                    if (!DiscoverGitHubSettings(programArgs, localGitRepository))
-                        return null;
-                    var lastCommit = GetLastTaggedCommit(localGitRepository, programArgs.ReleaseBranchRef);
-                    if (lastCommit == null)
-                    {
-                        Console.WriteLine($"Couldn't find the last commit to build history from");
-                        return null;
-                    }
-                    if (programArgs.VerboseOutput)
-                        Console.WriteLine($"Building history for {programArgs.ReleaseBranchRef} down to commit {lastCommit.Sha}");
-                    var unreleasedCommits = GetUnreleasedCommits(programArgs, localGitRepository, lastCommit);
-                    foreach (var mergeCommit in unreleasedCommits.Where(commit => commit.Parents.Count() > 1))
-                    {
-                        PullRequest pullRequest;
-                        var pullRequestDto = RetrieveGitHubPullRequest(gitHubClient, mergeCommit.Message, mergeCommit.Sha, programArgs, out pullRequest);
-                        if (pullRequestDto == null) continue;
-                        if (pullRequestDto.Labels.Contains(programArgs.FollowLabel, StringComparer.InvariantCultureIgnoreCase))
-                            FollowChildPullRequests(programArgs, gitHubClient, pullRequest, releaseHistory);
-                        else
-                            releaseHistory.Add(pullRequestDto);
-                    }
-                    return OrderReleaseNotes(releaseHistory.Distinct(new PullRequestDtoEqualityComparer()).ToList(), programArgs);
-                }
-            }
-            catch (Exception ex) when (ex is ArgumentNullException || ex is ArgumentException || ex is RepositoryNotFoundException)
-            {
-                Console.WriteLine("GitRepositoryPath was not supplied or is invalid.");
+                Console.WriteLine($"Couldn't find the last commit to build history from");
                 return null;
             }
+            if (programArgs.VerboseOutput)
+                Console.WriteLine($"Building history for {programArgs.ReleaseBranchRef} down to commit {lastCommit.Sha}");
+            var unreleasedCommits = GetUnreleasedCommits(programArgs, lastCommit);
+            foreach (var mergeCommit in unreleasedCommits.Where(commit => commit.Parents.Count() > 1))
+            {
+                PullRequest pullRequest;
+                var pullRequestDto = RetrieveGitHubPullRequest(gitHubClient, mergeCommit.Message, mergeCommit.Sha, programArgs, out pullRequest);
+                if (pullRequestDto == null) continue;
+                if (pullRequestDto.Labels.Contains(programArgs.FollowLabel, StringComparer.InvariantCultureIgnoreCase))
+                    FollowChildPullRequests(programArgs, gitHubClient, pullRequest, releaseHistory);
+                else
+                    releaseHistory.Add(pullRequestDto);
+            }
+            return OrderReleaseNotes(releaseHistory.Distinct(new PullRequestDtoEqualityComparer()).ToList(), programArgs);
         }
 
         private static PullRequestDto RetrieveGitHubPullRequest(GitHubClient gitHubClient, string commitMessage, string commitSha, ProgramArgs programArgs, out PullRequest pullRequest)
@@ -98,7 +70,7 @@ namespace UnreleasedGitHubHistory
         private static List<PullRequestDto> OrderReleaseNotes(List<PullRequestDto> releaseHistory, ProgramArgs programArgs)
         {
             var orderWhenKey = OrderWhenKey(programArgs);
-            if (programArgs.ReleaseNoteOrderDescending)
+            if (programArgs.ReleaseNoteOrderAscending.Value)
                 return releaseHistory.OrderByDescending(orderWhenKey).ToList();
             return releaseHistory.OrderBy(orderWhenKey).ToList();
         }
@@ -108,38 +80,6 @@ namespace UnreleasedGitHubHistory
             if (programArgs.ReleaseNoteOrderWhen.CaseInsensitiveContains("created"))
                 return r => r.CreatedAt;
             return r => r.MergedAt;
-        }
-
-        private static bool DiscoverGitHubSettings(ProgramArgs programArgs, IRepository localGitRepository)
-        {
-            if (!string.IsNullOrWhiteSpace(programArgs.GitHubOwner) && !string.IsNullOrWhiteSpace(programArgs.GitHubRepository))
-                return true;
-
-            Remote remote = null;
-            if (localGitRepository.Network.Remotes.Any())
-                remote = localGitRepository.Network.Remotes[programArgs.GitRemote] ?? localGitRepository.Network.Remotes.First(r => r.Url.CaseInsensitiveContains("github.com"));
-            if (remote == null)
-            {
-                Console.WriteLine($"GitHubOwner and GitHubRepository were not supplied and could not be discovered");
-                return false;
-            }
-            var remoteUrl = new Uri(remote.Url);
-            programArgs.GitHubOwner = remoteUrl.Segments[1].Replace(@"/", string.Empty);
-            programArgs.GitHubRepository = remoteUrl.Segments[2].Replace(@".git", string.Empty);
-            return true;
-        }
-
-        private static bool DiscoverGitHubToken(ProgramArgs programArgs)
-        {
-            if (!string.IsNullOrWhiteSpace(programArgs.GitHubToken))
-                return true;
-            if (programArgs.VerboseOutput)
-                Console.WriteLine("GitHubToken was not supplied. Trying UNRELEASED_HISTORY_GITHUB_TOKEN environment variable.");
-            programArgs.GitHubToken = Environment.GetEnvironmentVariable("UNRELEASED_HISTORY_GITHUB_TOKEN");
-            if (!string.IsNullOrWhiteSpace(programArgs.GitHubToken))
-                return true;
-            Console.WriteLine($"GitHubToken was not supplied and could not be found.");
-            return false;
         }
 
         private static PullRequestDto GetPullRequestWithLabels(ProgramArgs programArgs, PullRequest pullRequest, GitHubClient gitHubClient)
@@ -182,10 +122,10 @@ namespace UnreleasedGitHubHistory
             return int.Parse(match.Groups["pullRequestNumber"].Value);
         }
 
-        private static ICommitLog GetUnreleasedCommits(ProgramArgs programArgs, IRepository localGitRepository, Commit startingCommit)
+        private static ICommitLog GetUnreleasedCommits(ProgramArgs programArgs, Commit startingCommit)
         {
             // Let's only consider the local branch refs that lead to this commit...
-            var reachableRefs = localGitRepository.Refs.ReachableFrom(new[] {startingCommit})
+            var reachableRefs = programArgs.LocalGitRepository.Refs.ReachableFrom(new[] {startingCommit})
                 .Where(r => r.IsLocalBranch() && r.CanonicalName == programArgs.ReleaseBranchRef);
             //...and create a filter that will retrieve all the commits...
             var commitFilter = new CommitFilter
@@ -194,7 +134,7 @@ namespace UnreleasedGitHubHistory
                 Until = startingCommit, // ...until this commit is met
                 FirstParentOnly = true  // ...only follow our direct lineage
             };
-            var unreleasedCommits = localGitRepository.Commits.QueryBy(commitFilter);
+            var unreleasedCommits = programArgs.LocalGitRepository.Commits.QueryBy(commitFilter);
             return unreleasedCommits;
         }
 
