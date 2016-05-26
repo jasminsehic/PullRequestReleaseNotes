@@ -35,6 +35,8 @@ $ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ptc -c
 - ReleaseNoteCategoryPrefix (-rncp) : Default ("#"). Used to differentiate category labels from section labels.
 - ReleaseNoteOrderDescending (-rnod) : Default ("true"). Used to determine the sort order of the release notes.
 - ReleaseNoteOrderWhen (-rnow) : Default ("merged"). Set to "created" to order release notes based on pull request creation time rather than merge time.
+- ReleaseNoteFormat (-rnf) : Default ("{0} {1}"). Available fields are {0} pull request title, {1} pull request url, {2} pull request number, {3} pull request created date/time, {4} pull request merged date/time, {5} pull request author username, {6} pull request author URL
+- ReleaseNoteDateFormat (-rndf) : Default ("MMM dd, yyyy HH:mm"). You can use any .NET standard or custom date and time format strings.
 - PublishToConfluence (-ptc) : Default ("false"). Set to "true" for all other Confluence related parameters to become active.
 - ConfluenceReleaseParentPageId (-cpp) : Confluence parent page identifer. Pulished page will be its child page.
 - ConfluenceSpaceKey (-csk) : Required parameter if PublishToConfluence is true.

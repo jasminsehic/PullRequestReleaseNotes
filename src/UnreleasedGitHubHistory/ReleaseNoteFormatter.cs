@@ -74,13 +74,11 @@ namespace UnreleasedGitHubHistory
 
         private static string FormatReleaseNotes(IReadOnlyCollection<PullRequestDto> pullRequests, string sectionDescription, Dictionary<string, string> categories, ProgramArgs programArgs)
         {
-            var gitHubPullRequestUrl = $@"https://github.com/{programArgs.GitHubOwner}/{programArgs.GitHubRepository}/pull/";
             var markdown = new StringBuilder();
 
             if (string.IsNullOrWhiteSpace(sectionDescription) && categories == null)
             {
-                foreach (var pullRequest in pullRequests)
-                    markdown.AppendLine($@"- {EmphasiseSquareBraces(EscapeMarkdown(pullRequest.Title))} [\#{pullRequest.Number}]({gitHubPullRequestUrl}{pullRequest.Number})");
+                AppendMarkdownNotes(pullRequests, markdown, programArgs);
                 return markdown.ToString();
             }
 
@@ -91,8 +89,7 @@ namespace UnreleasedGitHubHistory
 
             if (!programArgs.ReleaseNoteCategorised)
             {
-                foreach (var pullRequest in pullRequests)
-                    markdown.AppendLine($@"- {EmphasiseSquareBraces(EscapeMarkdown(pullRequest.Title))} [\#{pullRequest.Number}]({gitHubPullRequestUrl}{pullRequest.Number})");
+                AppendMarkdownNotes(pullRequests, markdown, programArgs);
                 return markdown.ToString();
             }
 
@@ -104,17 +101,31 @@ namespace UnreleasedGitHubHistory
                 var pullRequestsWithLabelsThatContainCategory = pullRequestsWithCategories.Where(pr => pr.Labels.Contains($"#{category.Key}")).ToList();
                 if (pullRequestsWithLabelsThatContainCategory.Any())
                     markdown.AppendLine().AppendLine($@"### {category.Value}");
-                foreach (var pullRequest in pullRequestsWithLabelsThatContainCategory)
-                    markdown.AppendLine($@"- {EmphasiseSquareBraces(EscapeMarkdown(pullRequest.Title))} [\#{pullRequest.Number}]({gitHubPullRequestUrl}{pullRequest.Number})");
+                AppendMarkdownNotes(pullRequestsWithLabelsThatContainCategory, markdown, programArgs);
             }
             var pullRequestsWithoutCategories = pullRequests.Where(c => !c.Labels.Any(label => categories.ContainsKey(label.Replace(programArgs.ReleaseNoteCategoryPrefix, string.Empty)))).ToList();
             if (!pullRequestsWithoutCategories.Any())
                 return markdown.ToString();
 
             markdown.AppendLine().AppendLine($@"### {programArgs.ReleaseNoteUncategorisedDescription}");
-            foreach (var note in pullRequestsWithoutCategories)
-                markdown.AppendLine($@"- {EmphasiseSquareBraces(EscapeMarkdown(note.Title))} [\#{note.Number}]({gitHubPullRequestUrl}{note.Number})");
+            AppendMarkdownNotes(pullRequestsWithoutCategories, markdown, programArgs);
             return markdown.ToString();
+        }
+
+        private static void AppendMarkdownNotes(IEnumerable<PullRequestDto> pullRequests, StringBuilder markdown, ProgramArgs programArgs)
+        {
+            var gitHubPullRequestUrl = $@"https://github.com/{programArgs.GitHubOwner}/{programArgs.GitHubRepository}/pull/";
+            foreach (var pullRequest in pullRequests)
+            {
+                var pullRequestTitle = EmphasiseSquareBraces(EscapeMarkdown(pullRequest.Title));
+                var pullRequestUrl = $@"[\#{pullRequest.Number}]({gitHubPullRequestUrl}{pullRequest.Number})";
+                var pullRequestNumber = pullRequest.Number;
+                var pullRequestCreatedAt = pullRequest.CreatedAt.ToString(programArgs.ReleaseNoteDateFormat);
+                var pullRequestMergedAt = pullRequest.MergedAt?.ToString(programArgs.ReleaseNoteDateFormat);
+                var pullRequestAuthor = pullRequest.Author;
+                var pullRequestAuthorUrl = $@"[{pullRequest.Author}]({pullRequest.AuthorUrl})";
+                markdown.AppendLine(string.Format($@"- {programArgs.ReleaseNoteFormat}", pullRequestTitle, pullRequestUrl, pullRequestNumber, pullRequestCreatedAt, pullRequestMergedAt, pullRequestAuthor, pullRequestAuthorUrl));
+            }
         }
 
         /// <summary>

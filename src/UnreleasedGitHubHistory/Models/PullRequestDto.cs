@@ -10,6 +10,8 @@ namespace UnreleasedGitHubHistory.Models
         public List<string> Labels { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset? MergedAt { get; set; }
+        public string Author { get; set; }
+        public string AuthorUrl { get; set; }
     }
 
     public sealed class PullRequestDtoEqualityComparer : IEqualityComparer<PullRequestDto>
