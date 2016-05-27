@@ -104,11 +104,12 @@ namespace UnreleasedGitHubHistory
 
         private bool DiscoverGitRepository()
         {
-            if (!string.IsNullOrWhiteSpace(_programArgs.GitRepositoryPath))
-                return true;
-            if (_programArgs.VerboseOutput)
-                Console.WriteLine($"GitRepositoryPath was not supplied. Trying to discover the Git repository from the current directory.");
-            _programArgs.GitRepositoryPath = Directory.GetCurrentDirectory();
+            if (string.IsNullOrWhiteSpace(_programArgs.GitRepositoryPath))
+            {
+                if (_programArgs.VerboseOutput)
+                    Console.WriteLine($"GitRepositoryPath was not supplied. Trying to discover the Git repository from the current directory.");
+                _programArgs.GitRepositoryPath = Directory.GetCurrentDirectory();
+            }
             try
             {
                 _programArgs.LocalGitRepository = new Repository(Repository.Discover(_programArgs.GitRepositoryPath));
@@ -124,7 +125,12 @@ namespace UnreleasedGitHubHistory
         private void DiscoverGitHead()
         {
             if (!string.IsNullOrWhiteSpace(_programArgs.ReleaseBranchRef))
+            {
+                if (!_programArgs.ReleaseBranchRef.CaseInsensitiveContains("refs/heads") && !_programArgs.ReleaseBranchRef.CaseInsensitiveContains("/"))
+                    _programArgs.ReleaseBranchRef = $"refs/heads/{_programArgs.ReleaseBranchRef}";
                 return;
+            }
+                
             if (_programArgs.VerboseOutput)
                 Console.WriteLine($"ReleaseBranchRef was not supplied. Using the current HEAD branch.");
             _programArgs.ReleaseBranchRef = _programArgs.LocalGitRepository.Head.CanonicalName;
@@ -164,7 +170,10 @@ namespace UnreleasedGitHubHistory
         {
             var sampleConfigFile = Path.Combine(_programArgs.LocalGitRepository.Info.WorkingDirectory, YamlSettingsFileName);
             if (File.Exists(sampleConfigFile))
+            {
+                Console.WriteLine($"UnreleasedGitHubHistory.yml file already exists ...");
                 return;
+            }
             using (var writer = new StreamWriter(sampleConfigFile))
             {
                 writer.WriteLine("# release-branch-heads-only: true");
@@ -179,6 +188,7 @@ namespace UnreleasedGitHubHistory
                 writer.WriteLine("#   - bug=Fixes");
                 writer.WriteLine("#   - enhancement=Enhancements");
             }
+            Console.WriteLine($"Created a sample UnreleasedGitHubHistory.yml file ...");
         }
     }
 }
