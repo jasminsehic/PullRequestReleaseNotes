@@ -13,7 +13,7 @@ namespace UnreleasedGitHubHistory
         {
             var markdown = new StringBuilder();
 
-            if (!programArgs.ReleaseNoteSectioned)
+            if (!programArgs.ReleaseNoteSectioned.Value)
                 return markdown.AppendLine(FormatReleaseNotes(pullRequests, null, null, programArgs)).ToString();
 
             var userSuppliedSectionDescriptions = new Dictionary<string, string>();
@@ -87,7 +87,7 @@ namespace UnreleasedGitHubHistory
             else
                 return string.Empty;
 
-            if (!programArgs.ReleaseNoteCategorised)
+            if (!programArgs.ReleaseNoteCategorised.Value)
             {
                 AppendMarkdownNotes(pullRequests, markdown, programArgs);
                 return markdown.ToString();
