@@ -37,7 +37,7 @@ namespace UnreleasedGitHubHistory
                 markdown.AppendLine(FormatReleaseNotes(sectionPullRequests, sectionDescription, categoryDescriptions, programArgs));
             }
 
-            return markdown.ToString();
+            return EscapeMarkdown(markdown.ToString());
         }
 
         public static string EscapeMarkdown(string markdown)
@@ -67,7 +67,8 @@ namespace UnreleasedGitHubHistory
                 if (userSuppliedCategoryDescriptions.ContainsKey(category))
                     categoryDescriptions.Add(category, userSuppliedCategoryDescriptions[category]);
                 else
-                    categoryDescriptions.Add(category, category); // if no label description was supplied then default to label itself
+                    // if no label description was supplied then default to label itself
+                    categoryDescriptions.Add(category, category);
             }
             return categoryDescriptions;
         }
@@ -114,11 +115,10 @@ namespace UnreleasedGitHubHistory
 
         private static void AppendMarkdownNotes(IEnumerable<PullRequestDto> pullRequests, StringBuilder markdown, ProgramArgs programArgs)
         {
-            var gitHubPullRequestUrl = $@"https://github.com/{programArgs.GitHubOwner}/{programArgs.GitHubRepository}/pull/";
             foreach (var pullRequest in pullRequests)
             {
                 var pullRequestTitle = EmphasiseSquareBraces(EscapeMarkdown(pullRequest.Title));
-                var pullRequestUrl = $@"[\#{pullRequest.Number}]({gitHubPullRequestUrl}{pullRequest.Number})";
+                var pullRequestUrl = $@"[{programArgs.PullRequestProvider.PrefixedPullRequest(pullRequest.Number)}]({programArgs.PullRequestProvider.PullRequestUrl(pullRequest.Number)})";
                 var pullRequestNumber = pullRequest.Number;
                 var pullRequestCreatedAt = pullRequest.CreatedAt.ToString(programArgs.ReleaseNoteDateFormat);
                 var pullRequestMergedAt = pullRequest.MergedAt?.ToString(programArgs.ReleaseNoteDateFormat);

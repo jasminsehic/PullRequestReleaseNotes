@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using LibGit2Sharp;
 using PowerArgs;
+using UnreleasedGitHubHistory.Providers;
 using YamlDotNet.Serialization;
 
 namespace UnreleasedGitHubHistory.Models
@@ -45,21 +46,6 @@ namespace UnreleasedGitHubHistory.Models
         [ArgShortcut("-rnow")]
         [YamlMember(Alias = "release-note-order-when")]
         public string ReleaseNoteOrderWhen { get; set; }
-
-        [ArgShortcut("-ghpt")]
-        [YamlMember(Alias = "github-token")]
-        [ArgExample("30aee2825c48560da50732c4f849bfbfd24c091e", "GitHub Personal Token")]
-        public string GitHubToken { get; set; }
-
-        [ArgShortcut("-gho")]
-        [YamlMember(Alias = "github-owner")]
-        [ArgExample("company", "GitHub Organisational Account")]
-        public string GitHubOwner { get; set; }
-
-        [ArgShortcut("-ghr")]
-        [YamlMember(Alias = "github-repo")]
-        [ArgExample("repo", "GitHub Repository Name")]
-        public string GitHubRepository { get; set; }
 
         [ArgShortcut("-ghb")]
         [YamlMember(Alias = "git-branch-ref")]
@@ -143,11 +129,59 @@ namespace UnreleasedGitHubHistory.Models
         [YamlMember(Alias = "release-branch-heads-only")]
         public bool? ReleaseBranchHeadsOnly { get; set; }
 
+        [ArgShortcut("-init")]
+        public bool InitConfig { get; set; }
+
+        [ArgShortcut("-prpn")]
+        [YamlMember(Alias = "pull-request-provider-name")]
+        [ArgExample("github", "Pull request provider name")]
+        public string PullRequestProviderName { get; set; }
+
+        [ArgShortcut("-ghpt")]
+        [YamlMember(Alias = "github-token")]
+        [ArgExample("30aee2825c48560da50732c4f849bfbfd24c091e", "GitHub Personal Token")]
+        public string GitHubToken { get; set; }
+
+        [ArgShortcut("-gho")]
+        [YamlMember(Alias = "github-owner")]
+        [ArgExample("company", "GitHub Organisational Account")]
+        public string GitHubOwner { get; set; }
+
+        [ArgShortcut("-ghr")]
+        [YamlMember(Alias = "github-repo")]
+        [ArgExample("repo", "GitHub Repository Name")]
+        public string GitHubRepository { get; set; }
+
+        [ArgShortcut("-glpt")]
+        [YamlMember(Alias = "gitlab-token")]
+        [ArgExample("pjiS4SArhyHHypsRgXQW", "GitLab Personal Token")]
+        public string GitLabToken { get; set; }
+
+        [ArgShortcut("-glo")]
+        [YamlMember(Alias = "gitlab-owner")]
+        [ArgExample("company", "GitLab Organisational Account")]
+        public string GitLabOwner { get; set; }
+
+        [ArgShortcut("-glr")]
+        [YamlMember(Alias = "gitlab-repo")]
+        [ArgExample("repo", "GitLab Repository Name")]
+        public string GitLabRepository { get; set; }
+
+        [ArgShortcut("-glau")]
+        [YamlMember(Alias="gitlab-api-url")]
+        public string GitLabApiUrl { get; set; }
+
+        [ArgShortcut("-glpi")]
+        [YamlMember(Alias = "gitlab-project-id")]
+        public string GitLabProjectId { get; set; }
+
+
         [ArgIgnore]
         public Repository LocalGitRepository { get; set; }
 
-        [ArgShortcut("-init")]
-        public bool InitConfig { get; set; }
+        [ArgIgnore]
+        public IPullRequestProvider PullRequestProvider { get; set; }
+
 
         public bool HeadBranchRestrictionApplies()
         {
