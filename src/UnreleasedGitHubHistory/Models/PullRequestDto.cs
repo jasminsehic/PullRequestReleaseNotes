@@ -13,6 +13,8 @@ namespace UnreleasedGitHubHistory.Models
         public string Author { get; set; }
         public string AuthorUrl { get; set; }
         public string Url { get; set; }
+        public string BaseCommitSha { get; set; }
+        public string MergeCommitSha { get; set; }
     }
 
     public sealed class PullRequestDtoEqualityComparer : IEqualityComparer<PullRequestDto>

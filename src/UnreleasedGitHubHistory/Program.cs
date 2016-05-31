@@ -10,8 +10,8 @@ namespace UnreleasedGitHubHistory
     // FEATURE: add option to only look for annotated tags (releases)
     // FEATURE: add option to format lines that haven't been QC'd
     // FEATURE: find page on confluence based on partial name so we can have actual date in title
-    // FEATURE: add support for other pull request services (TFS, BitBucket / Stash)
-    // FEATURE: publish notes to (Slack, TFS, GitHub, BitBucket / Stash)
+    // FEATURE: add support for other pull request services (BitBucket / Stash)
+    // FEATURE: publish notes to (Slack, GitHub, BitBucket / Stash)
     // FEATURE: rename to GitPullRequestNotes?
 
     public static class Program

@@ -37,7 +37,7 @@ namespace UnreleasedGitHubHistory
                 markdown.AppendLine(FormatReleaseNotes(sectionPullRequests, sectionDescription, categoryDescriptions, programArgs));
             }
 
-            return EscapeMarkdown(markdown.ToString());
+            return markdown.ToString();
         }
 
         public static string EscapeMarkdown(string markdown)
@@ -129,18 +129,20 @@ namespace UnreleasedGitHubHistory
         }
 
         /// <summary>
-        /// Add markup to the outermost square braces.
+        /// Add markup to any outermost square braces.
         /// </summary>
         /// <param name="title"></param>
         /// <returns></returns>
         private static string EmphasiseSquareBraces(string title)
         {
-            // Lazily match the first pair of square braces. Test / explanation here; https://regex101.com/r/kU1pJ7/2
-            var braceFinder = new Regex(@"(?<Prefix>.*)\\\[(?<contents>.*?)\\\](?<suffix>.*)");
-            var match = braceFinder.Match(title);
-            if (match.Success)
-                title = string.Format($"{match.Groups["prefix"]}**[{match.Groups["contents"]}]**{match.Groups["suffix"]}");
-            return title;
+            // Test / explanation here; https://regex101.com/r/kU1pJ7/4
+            var braceFinder = new Regex(@"\\\[\\\#(?:[^\[\]]+)*\]");
+            var matches = braceFinder.Matches(title);
+            if (matches.Count <= 0)
+                return title;
+            return matches.Cast<Match>()
+                .SelectMany(match => match.Groups.Cast<Group>().ToList())
+                .Aggregate(title, (current, @group) => current.Replace(@group.Value, $"**{@group.Value}**"));
         }
     }
 }

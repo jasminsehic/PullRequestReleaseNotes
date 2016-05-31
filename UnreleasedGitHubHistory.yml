@@ -1,3 +1,4 @@
+pull-request-provider-name: github
 github-owner: jasminsehic
 github-repo: UnreleasedGitHubHistory
 git-remote-name: origin

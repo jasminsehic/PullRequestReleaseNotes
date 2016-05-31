@@ -85,8 +85,7 @@ namespace UnreleasedGitHubHistory
                 Until = startingCommit, // ...until this commit is met
                 FirstParentOnly = true  // ...only follow our direct lineage
             };
-            var unreleasedCommits = _programArgs.LocalGitRepository.Commits.QueryBy(commitFilter);
-            return unreleasedCommits;
+            return _programArgs.LocalGitRepository.Commits.QueryBy(commitFilter);
         }
 
         private static Commit GetLastTaggedCommit(IRepository repository, string branchName)
