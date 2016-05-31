@@ -14,6 +14,7 @@ Utility will use pull request titles and labels to group and sort the release no
     choco install UnreleasedGitHubHistory.Portable
     
 ## Usage
+
 Utility can have command line parameters passed to it or have the parameters supplied via a YAML based config. You can generate a sample YAML file by passing -init parameter to the utility.
 -
 ```{r, engine='bat', count_lines}
