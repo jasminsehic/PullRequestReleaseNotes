@@ -16,7 +16,7 @@ Utility will use pull request titles and labels to group and sort the release no
 ## Usage
 
 Utility can have command line parameters passed to it or have the parameters supplied via a YAML based config. You can generate a sample YAML file by passing -init parameter to the utility.
--
+
 ```{r, engine='bat', count_lines}
 $ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ptc -cpp 328432 -cu confluenceUser -cp confluencePwd -csk SPCKEY -cau "https://company.atlassian.net/wiki/rest/api"
 ```
