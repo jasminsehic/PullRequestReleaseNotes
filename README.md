@@ -5,9 +5,9 @@
 [![Release](https://img.shields.io/github/release/jasminsehic/unreleasedgithubhistory.svg)]()
 [![License](https://img.shields.io/github/license/jasminsehic/unreleasedgithubhistory.svg)]()
 
-UnreleasedGitHubHistory is a utility which generates release notes for all merged GitHub pull requests that have not yet been released (since last tag) from a specific branch and optionally publishes it to a markdown file and/or posts it to Atlassian Confluence page which is then rendered using the Render Markdown plugin. Intention is to run this utility as part of a CI process and generate notes automatically as part of every build of a head branch.
+UnreleasedGitHubHistory is a utility which generates release notes for all merged pull requests that have not yet been released (since last tag) from a specific branch and optionally publishes it to a markdown file and/or posts it to Atlassian Confluence page which is then rendered using the Render Markdown plugin. Intention is to run this utility as part of a CI process and generate notes automatically as part of every build of a head branch.
 
-Utility will use GitHub pull request titles and labels to group and sort the release notes. For example all pull requests with Bug label will be grouped under Fixes section in notes and pull requests with Enhancement label will be grouped under Enhancements section. Secondary level (categories) of grouping is possible through use of the #Label where # character is used to signify second level of grouping. You can supply the utility with category descriptions so that you can turn label CategoryA into Category A description. Pull requests without relevant labels will be grouped under Unclassified and Undefined sections. Pull requests labeled with multiple category labels will cause notes to appear in multiple categories.
+Utility will use pull request titles and labels to group and sort the release notes. For example all pull requests with Bug label will be grouped under Fixes section in notes and pull requests with Enhancement label will be grouped under Enhancements section. Secondary level (categories) of grouping is possible through use of the #Label where # character is used to signify second level of grouping. You can supply the utility with category descriptions so that you can turn label CategoryA into Category A description. Pull requests without relevant labels will be grouped under Unclassified and Undefined sections. Pull requests labeled with multiple category labels will cause notes to appear in multiple categories.
 
 ## Install
 
@@ -15,16 +15,21 @@ Utility will use GitHub pull request titles and labels to group and sort the rel
     
 ## Usage
 Utility can have command line parameters passed to it or have the parameters supplied via a YAML based config. You can generate a sample YAML file by passing -init parameter to the utility.
-
+-
 ```{r, engine='bat', count_lines}
 $ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ptc -cpp 328432 -cu confluenceUser -cp confluencePwd -csk SPCKEY -cau "https://company.atlassian.net/wiki/rest/api"
 ```
 
 ### Command Line Parameters
-- GitHubToken (-ghpt) : Required parameter. Can be supplied as parameter or UNRELEASED_HISTORY_GITHUB_TOKEN environment variable.
+- PullRequestProviderName (-prpn) : Default is github. gitlab is also supported.
+- GitHubToken (-ghpt) : Required parameter if PullRequestProviderName is github. Can be supplied as parameter or UNRELEASED_HISTORY_GITHUB_TOKEN environment variable.
 - GitHubOwner (-gho) : Default is extracted from remote url.
 - GitHubRepository (-ghr) : Default is extracted from remote url.
-- GitRepositoryPath (-grp) : Default is current working directory.
+- GitLabToken (-glpt) : Required parameter if PullRequestProviderName is gitlab. Can be supplied as parameter or UNRELEASED_HISTORY_GITLAB_TOKEN environment variable.
+- GitLabOwner (-glo) : Default is extracted from remote url.
+- GitLabRepository (-glr) : Default is extracted from remote url.
+- GitLabApiUrl (-glau) : Default is https://gitlab.com/api/v3
+- GitLabProjectId (-glpi) : Required parameter if PullRequestProviderName is gitlab. Set it to your GitLab project identifier.
 - GitRemote (-gr) : Default ("origin"). If not found it will search through all remotes.
 - GitVersion (-gv) : Default ("Unreleased"). Can be supplied as parameter or GITVERSION_MAJORMINORPATCH environment variable.
 - ReleaseBranchRef (-ghb) : Default is head branch.
@@ -54,9 +59,52 @@ $ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ptc -c
 - FollowLabel (-fl) : Default ("Follow Note"). Pull request label which once found will cause the tool to recursively follow all other pull request merge commits within the pull request.
 - Init (-init) : When provided the utility will generate a sample UnreleasedGitHubHistory.yml file at the root of the Git repository and not generate any notes.
 
+### YAML File Parameters
+
+See Command Line Parameters for details on default values or parameter usage
+
+- release-note-sections
+- release-note-sectionless-description
+- release-note-uncategorised-description
+- release-note-sectioned
+- release-note-categorised
+- release-note-categories
+- release-note-category-prefix
+- release-note-order-ascending
+- release-note-order-when
+- git-branch-ref
+- git-repo-path
+- confluence-publish
+- confluence-release-parent-page-id
+- confluence-space-key
+- confluence-username
+- confluence-password
+- verbose
+- accept-invalid-certificates
+- file-publish
+- file-name
+- confluence-api-url
+- git-remote-name
+- release-note-exclude
+- release-note-follow
+- git-version
+- release-note-date-format
+- release-note-format
+- release-branch-heads-only
+- pull-request-provider-name
+- github-token
+- github-owner
+- github-repo
+- gitlab-token
+- gitlab-owner
+- gitlab-repo
+- gitlab-api-url
+- gitlab-project-id
+
 ### Config File Sample
 
 ```yaml
+pull-request-provider-name: github
 release-branch-heads-only: true
 release-note-exclude: Exclude Note
 release-note-follow: Follow Note

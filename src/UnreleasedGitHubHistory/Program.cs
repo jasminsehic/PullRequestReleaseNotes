@@ -7,9 +7,11 @@ using PowerArgs;
 
 namespace UnreleasedGitHubHistory
 {
+    // FEATURE: add option to only look for annotated tags (releases)
+    // FEATURE: add option to format lines that haven't been QC'd
     // FEATURE: find page on confluence based on partial name so we can have actual date in title
-    // FEATURE: add support for other pull request services (TFS, GitLab, BitBucket/Stash)
-    // FEATURE: publish notes to (TFS, GitLab, GitHub)
+    // FEATURE: add support for other pull request services (TFS, BitBucket / Stash)
+    // FEATURE: publish notes to (Slack, TFS, GitHub, BitBucket / Stash)
     // FEATURE: rename to GitPullRequestNotes?
 
     public static class Program
@@ -21,13 +23,12 @@ namespace UnreleasedGitHubHistory
             const int failureExitCode = -1;
             ProgramArgs programArgs;
 
-            if (!RetrieveProgramArgs(args, out programArgs))
+            if (!Config.GetCommandLineInput(args, out programArgs))
                 Environment.Exit(failureExitCode);
 
             if (programArgs.InitConfig)
             {
                 new Config(programArgs).WriteSampleConfig();
-                Console.WriteLine($"Created a sample UnreleasedGitHubHistory.yml file ...");
                 Environment.Exit(successExitCode);
             }
 
@@ -40,7 +41,7 @@ namespace UnreleasedGitHubHistory
             if (programArgs.AcceptInvalidCertificates)
                 ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 
-            var releaseHistory = UnreleasedGitHubHistoryBuilder.BuildReleaseHistory(programArgs);
+            var releaseHistory = new PullRequestHistoryBuilder(programArgs).BuildHistory();
 
             if (releaseHistory == null)
             {
@@ -82,26 +83,8 @@ namespace UnreleasedGitHubHistory
             Environment.Exit(exitCode);
         }
 
-        private static bool RetrieveProgramArgs(string[] args, out ProgramArgs programArgs)
-        {
-            try
-            {
-                programArgs = Args.Parse<ProgramArgs>(args);
-            }
-            catch (ArgException e)
-            {
-                Console.WriteLine($"Error: {e.Message}");
-                Console.WriteLine(ArgUsage.GenerateUsageFromTemplate<ProgramArgs>());
-                programArgs = null;
-                return false;
-            }
-            return new Config(programArgs).MergeWithDefaults();
-        }
-
         private static string BuildVersion(ProgramArgs programArgs)
         {
-            if (string.IsNullOrWhiteSpace(programArgs.GitVersion))
-                programArgs.GitVersion = Environment.GetEnvironmentVariable("GITVERSION_MAJORMINORPATCH");
             var versionText = !string.IsNullOrWhiteSpace(programArgs.GitVersion) ? programArgs.GitVersion : "Unreleased";
             return $"{versionText} ({programArgs.ReleaseBranchRef.Replace("refs/heads/", string.Empty).ToUpper()}) - XX XXX {DateTime.Now:yyyy}";
         }

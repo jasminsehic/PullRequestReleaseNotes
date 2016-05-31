@@ -167,7 +167,7 @@ namespace UnreleasedGitHubHistory.Models
         public string Collection { get; set; }
 
         /// <summary>
-        /// TODO: What is this?
+        /// Context
         /// </summary>
         [DataMember(Name = "context")]
         public string Context { get; set; }
@@ -275,7 +275,6 @@ namespace UnreleasedGitHubHistory.Models
 
     /// <summary>
     ///     Plain information, used in the description.
-    /// TODO: Find a better name
     ///     See: https://docs.atlassian.com/confluence/REST/latest
     /// </summary>
     [DataContract]

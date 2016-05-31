@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using LibGit2Sharp;
+using PowerArgs;
 using UnreleasedGitHubHistory.Models;
+using UnreleasedGitHubHistory.Providers;
 using YamlDotNet.Serialization;
 
 namespace UnreleasedGitHubHistory
@@ -18,22 +19,64 @@ namespace UnreleasedGitHubHistory
             _programArgs = programArgs;
         }
 
-        public bool MergeWithDefaults()
+        public static bool GetCommandLineInput(string[] args, out ProgramArgs programArgs)
         {
-            if (!DiscoverGitHubToken() || !DiscoverGitRepository())
+            try
+            {
+                programArgs = Args.Parse<ProgramArgs>(args);
+            }
+            catch (ArgException e)
+            {
+                Console.WriteLine($"Error: {e.Message}");
+                Console.WriteLine(ArgUsage.GenerateUsageFromTemplate<ProgramArgs>());
+                programArgs = null;
+                return false;
+            }
+            return new Config(programArgs).MergeAllUserInputs();
+        }
+
+        private bool MergeAllUserInputs()
+        {
+            if (!DiscoverGitRepository())
                 return false;
             var yamlSettingsFile = Path.Combine(_programArgs.LocalGitRepository.Info.WorkingDirectory, YamlSettingsFileName);
             if (File.Exists(yamlSettingsFile))
                 using (var reader = File.OpenText(yamlSettingsFile))
-                    MergeArgs((new Deserializer()).Deserialize<ProgramArgs>(reader));
+                    MergeWithYamlInput((new Deserializer()).Deserialize<ProgramArgs>(reader));
             MergeDefaults();
-            if (!DiscoverGitHubSettings())
+            GetEnvironmentVariableInput();
+            if (!SetupPullRequestProvider())
                 return false;
-            DiscoverGitHead();
             return true;
         }
 
-        private void MergeArgs(ProgramArgs args)
+        private void GetEnvironmentVariableInput()
+        {
+            DiscoverGitHead();
+            DiscoverGitVersion();
+        }
+
+        private bool DiscoverGitRepository()
+        {
+            if (string.IsNullOrWhiteSpace(_programArgs.GitRepositoryPath))
+            {
+                if (_programArgs.VerboseOutput)
+                    Console.WriteLine($"GitRepositoryPath was not supplied. Trying to discover the Git repository from the current directory.");
+                _programArgs.GitRepositoryPath = Directory.GetCurrentDirectory();
+            }
+            try
+            {
+                _programArgs.LocalGitRepository = new Repository(Repository.Discover(_programArgs.GitRepositoryPath));
+            }
+            catch (Exception ex) when (ex is ArgumentNullException || ex is ArgumentException || ex is RepositoryNotFoundException)
+            {
+                Console.WriteLine("GitRepositoryPath was not supplied or is invalid.");
+                return false;
+            }
+            return true;
+        }
+
+        private void MergeWithYamlInput(ProgramArgs args)
         {
             _programArgs.ConfluenceApiUrl = _programArgs.ConfluenceApiUrl ?? args.ConfluenceApiUrl;
             _programArgs.ConfluenceReleaseParentPageId = _programArgs.ConfluenceReleaseParentPageId ?? args.ConfluenceReleaseParentPageId;
@@ -53,6 +96,11 @@ namespace UnreleasedGitHubHistory
             _programArgs.ReleaseNoteOrderWhen = _programArgs.ReleaseNoteOrderWhen ?? args.ReleaseNoteOrderWhen;
             _programArgs.ReleaseNoteSectionlessDescription = _programArgs.ReleaseNoteSectionlessDescription ?? args.ReleaseNoteSectionlessDescription;
             _programArgs.ReleaseNoteUncategorisedDescription = _programArgs.ReleaseNoteUncategorisedDescription ?? args.ReleaseNoteUncategorisedDescription;
+            _programArgs.GitLabOwner = _programArgs.GitLabOwner ?? args.GitLabOwner;
+            _programArgs.GitLabRepository = _programArgs.GitLabRepository ?? args.GitLabRepository;
+            _programArgs.GitLabApiUrl = _programArgs.GitLabApiUrl ?? args.GitLabApiUrl;
+            _programArgs.GitLabProjectId = _programArgs.GitLabProjectId ?? args.GitLabProjectId;
+            _programArgs.PullRequestProviderName = _programArgs.PullRequestProviderName ?? args.PullRequestProviderName;
 
             _programArgs.ReleaseNoteCategorised = _programArgs.ReleaseNoteCategorised ?? args.ReleaseNoteCategorised;
             _programArgs.ReleaseNoteOrderAscending = _programArgs.ReleaseNoteOrderAscending ?? args.ReleaseNoteOrderAscending;
@@ -80,6 +128,7 @@ namespace UnreleasedGitHubHistory
             _programArgs.ReleaseNoteOrderWhen = _programArgs.ReleaseNoteOrderWhen ?? "merged";
             _programArgs.ReleaseNoteSectionlessDescription = _programArgs.ReleaseNoteSectionlessDescription ?? "Undefined";
             _programArgs.ReleaseNoteUncategorisedDescription = _programArgs.ReleaseNoteUncategorisedDescription ?? "Unclassified";
+            _programArgs.GitLabApiUrl = _programArgs.GitLabApiUrl ?? "https://gitlab.com/api/v3";
 
             _programArgs.ReleaseNoteCategorised = _programArgs.ReleaseNoteCategorised ?? false;
             _programArgs.ReleaseNoteOrderAscending = _programArgs.ReleaseNoteOrderAscending ?? false;
@@ -89,36 +138,23 @@ namespace UnreleasedGitHubHistory
             _programArgs.ReleaseNoteSections = _programArgs.ReleaseNoteSections ?? new List<string>() { "bug=Fixes", "enhancement=Enhancements" };
         }
 
-        private bool DiscoverGitHubToken()
+        private bool SetupPullRequestProvider()
         {
-            if (!string.IsNullOrWhiteSpace(_programArgs.GitHubToken))
-                return true;
-            if (_programArgs.VerboseOutput)
-                Console.WriteLine("GitHubToken was not supplied. Trying UNRELEASED_HISTORY_GITHUB_TOKEN environment variable.");
-            _programArgs.GitHubToken = Environment.GetEnvironmentVariable("UNRELEASED_HISTORY_GITHUB_TOKEN");
-            if (!string.IsNullOrWhiteSpace(_programArgs.GitHubToken))
-                return true;
-            Console.WriteLine($"GitHubToken was not supplied and could not be found.");
-            return false;
-        }
-
-        private bool DiscoverGitRepository()
-        {
-            if (string.IsNullOrWhiteSpace(_programArgs.GitRepositoryPath))
+            _programArgs.PullRequestProviderName = _programArgs.PullRequestProviderName ?? "github";
+            switch (_programArgs.PullRequestProviderName.ToLower())
             {
-                if (_programArgs.VerboseOutput)
-                    Console.WriteLine($"GitRepositoryPath was not supplied. Trying to discover the Git repository from the current directory.");
-                _programArgs.GitRepositoryPath = Directory.GetCurrentDirectory();
+                case "github":
+                    _programArgs.PullRequestProvider = new GitHubPullRequestProvider(_programArgs);
+                    break;
+                case "gitlab":
+                    _programArgs.PullRequestProvider = new GitLabPullRequestProvider(_programArgs);
+                    break;
+                default:
+                    Console.WriteLine($"Unsupported pull request provider: {_programArgs.PullRequestProvider}.");
+                    return false;
             }
-            try
-            {
-                _programArgs.LocalGitRepository = new Repository(Repository.Discover(_programArgs.GitRepositoryPath));
-            }
-            catch (Exception ex) when(ex is ArgumentNullException || ex is ArgumentException || ex is RepositoryNotFoundException)
-            {
-                Console.WriteLine("GitRepositoryPath was not supplied or is invalid.");
+            if (!_programArgs.PullRequestProvider.DiscoverRemote())
                 return false;
-            }
             return true;
         }
 
@@ -136,36 +172,12 @@ namespace UnreleasedGitHubHistory
             _programArgs.ReleaseBranchRef = _programArgs.LocalGitRepository.Head.CanonicalName;
         }
 
-        private bool DiscoverGitHubSettings()
+        private void DiscoverGitVersion()
         {
-            Remote remote = null;
-            if (!string.IsNullOrWhiteSpace(_programArgs.GitHubOwner) && !string.IsNullOrWhiteSpace(_programArgs.GitHubRepository))
-                return true;
-            if (_programArgs.VerboseOutput)
-                Console.WriteLine($"GitHubOwner and GitHubRepository were not supplied. Trying to discover it from remotes.");
-            if (!_programArgs.LocalGitRepository.Network.Remotes.Any(r => r.Url.CaseInsensitiveContains("github.com")))
-                return false;
-            if (!string.IsNullOrWhiteSpace(_programArgs.GitRemote))
-                remote = _programArgs.LocalGitRepository.Network.Remotes[_programArgs.GitRemote] ?? _programArgs.LocalGitRepository.Network.Remotes.First(r => r.Url.CaseInsensitiveContains("github.com"));
-            // prefer origin and upstream
-            if (remote == null)
-                remote = _programArgs.LocalGitRepository.Network.Remotes
-                    .Where(r => r.Name.CaseInsensitiveContains("origin") || r.Name.CaseInsensitiveContains("upstream"))
-                    .OrderBy(r => r.Name).First();
-            // fallback to any remaining one
-            if (remote == null)
-                remote = _programArgs.LocalGitRepository.Network.Remotes.First(r => r.Url.CaseInsensitiveContains("github.com"));
-            if (remote == null)
-            {
-                Console.WriteLine($"GitHubOwner and GitHubRepository were not supplied and could not be discovered");
-                return false;
-            }
-            var remoteUrl = new Uri(remote.Url);
-            _programArgs.GitHubOwner = remoteUrl.Segments[1].Replace(@"/", string.Empty);
-            _programArgs.GitHubRepository = remoteUrl.Segments[2].Replace(@".git", string.Empty);
-            return true;
+            if (string.IsNullOrWhiteSpace(_programArgs.GitVersion))
+                _programArgs.GitVersion = Environment.GetEnvironmentVariable("GITVERSION_MAJORMINORPATCH");
         }
-
+     
         public void WriteSampleConfig()
         {
             var sampleConfigFile = Path.Combine(_programArgs.LocalGitRepository.Info.WorkingDirectory, YamlSettingsFileName);

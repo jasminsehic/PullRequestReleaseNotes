@@ -76,10 +76,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="Providers\GitHubPullRequestProvider.cs" />
+    <Compile Include="Providers\GitLabPullRequestProvider.cs" />
+    <Compile Include="Providers\IPullRequestProvider.cs" />
     <Compile Include="Publishers\ConfluencePublisher.cs" />
     <Compile Include="Publishers\FilePublisher.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="UnreleasedGitHubHistoryBuilder.cs" />
+    <Compile Include="Models\PullRequestCommitDto.cs" />
+    <Compile Include="PullRequestHistoryBuilder.cs" />
     <Compile Include="ReleaseNoteFormatter.cs" />
     <Compile Include="Models\ConfluenceDtos.cs" />
     <Compile Include="Models\PullRequestDto.cs" />
@@ -123,6 +127,7 @@
     </EmbeddedResource>
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
+  <ItemGroup />
   <UsingTask TaskName="CosturaCleanup" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" TaskFactory="CodeTaskFactory">
     <ParameterGroup>
       <Config Output="false" Required="true" ParameterType="Microsoft.Build.Framework.ITaskItem" />
