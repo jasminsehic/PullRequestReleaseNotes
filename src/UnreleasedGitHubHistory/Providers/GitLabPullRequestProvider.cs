@@ -21,7 +21,7 @@ namespace UnreleasedGitHubHistory.Providers
         {
             _programArgs = programArgs;
             DiscoverToken();
-            _restClient = new RestClient(_programArgs.GitLabApiUrl);
+            _restClient = new RestClient($"{_programArgs.GitLabApiUrl}/api/v3");
         }
 
         private void DiscoverToken()
@@ -132,7 +132,7 @@ namespace UnreleasedGitHubHistory.Providers
 
         public string PullRequestUrl(int pullRequestId)
         {
-            return $@"https://gitlab.com/{_programArgs.GitLabOwner}/{_programArgs.GitLabRepository}/merge_requests/{pullRequestId}";
+            return $@"{_programArgs.GitLabApiUrl}/{_programArgs.GitLabOwner}/{_programArgs.GitLabRepository}/merge_requests/{pullRequestId}";
         }
 
         public string PrefixedPullRequest(int pullRequestId)
@@ -160,7 +160,7 @@ namespace UnreleasedGitHubHistory.Providers
 
         public bool DiscoverRemote()
         {
-            const string remoteDomain = "gitlab.com";
+            var remoteDomain = new Uri(_programArgs.GitLabApiUrl).DnsSafeHost;
             Remote remote = null;
             if (!string.IsNullOrWhiteSpace(_programArgs.GitLabOwner) && !string.IsNullOrWhiteSpace(_programArgs.GitLabRepository))
                 return true;
@@ -169,7 +169,7 @@ namespace UnreleasedGitHubHistory.Providers
             if (!_programArgs.LocalGitRepository.Network.Remotes.Any(r => r.Url.CaseInsensitiveContains(remoteDomain)))
                 return false;
             if (!string.IsNullOrWhiteSpace(_programArgs.GitRemote))
-                remote = _programArgs.LocalGitRepository.Network.Remotes[_programArgs.GitRemote] ?? _programArgs.LocalGitRepository.Network.Remotes.First(r => r.Url.CaseInsensitiveContains("github.com"));
+                remote = _programArgs.LocalGitRepository.Network.Remotes[_programArgs.GitRemote] ?? _programArgs.LocalGitRepository.Network.Remotes.First(r => r.Url.CaseInsensitiveContains(remoteDomain));
             // prefer origin and upstream
             if (remote == null)
                 remote = _programArgs.LocalGitRepository.Network.Remotes

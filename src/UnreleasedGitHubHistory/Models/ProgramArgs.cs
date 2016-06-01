@@ -137,6 +137,10 @@ namespace UnreleasedGitHubHistory.Models
         [ArgExample("github", "Pull request provider name")]
         public string PullRequestProviderName { get; set; }
 
+        [ArgShortcut("-ghau")]
+        [YamlMember(Alias = "github-api-url")]
+        public string GitHubApiUrl { get; set; }
+
         [ArgShortcut("-ghpt")]
         [YamlMember(Alias = "github-token")]
         [ArgExample("30aee2825c48560da50732c4f849bfbfd24c091e", "GitHub Personal Token")]
@@ -175,13 +179,31 @@ namespace UnreleasedGitHubHistory.Models
         [YamlMember(Alias = "gitlab-project-id")]
         public string GitLabProjectId { get; set; }
 
+        [ArgShortcut("-tau")]
+        [YamlMember(Alias = "tfs-api-url")]
+        public string TfsApiUrl { get; set; }
+
+        [ArgShortcut("-tc")]
+        [YamlMember(Alias = "tfs-collection")]
+        public string TfsCollection { get; set; }
+
+        [ArgShortcut("-tr")]
+        [YamlMember(Alias = "tfs-repository")]
+        public string TfsRepository { get; set; }
+
+        [ArgShortcut("-tu")]
+        [YamlMember(Alias = "tfs-username")]
+        public string TfsUsername { get; set; }
+
+        [ArgShortcut("-tpt")]
+        [YamlMember(Alias = "tfs-token")]
+        public string TfsToken { get; set; }
 
         [ArgIgnore]
         public Repository LocalGitRepository { get; set; }
 
         [ArgIgnore]
         public IPullRequestProvider PullRequestProvider { get; set; }
-
 
         public bool HeadBranchRestrictionApplies()
         {

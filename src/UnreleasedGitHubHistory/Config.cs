@@ -83,8 +83,11 @@ namespace UnreleasedGitHubHistory
             _programArgs.ConfluenceSpaceKey = _programArgs.ConfluenceSpaceKey ?? args.ConfluenceSpaceKey;
             _programArgs.ExcludeLabel = _programArgs.ExcludeLabel ?? args.ExcludeLabel;
             _programArgs.FollowLabel = _programArgs.FollowLabel ?? args.FollowLabel;
+
+            _programArgs.GitHubApiUrl = _programArgs.GitHubApiUrl ?? args.GitHubApiUrl;
             _programArgs.GitHubOwner = _programArgs.GitHubOwner ?? args.GitHubOwner;
             _programArgs.GitHubRepository = _programArgs.GitHubRepository ?? args.GitHubRepository;
+
             _programArgs.GitRemote = _programArgs.GitRemote ?? args.GitRemote;
             _programArgs.GitRepositoryPath = _programArgs.GitRepositoryPath ?? args.GitRepositoryPath;
             _programArgs.GitVersion = _programArgs.GitVersion ?? args.GitVersion;
@@ -100,6 +103,7 @@ namespace UnreleasedGitHubHistory
             _programArgs.GitLabRepository = _programArgs.GitLabRepository ?? args.GitLabRepository;
             _programArgs.GitLabApiUrl = _programArgs.GitLabApiUrl ?? args.GitLabApiUrl;
             _programArgs.GitLabProjectId = _programArgs.GitLabProjectId ?? args.GitLabProjectId;
+
             _programArgs.PullRequestProviderName = _programArgs.PullRequestProviderName ?? args.PullRequestProviderName;
 
             _programArgs.ReleaseNoteCategorised = _programArgs.ReleaseNoteCategorised ?? args.ReleaseNoteCategorised;
@@ -128,7 +132,9 @@ namespace UnreleasedGitHubHistory
             _programArgs.ReleaseNoteOrderWhen = _programArgs.ReleaseNoteOrderWhen ?? "merged";
             _programArgs.ReleaseNoteSectionlessDescription = _programArgs.ReleaseNoteSectionlessDescription ?? "Undefined";
             _programArgs.ReleaseNoteUncategorisedDescription = _programArgs.ReleaseNoteUncategorisedDescription ?? "Unclassified";
-            _programArgs.GitLabApiUrl = _programArgs.GitLabApiUrl ?? "https://gitlab.com/api/v3";
+
+            _programArgs.GitHubApiUrl = _programArgs.GitHubApiUrl ?? "https://github.com";
+            _programArgs.GitLabApiUrl = _programArgs.GitLabApiUrl ?? "https://gitlab.com";
 
             _programArgs.ReleaseNoteCategorised = _programArgs.ReleaseNoteCategorised ?? false;
             _programArgs.ReleaseNoteOrderAscending = _programArgs.ReleaseNoteOrderAscending ?? false;
@@ -149,13 +155,14 @@ namespace UnreleasedGitHubHistory
                 case "gitlab":
                     _programArgs.PullRequestProvider = new GitLabPullRequestProvider(_programArgs);
                     break;
+                case "tfs":
+                    _programArgs.PullRequestProvider = new TfsPullRequestProvider(_programArgs);
+                    break;
                 default:
                     Console.WriteLine($"Unsupported pull request provider: {_programArgs.PullRequestProvider}.");
                     return false;
             }
-            if (!_programArgs.PullRequestProvider.DiscoverRemote())
-                return false;
-            return true;
+            return _programArgs.PullRequestProvider.DiscoverRemote();
         }
 
         private void DiscoverGitHead()
@@ -166,7 +173,6 @@ namespace UnreleasedGitHubHistory
                     _programArgs.ReleaseBranchRef = $"refs/heads/{_programArgs.ReleaseBranchRef}";
                 return;
             }
-                
             if (_programArgs.VerboseOutput)
                 Console.WriteLine($"ReleaseBranchRef was not supplied. Using the current HEAD branch.");
             _programArgs.ReleaseBranchRef = _programArgs.LocalGitRepository.Head.CanonicalName;
@@ -188,6 +194,7 @@ namespace UnreleasedGitHubHistory
             }
             using (var writer = new StreamWriter(sampleConfigFile))
             {
+                writer.WriteLine("# pull-request-provider-name: github");
                 writer.WriteLine("# release-branch-heads-only: true");
                 writer.WriteLine("# release-note-exclude: Exclude Note");
                 writer.WriteLine("# release-note-follow: Follow Note");

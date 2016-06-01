@@ -22,15 +22,21 @@ $ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ptc -c
 ```
 
 ### Command Line Parameters
-- PullRequestProviderName (-prpn) : Default is github. gitlab is also supported.
+- PullRequestProviderName (-prpn) : Default is github. gitlab and tfs is also supported.
 - GitHubToken (-ghpt) : Required parameter if PullRequestProviderName is github. Can be supplied as parameter or UNRELEASED_HISTORY_GITHUB_TOKEN environment variable.
 - GitHubOwner (-gho) : Default is extracted from remote url.
 - GitHubRepository (-ghr) : Default is extracted from remote url.
+- GitHubApiUrl (-glau) : Default is https://github.com
 - GitLabToken (-glpt) : Required parameter if PullRequestProviderName is gitlab. Can be supplied as parameter or UNRELEASED_HISTORY_GITLAB_TOKEN environment variable.
 - GitLabOwner (-glo) : Default is extracted from remote url.
 - GitLabRepository (-glr) : Default is extracted from remote url.
-- GitLabApiUrl (-glau) : Default is https://gitlab.com/api/v3
+- GitLabApiUrl (-glau) : Default is https://gitlab.com
 - GitLabProjectId (-glpi) : Required parameter if PullRequestProviderName is gitlab. Set it to your GitLab project identifier.
+- TfsUsername (-tu) : Required parameter if PullRequestProviderName is tfs. For VSO personal tokens use anything, for VSO alternate credentials and on-prem TFS use the username.
+- TfsToken (-tpt) : Required parameter if PullRequestProviderName is tfs. Can be supplied as parameter or UNRELEASED_HISTORY_TFS_TOKEN environment variable. For VSO personal tokens use the token itself and for VSO alternate credentials and on-prem TFS use the user password.
+- TfsCollection (-tc) : Default is extracted from remote url.
+- TfsRepository (-tr) : Default is extracted from remote url.
+- TfsApiUrl (-tau) : Required parameter if PullRequestProviderName is tfs.
 - GitRemote (-gr) : Default ("origin"). If not found it will search through all remotes.
 - GitVersion (-gv) : Default ("Unreleased"). Can be supplied as parameter or GITVERSION_MAJORMINORPATCH environment variable.
 - ReleaseBranchRef (-ghb) : Default is head branch.
@@ -93,6 +99,7 @@ See Command Line Parameters for details on default values or parameter usage
 - release-note-format
 - release-branch-heads-only
 - pull-request-provider-name
+- github-api-url
 - github-token
 - github-owner
 - github-repo
@@ -101,11 +108,17 @@ See Command Line Parameters for details on default values or parameter usage
 - gitlab-repo
 - gitlab-api-url
 - gitlab-project-id
+- tfs-api-url
+- tfs-collection
+- tfs-repository
+- tfs-username
+- tfs-token
+
 
 ### Config File Sample
 
 ```yaml
-pull-request-provider-name: github
+pull-request-provider-name: github | gitlab | tfs
 release-branch-heads-only: true
 release-note-exclude: Exclude Note
 release-note-follow: Follow Note

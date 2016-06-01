@@ -92,7 +92,7 @@ namespace UnreleasedGitHubHistory.Providers
 
         public string PullRequestUrl(int pullRequestId)
         {
-            return $@"https://github.com/{_programArgs.GitHubOwner}/{_programArgs.GitHubRepository}/pull/{pullRequestId}";
+            return $@"{_programArgs.GitHubApiUrl}/{_programArgs.GitHubOwner}/{_programArgs.GitHubRepository}/pull/{pullRequestId}";
         }
 
         public string PrefixedPullRequest(int pullRequestId)
@@ -111,8 +111,8 @@ namespace UnreleasedGitHubHistory.Providers
 
         public bool DiscoverRemote()
         {
-            const string remoteDomain = "github.com";
             Remote remote = null;
+            var remoteDomain = new Uri(_programArgs.GitHubApiUrl).DnsSafeHost;
             if (!string.IsNullOrWhiteSpace(_programArgs.GitHubOwner) && !string.IsNullOrWhiteSpace(_programArgs.GitHubRepository))
                 return true;
             if (_programArgs.VerboseOutput)
@@ -120,7 +120,7 @@ namespace UnreleasedGitHubHistory.Providers
             if (!_programArgs.LocalGitRepository.Network.Remotes.Any(r => r.Url.CaseInsensitiveContains(remoteDomain)))
                 return false;
             if (!string.IsNullOrWhiteSpace(_programArgs.GitRemote))
-                remote = _programArgs.LocalGitRepository.Network.Remotes[_programArgs.GitRemote] ?? _programArgs.LocalGitRepository.Network.Remotes.First(r => r.Url.CaseInsensitiveContains("github.com"));
+                remote = _programArgs.LocalGitRepository.Network.Remotes[_programArgs.GitRemote] ?? _programArgs.LocalGitRepository.Network.Remotes.First(r => r.Url.CaseInsensitiveContains(remoteDomain));
             // prefer origin and upstream
             if (remote == null)
                 remote = _programArgs.LocalGitRepository.Network.Remotes
