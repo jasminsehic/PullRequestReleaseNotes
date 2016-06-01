@@ -88,15 +88,23 @@ namespace UnreleasedGitHubHistory
             return _programArgs.LocalGitRepository.Commits.QueryBy(commitFilter);
         }
 
-        private static Commit GetLastTaggedCommit(IRepository repository, string branchName)
+        private Commit GetLastTaggedCommit(IRepository repository, string branchName)
         {
             var branch = repository.Branches.FirstOrDefault(b => b.CanonicalName == branchName);
-            var tags = repository.Tags.ToArray();
+            var tags = repository.Tags.Where(LightOrAnnotatedTags()).ToArray();
             var olderThan = branch?.Tip.Author.When;
             var commitFilter = new CommitFilter { FirstParentOnly = true };
             var queriableCommits = branch?.Commits as IQueryableCommitLog;
-            var lastTaggedCommit = queriableCommits?.QueryBy(commitFilter).FirstOrDefault(c => c.Author.When <= olderThan && tags.Any(a => a.Target.Sha == c.Sha));
+            var lastTaggedCommit = queriableCommits?.QueryBy(commitFilter)
+                .FirstOrDefault(c => c.Author.When <= olderThan && tags.Any(a => a.Target.Sha == c.Sha));
             return lastTaggedCommit ?? branch?.Commits.Last();
+        }
+
+        private Func<Tag, bool> LightOrAnnotatedTags()
+        {
+            if (_programArgs.GitTagsAnnotated)
+                return t => t.IsAnnotated;
+            return t => true;
         }
     }
 }

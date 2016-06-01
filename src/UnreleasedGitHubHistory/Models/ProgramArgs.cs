@@ -47,6 +47,11 @@ namespace UnreleasedGitHubHistory.Models
         [YamlMember(Alias = "release-note-order-when")]
         public string ReleaseNoteOrderWhen { get; set; }
 
+        [ArgShortcut("-rnqc")]
+        [YamlMember(Alias = "release-note-quality-control-labels")]
+        [ArgExample("Label1,Label2", "List of labels which a pull request without will be marked as up code to highlight items in release notes that haven't gone through quality control.")]
+        public List<string> ReleaseNoteQualityControlLabels { get; set; }
+
         [ArgShortcut("-ghb")]
         [YamlMember(Alias = "git-branch-ref")]
         [ArgExample("refs/heads/master", "Git head branch reference")]
@@ -56,7 +61,11 @@ namespace UnreleasedGitHubHistory.Models
         [YamlMember(Alias = "git-repo-path")]
         [ArgExample(@"D:\Dev\Repo", "Local Git repository path")]
         public string GitRepositoryPath { get; set; }
-    
+
+        [ArgShortcut("-gta")]
+        [YamlMember(Alias = "git-tags-annotated")]
+        public bool GitTagsAnnotated { get; set; }
+
         [ArgShortcut("-ptc")]
         [YamlMember(Alias = "confluence-publish")]
         public bool PublishToConfluence { get; set; }

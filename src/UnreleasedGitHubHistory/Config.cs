@@ -99,6 +99,7 @@ namespace UnreleasedGitHubHistory
             _programArgs.ReleaseNoteOrderWhen = _programArgs.ReleaseNoteOrderWhen ?? args.ReleaseNoteOrderWhen;
             _programArgs.ReleaseNoteSectionlessDescription = _programArgs.ReleaseNoteSectionlessDescription ?? args.ReleaseNoteSectionlessDescription;
             _programArgs.ReleaseNoteUncategorisedDescription = _programArgs.ReleaseNoteUncategorisedDescription ?? args.ReleaseNoteUncategorisedDescription;
+            _programArgs.ReleaseNoteQualityControlLabels = _programArgs.ReleaseNoteQualityControlLabels ?? args.ReleaseNoteQualityControlLabels;
             _programArgs.GitLabOwner = _programArgs.GitLabOwner ?? args.GitLabOwner;
             _programArgs.GitLabRepository = _programArgs.GitLabRepository ?? args.GitLabRepository;
             _programArgs.GitLabApiUrl = _programArgs.GitLabApiUrl ?? args.GitLabApiUrl;
@@ -115,6 +116,7 @@ namespace UnreleasedGitHubHistory
             _programArgs.PublishToConfluence = _programArgs.PublishToConfluence || args.PublishToConfluence;
             _programArgs.PublishToFile = _programArgs.PublishToFile || args.PublishToFile;
             _programArgs.VerboseOutput = _programArgs.VerboseOutput || args.VerboseOutput;
+            _programArgs.GitTagsAnnotated = _programArgs.GitTagsAnnotated || args.GitTagsAnnotated;
 
             _programArgs.ReleaseNoteSections = _programArgs.ReleaseNoteSections ?? args.ReleaseNoteSections;
             _programArgs.ReleaseNoteCategories = _programArgs.ReleaseNoteCategories ?? args.ReleaseNoteCategories;
@@ -132,7 +134,6 @@ namespace UnreleasedGitHubHistory
             _programArgs.ReleaseNoteOrderWhen = _programArgs.ReleaseNoteOrderWhen ?? "merged";
             _programArgs.ReleaseNoteSectionlessDescription = _programArgs.ReleaseNoteSectionlessDescription ?? "Undefined";
             _programArgs.ReleaseNoteUncategorisedDescription = _programArgs.ReleaseNoteUncategorisedDescription ?? "Unclassified";
-
             _programArgs.GitHubApiUrl = _programArgs.GitHubApiUrl ?? "https://github.com";
             _programArgs.GitLabApiUrl = _programArgs.GitLabApiUrl ?? "https://gitlab.com";
 

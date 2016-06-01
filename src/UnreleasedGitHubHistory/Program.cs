@@ -3,16 +3,13 @@ using System.Linq;
 using System.Net;
 using UnreleasedGitHubHistory.Models;
 using UnreleasedGitHubHistory.Publishers;
-using PowerArgs;
 
 namespace UnreleasedGitHubHistory
 {
-    // FEATURE: add option to only look for annotated tags (releases)
-    // FEATURE: add option to format lines that haven't been QC'd
     // FEATURE: find page on confluence based on partial name so we can have actual date in title
-    // FEATURE: add support for other pull request services (BitBucket / Stash)
-    // FEATURE: publish notes to (Slack, GitHub, BitBucket / Stash)
-    // FEATURE: rename to GitPullRequestNotes?
+    // FEATURE: add support for other pull request services (BitBucket / BitBucket Server (Stash))
+    // FEATURE: publish notes to (Slack, GitHub, BitBucket / BitBucket Server (Stash))
+    // FEATURE: rename to PullRequestNotes
 
     public static class Program
     {
