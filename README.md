@@ -18,11 +18,11 @@ Utility will use pull request titles and labels to group and sort the release no
 Utility can have command line parameters passed to it or have the parameters supplied via a YAML based config. You can generate a sample YAML file by passing -init parameter to the utility.
 
 ```{r, engine='bat', count_lines}
-$ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ptc -cpp 328432 -cu confluenceUser -cp confluencePwd -csk SPCKEY -cau "https://company.atlassian.net/wiki/rest/api"
+$ UnreleasedGitHubHistory -cu confluenceUser -cp confluencePwd
 ```
 
 ### Command Line Parameters
-- PullRequestProviderName (-prpn) : Default is github. gitlab and tfs is also supported.
+- PullRequestProviderName (-prpn) : Default is github. gitlab and tfs are also supported.
 - GitHubToken (-ghpt) : Required parameter if PullRequestProviderName is github. Can be supplied as parameter or UNRELEASED_HISTORY_GITHUB_TOKEN environment variable.
 - GitHubOwner (-gho) : Default is extracted from remote url.
 - GitHubRepository (-ghr) : Default is extracted from remote url.
@@ -39,6 +39,7 @@ $ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ptc -c
 - TfsApiUrl (-tau) : Required parameter if PullRequestProviderName is tfs.
 - GitRemote (-gr) : Default ("origin"). If not found it will search through all remotes.
 - GitVersion (-gv) : Default ("Unreleased"). Can be supplied as parameter or GITVERSION_MAJORMINORPATCH environment variable.
+- GitTagsAnnotated (-gta) : Default ("false"). Set to "true" to only consider annotated tags as releases.
 - ReleaseBranchRef (-ghb) : Default is head branch.
 - ReleaseBranchHeadsOnly (-rbho) : Default is ("true"). Set to false to generate notes from any branch.
 - ReleaseNoteSectioned (-rns) : Default ("false"). Set to "true" to enable note sections.
@@ -52,6 +53,7 @@ $ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ptc -c
 - ReleaseNoteOrderWhen (-rnow) : Default ("merged"). Set to "created" to order release notes based on pull request creation time rather than merge time.
 - ReleaseNoteFormat (-rnf) : Default ("{0} {1}"). Available fields are {0} pull request title, {1} pull request url, {2} pull request number, {3} pull request created date/time, {4} pull request merged date/time, {5} pull request author username, {6} pull request author URL
 - ReleaseNoteDateFormat (-rndf) : Default ("MMM dd, yyyy HH:mm"). You can use any .NET standard or custom date and time format strings.
+- ReleaseNoteQualityControlLabels (-rnqc) : Default is (""). Comma-separated list of labels that a pull request without will be marked up as code to highlight release notes that haven't gone through quality control'
 - PublishToConfluence (-ptc) : Default ("false"). Set to "true" for all other Confluence related parameters to become active.
 - ConfluenceReleaseParentPageId (-cpp) : Confluence parent page identifer. Pulished page will be its child page.
 - ConfluenceSpaceKey (-csk) : Required parameter if PublishToConfluence is true.
@@ -70,6 +72,7 @@ $ UnreleasedGitHubHistory -ghpt 30aee6853987d30da50732c4f849bfbfd24c091e -ptc -c
 
 See Command Line Parameters for details on default values or parameter usage
 
+- pull-request-provider-name
 - release-note-sections
 - release-note-sectionless-description
 - release-note-uncategorised-description
@@ -79,26 +82,27 @@ See Command Line Parameters for details on default values or parameter usage
 - release-note-category-prefix
 - release-note-order-ascending
 - release-note-order-when
+- release-note-exclude
+- release-note-follow
+- release-note-date-format
+- release-note-format
+- release-branch-heads-only
+- release-note-quality-control-labels
 - git-branch-ref
 - git-repo-path
+- git-remote-name
+- git-version
+- git-tags-annotated
 - confluence-publish
 - confluence-release-parent-page-id
 - confluence-space-key
+- confluence-api-url
 - confluence-username
 - confluence-password
 - verbose
 - accept-invalid-certificates
 - file-publish
 - file-name
-- confluence-api-url
-- git-remote-name
-- release-note-exclude
-- release-note-follow
-- git-version
-- release-note-date-format
-- release-note-format
-- release-branch-heads-only
-- pull-request-provider-name
 - github-api-url
 - github-token
 - github-owner

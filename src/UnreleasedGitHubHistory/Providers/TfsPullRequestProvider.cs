@@ -21,7 +21,7 @@ namespace UnreleasedGitHubHistory.Providers
             DiscoverTfsCredentials();
             _tfsClient = new TfsClient(new TfsClientConfiguration
             {
-                Url = new Uri(new Uri(_programArgs.TfsApiUrl), $"tfs/{_programArgs.TfsCollection}"),
+                Url = new Uri($"{_programArgs.TfsApiUrl}/{_programArgs.TfsCollection}", UriKind.Absolute),
                 Credentials = new NetworkCredential(_programArgs.TfsUsername, _programArgs.TfsToken),
             });
         }
@@ -53,7 +53,8 @@ namespace UnreleasedGitHubHistory.Providers
 
         private PullRequest GetPullRequest(int pullRequestId)
         {
-            var repository = _tfsClient.Git.GetRepositories().Result.First(r => string.Equals(r.Name, _programArgs.TfsRepository, StringComparison.CurrentCultureIgnoreCase));
+            var repository = _tfsClient.Git.GetRepositories().Result
+                .First(r => string.Equals(r.Name, _programArgs.TfsRepository, StringComparison.CurrentCultureIgnoreCase));
             if (repository == null)
                 return null;
             return _tfsClient.Git.GetPullRequest(repository.Id, pullRequestId).Result;
@@ -131,14 +132,15 @@ namespace UnreleasedGitHubHistory.Providers
             var filter = new CommitFilter
             {
                 Since = pullRequestDto.MergeCommitSha,
-                Until = pullRequestDto.BaseCommitSha
+                Until = pullRequestDto.BaseCommitSha,
+                FirstParentOnly = true
             };
             return _programArgs.LocalGitRepository.Commits.QueryBy(filter);
         }
 
         public string PullRequestUrl(int pullRequestId)
         {
-            return $@"{_programArgs.TfsApiUrl}/tfs/{_programArgs.TfsCollection}/_git/{_programArgs.TfsRepository}/pullrequest/{pullRequestId}";
+            return $@"{_programArgs.TfsApiUrl}/{_programArgs.TfsCollection}/_git/{_programArgs.TfsRepository}/pullrequest/{pullRequestId}";
         }
 
         public string PrefixedPullRequest(int pullRequestId)

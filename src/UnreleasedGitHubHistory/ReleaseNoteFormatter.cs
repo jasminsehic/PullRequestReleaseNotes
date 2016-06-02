@@ -117,7 +117,7 @@ namespace UnreleasedGitHubHistory
         {
             foreach (var pullRequest in pullRequests)
             {
-                var pullRequestTitle = EmphasiseSquareBraces(EscapeMarkdown(pullRequest.Title));
+                var pullRequestTitle = FormatTitle(pullRequest.Title, pullRequest, programArgs);
                 var pullRequestUrl = $@"[{programArgs.PullRequestProvider.PrefixedPullRequest(pullRequest.Number)}]({programArgs.PullRequestProvider.PullRequestUrl(pullRequest.Number)})";
                 var pullRequestNumber = pullRequest.Number;
                 var pullRequestCreatedAt = pullRequest.CreatedAt.ToString(programArgs.ReleaseNoteDateFormat);
@@ -126,6 +126,19 @@ namespace UnreleasedGitHubHistory
                 var pullRequestAuthorUrl = $@"[{pullRequest.Author}]({pullRequest.AuthorUrl})";
                 markdown.AppendLine(string.Format($@"- {programArgs.ReleaseNoteFormat}", pullRequestTitle, pullRequestUrl, pullRequestNumber, pullRequestCreatedAt, pullRequestMergedAt, pullRequestAuthor, pullRequestAuthorUrl));
             }
+        }
+
+        private static string FormatTitle(string title, PullRequestDto pullRequest, ProgramArgs programArgs)
+        {
+            if (!programArgs.ReleaseNoteQualityControlLabels.All(string.IsNullOrWhiteSpace))
+            {
+                if (pullRequest.Labels
+                   .Intersect(programArgs.ReleaseNoteQualityControlLabels, StringComparer.InvariantCultureIgnoreCase)
+                   .Count() != programArgs.ReleaseNoteQualityControlLabels.Count)
+                    return $"`{title}`";
+            }
+            var escapedTitle = EscapeMarkdown(title);
+            return EmphasiseSquareBraces(escapedTitle);
         }
 
         /// <summary>
