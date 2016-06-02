@@ -21,16 +21,7 @@ namespace UnreleasedGitHubHistory
         public List<PullRequestDto> BuildHistory()
         {
             var releaseHistory = new List<PullRequestDto>();
-
-            var lastCommit = GetLastTaggedCommit(_programArgs.LocalGitRepository, _programArgs.ReleaseBranchRef);
-            if (lastCommit == null)
-            {
-                Console.WriteLine($"Couldn't find the last commit to build history from");
-                return null;
-            }
-            if (_programArgs.VerboseOutput)
-                Console.WriteLine($"Building history for {_programArgs.ReleaseBranchRef} down to commit {lastCommit.Sha}");
-            var unreleasedCommits = GetUnreleasedCommits(lastCommit);
+            var unreleasedCommits = GetAllUnreleasedCommits();
             foreach (var mergeCommit in unreleasedCommits.Where(commit => commit.Parents.Count() > 1))
             {
                 var pullRequestDto = _pullRequestProvider.Get(mergeCommit.Message);
@@ -73,31 +64,30 @@ namespace UnreleasedGitHubHistory
             return r => r.MergedAt;
         }
 
-        private ICommitLog GetUnreleasedCommits(Commit startingCommit)
+        private IEnumerable<Commit> GetAllUnreleasedCommits()
         {
-            // Let's only consider the local branch refs that lead to this commit...
-            var reachableRefs = _programArgs.LocalGitRepository.Refs.ReachableFrom(new[] {startingCommit})
-                .Where(r => r.IsLocalBranch() && r.CanonicalName == _programArgs.ReleaseBranchRef);
-            //...and create a filter that will retrieve all the commits...
-            var commitFilter = new CommitFilter
+            IEnumerable<Commit> commitSet = new List<Commit>();
+            var tags = _programArgs.LocalGitRepository.Tags.Where(LightOrAnnotatedTags())
+               .Select(tag => tag.Target as Commit).Where(x => x != null);
+           var tagCommits = tags as IList<Commit> ?? tags.ToList();
+           foreach (var tagCommit in tagCommits)
+           {
+                var commits = _programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter
+                {
+                    Since = _programArgs.LocalGitRepository.Branches[_programArgs.ReleaseBranchRef],
+                    Until = tagCommit
+                });
+                commitSet = commitSet.Concat(commits);
+            }
+            commitSet = commitSet.Distinct();
+            // then for each tagged commit traverse down its parents and remove them from commit set as they are considered released
+            foreach (var tagCommit in tagCommits)
             {
-                Since = reachableRefs,  // ...reachable from refs...
-                Until = startingCommit, // ...until this commit is met
-                FirstParentOnly = true  // ...only follow our direct lineage
-            };
-            return _programArgs.LocalGitRepository.Commits.QueryBy(commitFilter);
-        }
-
-        private Commit GetLastTaggedCommit(IRepository repository, string branchName)
-        {
-            var branch = repository.Branches.FirstOrDefault(b => b.CanonicalName == branchName);
-            var tags = repository.Tags.Where(LightOrAnnotatedTags()).ToArray();
-            var olderThan = branch?.Tip.Author.When;
-            var commitFilter = new CommitFilter { FirstParentOnly = true };
-            var queriableCommits = branch?.Commits as IQueryableCommitLog;
-            var lastTaggedCommit = queriableCommits?.QueryBy(commitFilter)
-                .FirstOrDefault(c => c.Author.When <= olderThan && tags.Any(a => a.Target.Sha == c.Sha));
-            return lastTaggedCommit ?? branch?.Commits.Last();
+                var commitFilter = new CommitFilter { Since = tagCommit.Id };
+                var commitsToExclude = _programArgs.LocalGitRepository.Commits.QueryBy(commitFilter);
+                commitSet = commitSet.Except(commitsToExclude);
+            }
+            return commitSet;
         }
 
         private Func<Tag, bool> LightOrAnnotatedTags()
