@@ -66,10 +66,11 @@ namespace UnreleasedGitHubHistory
 
         private IEnumerable<Commit> GetAllUnreleasedCommits()
         {
-            IEnumerable<Commit> commitSet = new List<Commit>();
+            IEnumerable<Commit> releasedAndUnreleasedCommits = new List<Commit>();
             var tags = _programArgs.LocalGitRepository.Tags.Where(LightOrAnnotatedTags())
                .Select(tag => tag.Target as Commit).Where(x => x != null);
            var tagCommits = tags as IList<Commit> ?? tags.ToList();
+           // get all released and unreleased commits down to tagged (release) commits
            foreach (var tagCommit in tagCommits)
            {
                 var commits = _programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter
@@ -77,17 +78,16 @@ namespace UnreleasedGitHubHistory
                     Since = _programArgs.LocalGitRepository.Branches[_programArgs.ReleaseBranchRef],
                     Until = tagCommit
                 });
-                commitSet = commitSet.Concat(commits);
+                releasedAndUnreleasedCommits = releasedAndUnreleasedCommits.Concat(commits);
             }
-            commitSet = commitSet.Distinct();
-            // then for each tagged commit traverse down its parents and remove them from commit set as they are considered released
+            releasedAndUnreleasedCommits = releasedAndUnreleasedCommits.Distinct();
+            // then for each tagged commit traverse further down all its parents and remove them from released/unreleased commits as they have been included in a release
             foreach (var tagCommit in tagCommits)
             {
-                var commitFilter = new CommitFilter { Since = tagCommit.Id };
-                var commitsToExclude = _programArgs.LocalGitRepository.Commits.QueryBy(commitFilter);
-                commitSet = commitSet.Except(commitsToExclude);
+                var releasedCommits = _programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter { Since = tagCommit.Id });
+                releasedAndUnreleasedCommits = releasedAndUnreleasedCommits.Except(releasedCommits);
             }
-            return commitSet;
+            return releasedAndUnreleasedCommits;
         }
 
         private Func<Tag, bool> LightOrAnnotatedTags()
