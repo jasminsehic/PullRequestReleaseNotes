@@ -228,6 +228,22 @@ namespace UnreleasedGitHubHistory.Models
         [YamlMember(Alias = "bitbucketserver-password")]
         public string BitBucketServerPassword { get; set; }
 
+        [ArgShortcut("-bbak")]
+        [YamlMember(Alias = "bitbucket-api-key")]
+        public string BitBucketApiKey { get; set; }
+
+        [ArgShortcut("-bbas")]
+        [YamlMember(Alias = "bitbucket-api-secret")]
+        public string BitBucketApiSecret { get; set; }
+
+        [ArgShortcut("-bba")]
+        [YamlMember(Alias = "bitbucket-account")]
+        public string BitBucketAccount { get; set; }
+
+        [ArgShortcut("-bbr")]
+        [YamlMember(Alias = "bitbucket-repository")]
+        public string BitBucketRepository { get; set; }
+
         // Not direct parameters
 
         [ArgIgnore]
@@ -235,7 +251,6 @@ namespace UnreleasedGitHubHistory.Models
 
         [ArgIgnore]
         public IPullRequestProvider PullRequestProvider { get; set; }
-
 
         public bool HeadBranchRestrictionApplies()
         {

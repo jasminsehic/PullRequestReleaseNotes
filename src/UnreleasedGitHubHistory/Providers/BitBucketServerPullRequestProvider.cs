@@ -18,6 +18,7 @@ namespace UnreleasedGitHubHistory.Providers
         private readonly ProgramArgs _programArgs;
         private readonly RestClient _restClient;
 
+        // Formerly known as Stash
         public BitBucketServerPullRequestProvider(ProgramArgs programArgs)
         {
             _programArgs = programArgs;
@@ -442,10 +443,6 @@ namespace UnreleasedGitHubHistory.Providers
             long ticks = (long)reader.Value;
             return ticks.FromTimestamp();
         }
-    }
-
-    public static class DateTimeHelpers
-    {
     }
 
     public class ResponseWrapper<T>

@@ -7,7 +7,6 @@ using UnreleasedGitHubHistory.Publishers;
 namespace UnreleasedGitHubHistory
 {
     // FEATURE: find page on confluence based on partial name so we can have actual date in title
-    // FEATURE: add support for other pull request services (BitBucket / BitBucket Server (Stash))
     // FEATURE: publish notes to (Slack, GitHub, BitBucket / BitBucket Server (Stash))
     // FEATURE: rename to PullRequestNotes
 

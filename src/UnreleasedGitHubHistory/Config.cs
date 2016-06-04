@@ -112,6 +112,9 @@ namespace UnreleasedGitHubHistory
             _programArgs.BitBucketServerUsername = _programArgs.BitBucketServerUsername ?? args.BitBucketServerUsername;
             _programArgs.BitBucketServerProject = _programArgs.BitBucketServerProject ?? args.BitBucketServerProject;
             _programArgs.BitBucketServerRepository = _programArgs.BitBucketServerRepository ?? args.BitBucketServerRepository;
+            _programArgs.BitBucketApiKey = _programArgs.BitBucketApiKey ?? args.BitBucketApiKey;
+            _programArgs.BitBucketAccount = _programArgs.BitBucketAccount ?? args.BitBucketAccount;
+            _programArgs.BitBucketRepository = _programArgs.BitBucketRepository ?? args.BitBucketRepository;
 
             _programArgs.PullRequestProviderName = _programArgs.PullRequestProviderName ?? args.PullRequestProviderName;
 
@@ -167,6 +170,9 @@ namespace UnreleasedGitHubHistory
                 case "tfs":
                     _programArgs.PullRequestProvider = new TfsPullRequestProvider(_programArgs);
                     break;
+                case "bitbucket":
+                    _programArgs.PullRequestProvider = new BitBucketPullRequestProvider(_programArgs);
+                    break;
                 case "bitbucketserver":
                     _programArgs.PullRequestProvider = new BitBucketServerPullRequestProvider(_programArgs);
                     break;
@@ -206,7 +212,7 @@ namespace UnreleasedGitHubHistory
             }
             using (var writer = new StreamWriter(sampleConfigFile))
             {
-                writer.WriteLine("# pull-request-provider-name: github");
+                writer.WriteLine("# pull-request-provider-name: github | tfs | gitlab | bitbucketserver | bitbucket");
                 writer.WriteLine("# release-branch-heads-only: true");
                 writer.WriteLine("# release-note-exclude: Exclude Note");
                 writer.WriteLine("# release-note-follow: Follow Note");

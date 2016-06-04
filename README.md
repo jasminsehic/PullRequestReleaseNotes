@@ -25,7 +25,7 @@ $ UnreleasedGitHubHistory -cu confluenceUser -cp confluencePwd
 ```
 
 ### Command Line Parameters
-- PullRequestProviderName (-prpn) : Default is github. gitlab and tfs are also supported.
+- PullRequestProviderName (-prpn) : Default is github. gitlab, tfs, bitbucket and bitbucketserver are also supported.
 - GitHubToken (-ghpt) : Required parameter if PullRequestProviderName is github. Can be supplied as parameter or UNRELEASED_HISTORY_GITHUB_TOKEN environment variable.
 - GitHubOwner (-gho) : Default is extracted from remote url.
 - GitHubRepository (-ghr) : Default is extracted from remote url.
@@ -42,7 +42,13 @@ $ UnreleasedGitHubHistory -cu confluenceUser -cp confluencePwd
 - TfsApiUrl (-tau) : Required parameter if PullRequestProviderName is tfs.
 - BitBucketServerUrl (-bbsu) : Required parameter if PullRequestProviderName is bitbucketserver.
 - BitBucketServerUsername (-bbsun) : Required parameter if PullRequestProviderName is bitbucketserver.
-- BitBucketServerPassword (-bbsp) : Required parameter if PullRequestProviderName is tfs. Can be supplied as parameter or UNRELEASED_HISTORY_BITBUCKETSERVER_PASSWORD environment variable.
+- BitBucketServerPassword (-bbsp) : Required parameter if PullRequestProviderName is bitbucketserver. Can be supplied as parameter or UNRELEASED_HISTORY_BITBUCKETSERVER_PASSWORD environment variable.
+- BitBucketServerProject (-bbspk) : Required parameter if PullRequestProviderName is bitbucketserver.
+- BitBucketServerRepository (-bbsr) : Required parameter if PullRequestProviderName is bitbucketserver. 
+- BitBucketApiKey (-bbak) : Required parameter if PullRequestProviderName is bitbucket.
+- BitBucketApiSecret (-bbas) : Required parameter if PullRequestProviderName is bitbucket. Can be supplied as parameter or UNRELEASED_HISTORY_BITBUCKET_SECRET environment variable.
+- BitBucketAccount (-bba) : Required parameter if PullRequestProviderName is bitbucket.
+- BitBucketRepository (-bbr) : Required parameter if PullRequestProviderName is bitbucket. 
 - GitRemote (-gr) : Default ("origin"). If not found it will search through all remotes.
 - GitVersion (-gv) : Default ("Unreleased"). Can be supplied as parameter or GITVERSION_MAJORMINORPATCH environment variable.
 - GitTagsAnnotated (-gta) : Default ("false"). Set to "true" to only consider annotated tags as releases.
@@ -126,6 +132,12 @@ See Command Line Parameters for details on default values or parameter usage
 - bitbucketserver-username
 - bitbucketserver-password
 - bitbucketserver-url
+- bitbucketserver-project-key
+- bitbucketserver-repository
+- bitbucket-api-key
+- bitbucket-api-secret
+- bitbucket-account
+- bitbucket-repository
 
 ### Config File Sample
 
