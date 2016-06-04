@@ -40,10 +40,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Atlassian.Stash.Api, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Atlassian.Stash.Api.2.0.0\lib\net45\Atlassian.Stash.Api.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Infinity, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Infinity.NET.0.1.2\lib\portable-net45+win+wpa81+wp80\Infinity.dll</HintPath>
       <Private>True</Private>
@@ -97,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="Providers\BitBucketServerPullRequestProvider.cs" />
     <Compile Include="Providers\GitHubPullRequestProvider.cs" />
     <Compile Include="Providers\GitLabPullRequestProvider.cs" />
     <Compile Include="Providers\IPullRequestProvider.cs" />

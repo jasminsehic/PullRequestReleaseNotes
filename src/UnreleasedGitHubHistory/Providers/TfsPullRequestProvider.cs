@@ -96,6 +96,7 @@ namespace UnreleasedGitHubHistory.Providers
                         Console.WriteLine($"   - Label : {label}");
                 }
             }
+            pullRequestDto.Labels = pullRequestDto.Labels.Distinct().ToList();
             return pullRequestDto;
         }
 

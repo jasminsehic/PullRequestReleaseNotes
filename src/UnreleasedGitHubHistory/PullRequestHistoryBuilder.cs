@@ -69,10 +69,17 @@ namespace UnreleasedGitHubHistory
             IEnumerable<Commit> releasedAndUnreleasedCommits = new List<Commit>();
             var tags = _programArgs.LocalGitRepository.Tags.Where(LightOrAnnotatedTags())
                .Select(tag => tag.Target as Commit).Where(x => x != null);
-           var tagCommits = tags as IList<Commit> ?? tags.ToList();
-           // get all released and unreleased commits down to tagged (release) commits
-           foreach (var tagCommit in tagCommits)
-           {
+            var tagCommits = tags as IList<Commit> ?? tags.ToList();
+            if (!tagCommits.Any())
+            {
+                return _programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter
+                {
+                    Since = _programArgs.LocalGitRepository.Branches[_programArgs.ReleaseBranchRef],
+                });
+            }
+            // get all released and unreleased commits down to tagged (release) commits
+            foreach (var tagCommit in tagCommits)
+            {
                 var commits = _programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter
                 {
                     Since = _programArgs.LocalGitRepository.Branches[_programArgs.ReleaseBranchRef],

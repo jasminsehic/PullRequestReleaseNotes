@@ -99,11 +99,19 @@ namespace UnreleasedGitHubHistory
             _programArgs.ReleaseNoteOrderWhen = _programArgs.ReleaseNoteOrderWhen ?? args.ReleaseNoteOrderWhen;
             _programArgs.ReleaseNoteSectionlessDescription = _programArgs.ReleaseNoteSectionlessDescription ?? args.ReleaseNoteSectionlessDescription;
             _programArgs.ReleaseNoteUncategorisedDescription = _programArgs.ReleaseNoteUncategorisedDescription ?? args.ReleaseNoteUncategorisedDescription;
-            _programArgs.ReleaseNoteQualityControlLabels = _programArgs.ReleaseNoteQualityControlLabels ?? args.ReleaseNoteQualityControlLabels;
+            _programArgs.ReleaseNoteHighlightlLabels = _programArgs.ReleaseNoteHighlightlLabels ?? args.ReleaseNoteHighlightlLabels;
             _programArgs.GitLabOwner = _programArgs.GitLabOwner ?? args.GitLabOwner;
             _programArgs.GitLabRepository = _programArgs.GitLabRepository ?? args.GitLabRepository;
             _programArgs.GitLabApiUrl = _programArgs.GitLabApiUrl ?? args.GitLabApiUrl;
             _programArgs.GitLabProjectId = _programArgs.GitLabProjectId ?? args.GitLabProjectId;
+            _programArgs.TfsApiUrl = _programArgs.TfsApiUrl ?? args.TfsApiUrl;
+            _programArgs.TfsCollection = _programArgs.TfsCollection ?? args.TfsCollection;
+            _programArgs.TfsRepository = _programArgs.TfsRepository ?? args.TfsRepository;
+            _programArgs.TfsUsername = _programArgs.TfsUsername ?? args.TfsUsername;
+            _programArgs.BitBucketServerUrl = _programArgs.BitBucketServerUrl ?? args.BitBucketServerUrl;
+            _programArgs.BitBucketServerUsername = _programArgs.BitBucketServerUsername ?? args.BitBucketServerUsername;
+            _programArgs.BitBucketServerProject = _programArgs.BitBucketServerProject ?? args.BitBucketServerProject;
+            _programArgs.BitBucketServerRepository = _programArgs.BitBucketServerRepository ?? args.BitBucketServerRepository;
 
             _programArgs.PullRequestProviderName = _programArgs.PullRequestProviderName ?? args.PullRequestProviderName;
 
@@ -158,6 +166,9 @@ namespace UnreleasedGitHubHistory
                     break;
                 case "tfs":
                     _programArgs.PullRequestProvider = new TfsPullRequestProvider(_programArgs);
+                    break;
+                case "bitbucketserver":
+                    _programArgs.PullRequestProvider = new BitBucketServerPullRequestProvider(_programArgs);
                     break;
                 default:
                     Console.WriteLine($"Unsupported pull request provider: {_programArgs.PullRequestProvider}.");

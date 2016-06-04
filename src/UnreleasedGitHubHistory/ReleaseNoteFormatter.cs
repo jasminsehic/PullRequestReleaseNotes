@@ -130,11 +130,11 @@ namespace UnreleasedGitHubHistory
 
         private static string FormatTitle(string title, PullRequestDto pullRequest, ProgramArgs programArgs)
         {
-            if (!programArgs.ReleaseNoteQualityControlLabels.All(string.IsNullOrWhiteSpace))
+            if (!programArgs.ReleaseNoteHighlightlLabels.All(string.IsNullOrWhiteSpace))
             {
                 if (pullRequest.Labels
-                   .Intersect(programArgs.ReleaseNoteQualityControlLabels, StringComparer.InvariantCultureIgnoreCase)
-                   .Count() != programArgs.ReleaseNoteQualityControlLabels.Count)
+                   .Intersect(programArgs.ReleaseNoteHighlightlLabels, StringComparer.InvariantCultureIgnoreCase)
+                   .Count() != programArgs.ReleaseNoteHighlightlLabels.Count)
                     return $"`{title}`";
             }
             var escapedTitle = EscapeMarkdown(title);

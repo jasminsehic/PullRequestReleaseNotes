@@ -1,4 +1,7 @@
-# UnreleasedGitHubHistory
+![Icon](https://raw.github.com/jasminsehic/UnreleasedGitHubHistory/master/logo.png)
+
+UnreleasedGitHubHistory
+=======================
 
 [![Build status](https://ci.appveyor.com/api/projects/status/github/jasminsehic/unreleasedgithubhistory?svg=true)](https://ci.appveyor.com/project/jasminsehic/unreleasedgithubhistory)
 [![Chocolatey](https://img.shields.io/chocolatey/vpre/unreleasedgithubhistory.portable.svg)](https://chocolatey.org/packages/UnreleasedGitHubHistory.Portable)
@@ -37,6 +40,9 @@ $ UnreleasedGitHubHistory -cu confluenceUser -cp confluencePwd
 - TfsCollection (-tc) : Default is extracted from remote url.
 - TfsRepository (-tr) : Default is extracted from remote url.
 - TfsApiUrl (-tau) : Required parameter if PullRequestProviderName is tfs.
+- BitBucketServerUrl (-bbsu) : Required parameter if PullRequestProviderName is bitbucketserver.
+- BitBucketServerUsername (-bbsun) : Required parameter if PullRequestProviderName is bitbucketserver.
+- BitBucketServerPassword (-bbsp) : Required parameter if PullRequestProviderName is tfs. Can be supplied as parameter or UNRELEASED_HISTORY_BITBUCKETSERVER_PASSWORD environment variable.
 - GitRemote (-gr) : Default ("origin"). If not found it will search through all remotes.
 - GitVersion (-gv) : Default ("Unreleased"). Can be supplied as parameter or GITVERSION_MAJORMINORPATCH environment variable.
 - GitTagsAnnotated (-gta) : Default ("false"). Set to "true" to only consider annotated tags as releases.
@@ -53,7 +59,7 @@ $ UnreleasedGitHubHistory -cu confluenceUser -cp confluencePwd
 - ReleaseNoteOrderWhen (-rnow) : Default ("merged"). Set to "created" to order release notes based on pull request creation time rather than merge time.
 - ReleaseNoteFormat (-rnf) : Default ("{0} {1}"). Available fields are {0} pull request title, {1} pull request url, {2} pull request number, {3} pull request created date/time, {4} pull request merged date/time, {5} pull request author username, {6} pull request author URL
 - ReleaseNoteDateFormat (-rndf) : Default ("MMM dd, yyyy HH:mm"). You can use any .NET standard or custom date and time format strings.
-- ReleaseNoteQualityControlLabels (-rnqc) : Default is (""). Comma-separated list of labels that a pull request without will be marked up as code to highlight release notes that haven't gone through quality control'
+- ReleaseNoteHighlightLabels (-rnhl) : Default is (""). Comma-separated list of labels which a pull request without will be marked up as code to highlight the item in release notes.'
 - PublishToConfluence (-ptc) : Default ("false"). Set to "true" for all other Confluence related parameters to become active.
 - ConfluenceReleaseParentPageId (-cpp) : Confluence parent page identifer. Pulished page will be its child page.
 - ConfluenceSpaceKey (-csk) : Required parameter if PublishToConfluence is true.
@@ -87,7 +93,7 @@ See Command Line Parameters for details on default values or parameter usage
 - release-note-date-format
 - release-note-format
 - release-branch-heads-only
-- release-note-quality-control-labels
+- release-note-highlight-labels
 - git-branch-ref
 - git-repo-path
 - git-remote-name
@@ -117,12 +123,14 @@ See Command Line Parameters for details on default values or parameter usage
 - tfs-repository
 - tfs-username
 - tfs-token
-
+- bitbucketserver-username
+- bitbucketserver-password
+- bitbucketserver-url
 
 ### Config File Sample
 
 ```yaml
-pull-request-provider-name: github | gitlab | tfs
+pull-request-provider-name: github | gitlab | tfs | bitbucketserver
 release-branch-heads-only: true
 release-note-exclude: Exclude Note
 release-note-follow: Follow Note

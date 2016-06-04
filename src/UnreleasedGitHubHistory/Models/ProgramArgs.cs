@@ -47,10 +47,10 @@ namespace UnreleasedGitHubHistory.Models
         [YamlMember(Alias = "release-note-order-when")]
         public string ReleaseNoteOrderWhen { get; set; }
 
-        [ArgShortcut("-rnqc")]
-        [YamlMember(Alias = "release-note-quality-control-labels")]
-        [ArgExample("Label1,Label2", "List of labels which a pull request without will be marked as up code to highlight items in release notes that haven't gone through quality control.")]
-        public List<string> ReleaseNoteQualityControlLabels { get; set; }
+        [ArgShortcut("-rnhl")]
+        [YamlMember(Alias = "release-note-highlight-labels")]
+        [ArgExample("Label1,Label2", "List of labels which a pull request without will be marked up as code to highlight the item in release notes.")]
+        public List<string> ReleaseNoteHighlightlLabels { get; set; }
 
         [ArgShortcut("-ghb")]
         [YamlMember(Alias = "git-branch-ref")]
@@ -208,11 +208,34 @@ namespace UnreleasedGitHubHistory.Models
         [YamlMember(Alias = "tfs-token")]
         public string TfsToken { get; set; }
 
+        [ArgShortcut("-bbsu")]
+        [YamlMember(Alias = "bitbucketserver-url")]
+        public string BitBucketServerUrl { get; set; }
+
+        [ArgShortcut("-bbspk")]
+        [YamlMember(Alias = "bitbucketserver-project-key")]
+        public string BitBucketServerProject { get; set; }
+
+        [ArgShortcut("-bbsr")]
+        [YamlMember(Alias = "bitbucketserver-repository")]
+        public string BitBucketServerRepository { get; set; }
+
+        [ArgShortcut("-bbsun")]
+        [YamlMember(Alias = "bitbucketserver-username")]
+        public string BitBucketServerUsername { get; set; }
+
+        [ArgShortcut("-bbsp")]
+        [YamlMember(Alias = "bitbucketserver-password")]
+        public string BitBucketServerPassword { get; set; }
+
+        // Not direct parameters
+
         [ArgIgnore]
         public Repository LocalGitRepository { get; set; }
 
         [ArgIgnore]
         public IPullRequestProvider PullRequestProvider { get; set; }
+
 
         public bool HeadBranchRestrictionApplies()
         {
