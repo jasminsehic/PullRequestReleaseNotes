@@ -5,10 +5,10 @@ using System.Text.RegularExpressions;
 using LibGit2Sharp;
 using SharpBucket.V2;
 using SharpBucket.V2.Pocos;
-using UnreleasedGitHubHistory.Models;
+using PullRequestReleaseNotes.Models;
 using Group = System.Text.RegularExpressions.Group;
 
-namespace UnreleasedGitHubHistory.Providers
+namespace PullRequestReleaseNotes.Providers
 {
     public class BitBucketPullRequestProvider : IPullRequestProvider
     {
@@ -66,6 +66,7 @@ namespace UnreleasedGitHubHistory.Providers
                 MergedAt = Convert.ToDateTime(pullRequest.updated_on),
                 Author = pullRequest.author.display_name,
                 AuthorUrl = pullRequest.author.links.self.href,
+                Url = PullRequestUrl((int)pullRequest.id),
                 Labels = new List<string>()
             };
             // extract labels from title and description following pattern [#Section] ... [##Category]

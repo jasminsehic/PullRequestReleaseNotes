@@ -1,27 +1,29 @@
-![Icon](https://raw.github.com/jasminsehic/UnreleasedGitHubHistory/master/logo.png)
+![Icon](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/logo.png)
 
-UnreleasedGitHubHistory
+PullRequestReleaseNotes
 =======================
 
-[![Build status](https://ci.appveyor.com/api/projects/status/github/jasminsehic/unreleasedgithubhistory?svg=true)](https://ci.appveyor.com/project/jasminsehic/unreleasedgithubhistory)
-[![Chocolatey](https://img.shields.io/chocolatey/vpre/unreleasedgithubhistory.portable.svg)](https://chocolatey.org/packages/UnreleasedGitHubHistory.Portable)
-[![Release](https://img.shields.io/github/release/jasminsehic/unreleasedgithubhistory.svg)]()
-[![License](https://img.shields.io/github/license/jasminsehic/unreleasedgithubhistory.svg)]()
+[![Build status](https://ci.appveyor.com/api/projects/status/github/jasminsehic/pullrequestreleasenotes?svg=true)](https://ci.appveyor.com/project/jasminsehic/unreleasedgithubhistory)
+[![Chocolatey](https://img.shields.io/chocolatey/vpre/PullRequestReleaseNotes.portable.svg)](https://chocolatey.org/packages/PullRequestReleaseNotes.Portable)
+[![Release](https://img.shields.io/github/release/jasminsehic/PullRequestReleaseNotes.svg)]()
+[![License](https://img.shields.io/github/license/jasminsehic/PullRequestReleaseNotes.svg)]()
 
-UnreleasedGitHubHistory is a utility which generates release notes for all merged pull requests that have not yet been released (since last tag) from a specific branch and optionally publishes it to a markdown file and/or posts it to Atlassian Confluence page which is then rendered using the Render Markdown plugin. Intention is to run this utility as part of a CI process and generate notes automatically as part of every build of a head branch.
+PullRequestReleaseNotes is a utility which generates release notes for all merged pull requests on a specific branch that have not yet been released (since last tag). Supported Pull Request providers are [GitHub](https://github.com/), [GitLab](https://gitlab.com/), [TFS / Team Services](https://www.visualstudio.com/en-us/products/visual-studio-team-services-vs.aspx), [BitBucket](https://bitbucket.org/) and [Bitbucket Server](https://www.atlassian.com/software/bitbucket/download). Intention is to run this utility as part of a continous integration process and generate notes automatically as part of every release branch build. Optionally the utility can also publish the notes to a markdown file, [Atlassian Confluence](https://www.atlassian.com/software/confluence) page or a [Slack](https://slack.com/) Post. 
 
-Utility will use pull request titles and labels to group and sort the release notes. For example all pull requests with Bug label will be grouped under Fixes section in notes and pull requests with Enhancement label will be grouped under Enhancements section. Secondary level (categories) of grouping is possible through use of the #Label where # character is used to signify second level of grouping. You can supply the utility with category descriptions so that you can turn label CategoryA into Category A description. Pull requests without relevant labels will be grouped under Unclassified and Undefined sections. Pull requests labeled with multiple category labels will cause notes to appear in multiple categories.
+Utility uses [SemanticReleaseNotes.org](http://www.semanticreleasenotes.org/) format and will use pull request titles and labels to extract semantic release note sections, categories and summaries. For example all pull requests with `Bug` label can be grouped under `Fixes `section and pull requests with `Enhancement` label can be grouped under `Enhancements` section. Category grouping is possible through use of the `#Label` where `#` character is used to signify a category. You can supply the utility with category descriptions so that you can turn label `CategoryA` into `Category A` description. Pull requests without relevant labels will be grouped under `Unclassified` and `Undefined` sections. Pull requests labeled with multiple category labels will cause notes to appear in multiple categories. 
+
+NOTE: TFS / Team Services and BitBucket Hosted / Server pull request providers to not have a label/tag concept on pull requests yet so on those providers you can type `[#section]` or `[##category]` either in the title or the description of the pull request as a pseudo-tag.
 
 ## Install
 
-    choco install UnreleasedGitHubHistory.Portable
+    choco install PullRequestReleaseNotes.Portable
     
 ## Usage
 
 Utility can have command line parameters passed to it or have the parameters supplied via a YAML based config. You can generate a sample YAML file by passing -init parameter to the utility.
 
 ```{r, engine='bat', count_lines}
-$ UnreleasedGitHubHistory -cu confluenceUser -cp confluencePwd
+$ PullRequestReleaseNotes -cu confluenceUser -cp confluencePwd
 ```
 
 ### Command Line Parameters
@@ -64,7 +66,7 @@ $ UnreleasedGitHubHistory -cu confluenceUser -cp confluencePwd
 - ReleaseNoteOrderAscending (-rnoa) : Default ("false"). Used to determine the sort order of the release notes.
 - ReleaseNoteOrderWhen (-rnow) : Default ("merged"). Set to "created" to order release notes based on pull request creation time rather than merge time.
 - ReleaseNoteFormat (-rnf) : Default ("{0} {1}"). Available fields are {0} pull request title, {1} pull request url, {2} pull request number, {3} pull request created date/time, {4} pull request merged date/time, {5} pull request author username, {6} pull request author URL
-- ReleaseNoteDateFormat (-rndf) : Default ("MMM dd, yyyy HH:mm"). You can use any .NET standard or custom date and time format strings.
+- ReleaseNoteDateFormat (-rndf) : Default ("MMM dd, yyyy HH:mm"). You can use any [.NET standard](https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx) or [custom date and time format](https://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx) strings.
 - ReleaseNoteHighlightLabels (-rnhl) : Default is (""). Comma-separated list of labels which a pull request without will be marked up as code to highlight the item in release notes.'
 - PublishToConfluence (-ptc) : Default ("false"). Set to "true" for all other Confluence related parameters to become active.
 - ConfluenceReleaseParentPageId (-cpp) : Confluence parent page identifer. Pulished page will be its child page.
@@ -72,13 +74,16 @@ $ UnreleasedGitHubHistory -cu confluenceUser -cp confluencePwd
 - ConfluenceUser (-cu) : Required parameter if PublishToConfluence is true.
 - ConfluencePassword (-cp) : Required parameter if PublishToConfluence is true.
 - ConfluenceApiUrl (-cau) : Required parameter if PublishToConfluence is true.
+- PublishToSlack (-pts) : Default ("false"). Set to "true" for all other Slack related parameters to become active.
+- SlackToken (-st) : Required parameter if PublishToSlack is true. Set to your personal Slack token.
+- SlackChannels(-cau) : Required parameter if PublishToSlack is true. Set to a comma-separated list of channel identifiers.
 - VerboseOutput (-v) : Default ("false"). Set to "true" to output more information about what the utility is doing.
 - AcceptInvalidCertificates (-aic) : Default ("false"). Set to "true" to help when using Fiddler to debug HTTP responses.
 - PublishToFile (-ptf) : Default ("false"). Set to "true" to output markdown to a local filename supplied by OutputFileName parameter.
 - OutputFileName (-o) : Default ("Unreleased.md").
 - ExcludeLabel (-el) : Default ("Exclude Note"). Pull request label which once found will cause the entire pull request to be excluded from release notes.
 - FollowLabel (-fl) : Default ("Follow Note"). Pull request label which once found will cause the tool to recursively follow all other pull request merge commits within the pull request.
-- Init (-init) : When provided the utility will generate a sample UnreleasedGitHubHistory.yml file at the root of the Git repository and not generate any notes.
+- Init (-init) : When provided the utility will generate a sample PullRequestReleaseNotes.yml file at the root of the Git repository and not generate any notes.
 
 ### YAML File Parameters
 
@@ -111,6 +116,9 @@ See Command Line Parameters for details on default values or parameter usage
 - confluence-api-url
 - confluence-username
 - confluence-password
+- slack-publish
+- slack-token
+- slack-channels
 - verbose
 - accept-invalid-certificates
 - file-publish
@@ -142,7 +150,7 @@ See Command Line Parameters for details on default values or parameter usage
 ### Config File Sample
 
 ```yaml
-pull-request-provider-name: github | gitlab | tfs | bitbucketserver
+pull-request-provider-name: github | gitlab | tfs | bitbucketserver | bitbucket
 release-branch-heads-only: true
 release-note-exclude: Exclude Note
 release-note-follow: Follow Note

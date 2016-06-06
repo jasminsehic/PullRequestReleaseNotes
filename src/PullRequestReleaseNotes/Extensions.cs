@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnreleasedGitHubHistory
+namespace PullRequestReleaseNotes
 {
     public static class Extensions
     {

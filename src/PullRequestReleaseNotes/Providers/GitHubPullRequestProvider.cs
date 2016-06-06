@@ -5,10 +5,10 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using LibGit2Sharp;
-using UnreleasedGitHubHistory.Models;
+using PullRequestReleaseNotes.Models;
 using Credentials = Octokit.Credentials;
 
-namespace UnreleasedGitHubHistory.Providers
+namespace PullRequestReleaseNotes.Providers
 {
     public class GitHubPullRequestProvider : IPullRequestProvider
     {
@@ -20,7 +20,7 @@ namespace UnreleasedGitHubHistory.Providers
             _programArgs = programArgs;
             DiscoverToken();
             var gitHubCredentials = new InMemoryCredentialStore(new Credentials(_programArgs.GitHubToken));
-            _gitHubClient = new GitHubClient(new ProductHeaderValue("UnreleasedGitHubHistory"), gitHubCredentials);
+            _gitHubClient = new GitHubClient(new ProductHeaderValue("PullRequestReleaseNotes"), gitHubCredentials);
         }
 
         private void DiscoverToken()
@@ -59,8 +59,9 @@ namespace UnreleasedGitHubHistory.Providers
                 Title = pullRequest.Title,
                 CreatedAt = pullRequest.CreatedAt,
                 MergedAt = pullRequest.MergedAt,
-                Author = pullRequest.User.Name,
+                Author = pullRequest.User.Login,
                 AuthorUrl = pullRequest.User.Url,
+                Url = PullRequestUrl(pullRequest.Number),
                 Labels = new List<string>()
             };
             foreach (var label in issue.Labels)

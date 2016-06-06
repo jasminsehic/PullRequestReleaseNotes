@@ -8,10 +8,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using RestSharp;
 using RestSharp.Authenticators;
-using UnreleasedGitHubHistory.Models;
+using PullRequestReleaseNotes.Models;
 using Group = System.Text.RegularExpressions.Group;
 
-namespace UnreleasedGitHubHistory.Providers
+namespace PullRequestReleaseNotes.Providers
 {
     public class BitBucketServerPullRequestProvider : IPullRequestProvider
     {
@@ -86,6 +86,7 @@ namespace UnreleasedGitHubHistory.Providers
                 MergedAt = Convert.ToInt64(pullRequest.UpdatedDate).FromTimestamp(),
                 Author = pullRequest.Author.User.DisplayName,
                 AuthorUrl = pullRequest.Author.User.Links.Self.First().Href.ToString(),
+                Url = PullRequestUrl(Convert.ToInt32(pullRequest.Id)),
                 Labels = new List<string>()
             };
             // extract labels from title and description following pattern [#Section] ... [##Category]

@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace UnreleasedGitHubHistory.Models
+namespace PullRequestReleaseNotes.Models
 {
     [DataContract]
     public class Content

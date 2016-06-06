@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using UnreleasedGitHubHistory.Models;
+using PullRequestReleaseNotes.Models;
 using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Authenticators;
 
-namespace UnreleasedGitHubHistory.Publishers
+namespace PullRequestReleaseNotes.Publishers
 {
     public static class ConfluencePublisher
     {
-        public static bool PublishMarkdownReleaseHistoryPage(string pageTitle, string markdownNotes, ProgramArgs programArgs)
+        public static bool PublishMarkdownPage(string pageTitle, string markdownNotes, ProgramArgs programArgs)
         {
             var existingPage = FindConfluencePage(programArgs, pageTitle);
             if (existingPage == null)

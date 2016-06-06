@@ -1,6 +1,6 @@
 pull-request-provider-name: github
 github-owner: jasminsehic
-github-repo: UnreleasedGitHubHistory
+github-repo: PullRequestReleaseNotes
 git-remote-name: origin
 release-branch-heads-only: true
 release-note-exclude: Exclude Note

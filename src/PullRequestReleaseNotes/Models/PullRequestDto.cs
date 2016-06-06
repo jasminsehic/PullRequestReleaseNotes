@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace UnreleasedGitHubHistory.Models
+namespace PullRequestReleaseNotes.Models
 {
     public class PullRequestDto
     {
@@ -15,6 +16,19 @@ namespace UnreleasedGitHubHistory.Models
         public string Url { get; set; }
         public string BaseCommitSha { get; set; }
         public string MergeCommitSha { get; set; }
+
+        public List<string> Categories(string categoryPrefix, Dictionary<string, string> categoryDescriptions)
+        {
+            return Labels.Where(l => l.StartsWith(categoryPrefix)).ToList()
+                .Select(category => categoryDescriptions[category.Replace(categoryPrefix, string.Empty)]).ToList();
+        }
+
+        public bool Highlighted(List<string> highlightLabels)
+        {
+            if (highlightLabels.All(string.IsNullOrWhiteSpace))
+                return false;
+            return Labels.Intersect(highlightLabels, StringComparer.InvariantCultureIgnoreCase).Count() != highlightLabels.Count;
+        }
     }
 
     public sealed class PullRequestDtoEqualityComparer : IEqualityComparer<PullRequestDto>

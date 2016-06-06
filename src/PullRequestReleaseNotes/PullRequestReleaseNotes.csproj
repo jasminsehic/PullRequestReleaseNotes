@@ -9,8 +9,8 @@
     <ProjectGuid>{B7A7DF45-4248-4784-8417-594F15B7484A}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnreleasedGitHubHistory</RootNamespace>
-    <AssemblyName>UnreleasedGitHubHistory</AssemblyName>
+    <RootNamespace>PullRequestReleaseNotes</RootNamespace>
+    <AssemblyName>PullRequestReleaseNotes</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BuildDir>$(SolutionDir)..\build\</BuildDir>
@@ -107,18 +107,20 @@
     <Compile Include="Publishers\FilePublisher.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Models\PullRequestCommitDto.cs" />
+    <Compile Include="Publishers\SlackPublisher.cs" />
     <Compile Include="PullRequestHistoryBuilder.cs" />
-    <Compile Include="ReleaseNoteFormatter.cs" />
+    <Compile Include="MarkdownFormatter.cs" />
     <Compile Include="Models\ConfluenceDtos.cs" />
     <Compile Include="Models\PullRequestDto.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Models\ProgramArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SemanticReleaseNotesBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="NugetAssets\UnreleasedGitHubHistory.Portable.nuspec" />
+    <None Include="NugetAssets\PullRequestReleaseNotes.Portable.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="Clean">
@@ -204,10 +206,10 @@ foreach (var item in filesToCleanup)
     <!-- NugetExeBuild -->
     <MakeDir Directories="$(BuildDir)NuGetExeBuild" />
     <Copy SourceFiles="@(NativeBinaries)" DestinationFiles="@(NativeBinaries->'$(BuildDir)NuGetExeBuild\tools\lib\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="$(OutputPath)UnreleasedGitHubHistory.exe" DestinationFolder="$(BuildDir)NuGetExeBuild\tools" />
-    <Copy SourceFiles="$(OutputPath)UnreleasedGitHubHistory.pdb" DestinationFolder="$(BuildDir)NuGetExeBuild\tools" Condition="Exists('$(OutputPath)UnreleasedGitHubHistory.pdb')" />
-    <Copy SourceFiles="$(ProjectDir)NugetAssets\UnreleasedGitHubHistory.Portable.nuspec" DestinationFolder="$(BuildDir)NuGetExeBuild" />
-    <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(BuildDir)NuGetExeBuild" MetadataAssembly="$(OutputPath)UnreleasedGitHubHistory.exe" Version="$(GitVersion_NuGetVersion)" />
+    <Copy SourceFiles="$(OutputPath)PullRequestReleaseNotes.exe" DestinationFolder="$(BuildDir)NuGetExeBuild\tools" />
+    <Copy SourceFiles="$(OutputPath)PullRequestReleaseNotes.pdb" DestinationFolder="$(BuildDir)NuGetExeBuild\tools" Condition="Exists('$(OutputPath)PullRequestReleaseNotes.pdb')" />
+    <Copy SourceFiles="$(ProjectDir)NugetAssets\PullRequestReleaseNotes.Portable.nuspec" DestinationFolder="$(BuildDir)NuGetExeBuild" />
+    <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(BuildDir)NuGetExeBuild" MetadataAssembly="$(OutputPath)PullRequestReleaseNotes.exe" Version="$(GitVersion_NuGetVersion)" />
   </Target>
   <Import Project="..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets" Condition="Exists('..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets')" />
   <Import Project="..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />

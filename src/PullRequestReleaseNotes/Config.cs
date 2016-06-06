@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using LibGit2Sharp;
 using PowerArgs;
-using UnreleasedGitHubHistory.Models;
-using UnreleasedGitHubHistory.Providers;
+using PullRequestReleaseNotes.Models;
+using PullRequestReleaseNotes.Providers;
 using YamlDotNet.Serialization;
 
-namespace UnreleasedGitHubHistory
+namespace PullRequestReleaseNotes
 {
     public class Config
     {
         private readonly ProgramArgs _programArgs;
-        private const string YamlSettingsFileName = "UnreleasedGitHubHistory.yml";
+        private const string YamlSettingsFileName = "PullRequestReleaseNotes.yml";
 
         public Config(ProgramArgs programArgs)
         {
@@ -78,20 +78,12 @@ namespace UnreleasedGitHubHistory
 
         private void MergeWithYamlInput(ProgramArgs args)
         {
-            _programArgs.ConfluenceApiUrl = _programArgs.ConfluenceApiUrl ?? args.ConfluenceApiUrl;
-            _programArgs.ConfluenceReleaseParentPageId = _programArgs.ConfluenceReleaseParentPageId ?? args.ConfluenceReleaseParentPageId;
-            _programArgs.ConfluenceSpaceKey = _programArgs.ConfluenceSpaceKey ?? args.ConfluenceSpaceKey;
+            // general settings
             _programArgs.ExcludeLabel = _programArgs.ExcludeLabel ?? args.ExcludeLabel;
             _programArgs.FollowLabel = _programArgs.FollowLabel ?? args.FollowLabel;
-
-            _programArgs.GitHubApiUrl = _programArgs.GitHubApiUrl ?? args.GitHubApiUrl;
-            _programArgs.GitHubOwner = _programArgs.GitHubOwner ?? args.GitHubOwner;
-            _programArgs.GitHubRepository = _programArgs.GitHubRepository ?? args.GitHubRepository;
-
             _programArgs.GitRemote = _programArgs.GitRemote ?? args.GitRemote;
             _programArgs.GitRepositoryPath = _programArgs.GitRepositoryPath ?? args.GitRepositoryPath;
             _programArgs.GitVersion = _programArgs.GitVersion ?? args.GitVersion;
-            _programArgs.OutputFileName = _programArgs.OutputFileName ?? args.OutputFileName;
             _programArgs.ReleaseBranchRef = _programArgs.ReleaseBranchRef ?? args.ReleaseBranchRef;
             _programArgs.ReleaseNoteCategoryPrefix = _programArgs.ReleaseNoteCategoryPrefix ?? args.ReleaseNoteCategoryPrefix;
             _programArgs.ReleaseNoteDateFormat = _programArgs.ReleaseNoteDateFormat ?? args.ReleaseNoteDateFormat;
@@ -100,37 +92,52 @@ namespace UnreleasedGitHubHistory
             _programArgs.ReleaseNoteSectionlessDescription = _programArgs.ReleaseNoteSectionlessDescription ?? args.ReleaseNoteSectionlessDescription;
             _programArgs.ReleaseNoteUncategorisedDescription = _programArgs.ReleaseNoteUncategorisedDescription ?? args.ReleaseNoteUncategorisedDescription;
             _programArgs.ReleaseNoteHighlightlLabels = _programArgs.ReleaseNoteHighlightlLabels ?? args.ReleaseNoteHighlightlLabels;
-            _programArgs.GitLabOwner = _programArgs.GitLabOwner ?? args.GitLabOwner;
-            _programArgs.GitLabRepository = _programArgs.GitLabRepository ?? args.GitLabRepository;
-            _programArgs.GitLabApiUrl = _programArgs.GitLabApiUrl ?? args.GitLabApiUrl;
-            _programArgs.GitLabProjectId = _programArgs.GitLabProjectId ?? args.GitLabProjectId;
-            _programArgs.TfsApiUrl = _programArgs.TfsApiUrl ?? args.TfsApiUrl;
-            _programArgs.TfsCollection = _programArgs.TfsCollection ?? args.TfsCollection;
-            _programArgs.TfsRepository = _programArgs.TfsRepository ?? args.TfsRepository;
-            _programArgs.TfsUsername = _programArgs.TfsUsername ?? args.TfsUsername;
-            _programArgs.BitBucketServerUrl = _programArgs.BitBucketServerUrl ?? args.BitBucketServerUrl;
-            _programArgs.BitBucketServerUsername = _programArgs.BitBucketServerUsername ?? args.BitBucketServerUsername;
-            _programArgs.BitBucketServerProject = _programArgs.BitBucketServerProject ?? args.BitBucketServerProject;
-            _programArgs.BitBucketServerRepository = _programArgs.BitBucketServerRepository ?? args.BitBucketServerRepository;
-            _programArgs.BitBucketApiKey = _programArgs.BitBucketApiKey ?? args.BitBucketApiKey;
-            _programArgs.BitBucketAccount = _programArgs.BitBucketAccount ?? args.BitBucketAccount;
-            _programArgs.BitBucketRepository = _programArgs.BitBucketRepository ?? args.BitBucketRepository;
-
-            _programArgs.PullRequestProviderName = _programArgs.PullRequestProviderName ?? args.PullRequestProviderName;
-
             _programArgs.ReleaseNoteCategorised = _programArgs.ReleaseNoteCategorised ?? args.ReleaseNoteCategorised;
             _programArgs.ReleaseNoteOrderAscending = _programArgs.ReleaseNoteOrderAscending ?? args.ReleaseNoteOrderAscending;
             _programArgs.ReleaseNoteSectioned = _programArgs.ReleaseNoteSectioned ?? args.ReleaseNoteSectioned;
             _programArgs.ReleaseBranchHeadsOnly = _programArgs.ReleaseBranchHeadsOnly ?? args.ReleaseBranchHeadsOnly;
-
             _programArgs.AcceptInvalidCertificates = _programArgs.AcceptInvalidCertificates || args.AcceptInvalidCertificates;
-            _programArgs.PublishToConfluence = _programArgs.PublishToConfluence || args.PublishToConfluence;
-            _programArgs.PublishToFile = _programArgs.PublishToFile || args.PublishToFile;
             _programArgs.VerboseOutput = _programArgs.VerboseOutput || args.VerboseOutput;
             _programArgs.GitTagsAnnotated = _programArgs.GitTagsAnnotated || args.GitTagsAnnotated;
-
             _programArgs.ReleaseNoteSections = _programArgs.ReleaseNoteSections ?? args.ReleaseNoteSections;
             _programArgs.ReleaseNoteCategories = _programArgs.ReleaseNoteCategories ?? args.ReleaseNoteCategories;
+            _programArgs.PullRequestProviderName = _programArgs.PullRequestProviderName ?? args.PullRequestProviderName;
+            // pull request providers
+            _programArgs.GitHubApiUrl = _programArgs.GitHubApiUrl ?? args.GitHubApiUrl;
+            _programArgs.GitHubOwner = _programArgs.GitHubOwner ?? args.GitHubOwner;
+            _programArgs.GitHubRepository = _programArgs.GitHubRepository ?? args.GitHubRepository;
+            _programArgs.GitHubToken = _programArgs.GitHubToken ?? args.GitHubToken;
+            _programArgs.GitLabOwner = _programArgs.GitLabOwner ?? args.GitLabOwner;
+            _programArgs.GitLabRepository = _programArgs.GitLabRepository ?? args.GitLabRepository;
+            _programArgs.GitLabApiUrl = _programArgs.GitLabApiUrl ?? args.GitLabApiUrl;
+            _programArgs.GitLabProjectId = _programArgs.GitLabProjectId ?? args.GitLabProjectId;
+            _programArgs.GitLabToken = _programArgs.GitLabToken ?? args.GitLabToken;
+            _programArgs.TfsApiUrl = _programArgs.TfsApiUrl ?? args.TfsApiUrl;
+            _programArgs.TfsCollection = _programArgs.TfsCollection ?? args.TfsCollection;
+            _programArgs.TfsRepository = _programArgs.TfsRepository ?? args.TfsRepository;
+            _programArgs.TfsUsername = _programArgs.TfsUsername ?? args.TfsUsername;
+            _programArgs.TfsToken = _programArgs.TfsToken ?? args.TfsToken;
+            _programArgs.BitBucketServerUrl = _programArgs.BitBucketServerUrl ?? args.BitBucketServerUrl;
+            _programArgs.BitBucketServerUsername = _programArgs.BitBucketServerUsername ?? args.BitBucketServerUsername;
+            _programArgs.BitBucketServerPassword = _programArgs.BitBucketServerPassword ?? args.BitBucketServerPassword;
+            _programArgs.BitBucketServerProject = _programArgs.BitBucketServerProject ?? args.BitBucketServerProject;
+            _programArgs.BitBucketServerRepository = _programArgs.BitBucketServerRepository ?? args.BitBucketServerRepository;
+            _programArgs.BitBucketApiKey = _programArgs.BitBucketApiKey ?? args.BitBucketApiKey;
+            _programArgs.BitBucketApiSecret = _programArgs.BitBucketApiSecret ?? args.BitBucketApiSecret;
+            _programArgs.BitBucketAccount = _programArgs.BitBucketAccount ?? args.BitBucketAccount;
+            _programArgs.BitBucketRepository = _programArgs.BitBucketRepository ?? args.BitBucketRepository;
+            // publishers
+            _programArgs.PublishToConfluence = _programArgs.PublishToConfluence || args.PublishToConfluence;
+            _programArgs.PublishToSlack = _programArgs.PublishToSlack || args.PublishToSlack;
+            _programArgs.PublishToFile = _programArgs.PublishToFile || args.PublishToFile;
+            _programArgs.OutputFileName = _programArgs.OutputFileName ?? args.OutputFileName;
+            _programArgs.ConfluenceApiUrl = _programArgs.ConfluenceApiUrl ?? args.ConfluenceApiUrl;
+            _programArgs.ConfluenceUser = _programArgs.ConfluenceUser ?? args.ConfluenceUser;
+            _programArgs.ConfluencePassword = _programArgs.ConfluencePassword ?? args.ConfluencePassword;
+            _programArgs.ConfluenceReleaseParentPageId = _programArgs.ConfluenceReleaseParentPageId ?? args.ConfluenceReleaseParentPageId;
+            _programArgs.ConfluenceSpaceKey = _programArgs.ConfluenceSpaceKey ?? args.ConfluenceSpaceKey;
+            _programArgs.SlackChannels = _programArgs.SlackChannels ?? args.SlackChannels;
+            _programArgs.SlackToken = _programArgs.SlackToken ?? args.SlackToken;
         }
 
         private void MergeDefaults()
@@ -207,7 +214,7 @@ namespace UnreleasedGitHubHistory
             var sampleConfigFile = Path.Combine(_programArgs.LocalGitRepository.Info.WorkingDirectory, YamlSettingsFileName);
             if (File.Exists(sampleConfigFile))
             {
-                Console.WriteLine($"UnreleasedGitHubHistory.yml file already exists ...");
+                Console.WriteLine($"PullRequestReleaseNotes.yml file already exists ...");
                 return;
             }
             using (var writer = new StreamWriter(sampleConfigFile))
@@ -225,7 +232,7 @@ namespace UnreleasedGitHubHistory
                 writer.WriteLine("#   - bug=Fixes");
                 writer.WriteLine("#   - enhancement=Enhancements");
             }
-            Console.WriteLine($"Created a sample UnreleasedGitHubHistory.yml file ...");
+            Console.WriteLine($"Created a sample PullRequestReleaseNotes.yml file ...");
         }
     }
 }

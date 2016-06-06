@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>PullRequestReleaseNotes.Portable</id>
+    <version>$version$</version>
+    <title>PullRequestReleaseNotes</title>
+    <authors>Jasmin Sehic</authors>
+    <owners>Jasmin Sehic</owners>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>https://github.com/jasminsehic/PullRequestReleaseNotes</projectUrl>
+    <projectSourceUrl>https://github.com/jasminsehic/PullRequestReleaseNotes</projectSourceUrl>
+    <bugTrackerUrl>https://github.com/jasminsehic/PullRequestReleaseNotes/issues</bugTrackerUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Builds release history notes from unreleased pull requests on GitHub, GitLab, TFS / Team Services, BitBucket and Bitbucket Server and optionally posts them to a markdown file, Atlassian Confluence or Slack.</description>
+    <summary>Builds release history notes from unreleased pull requests on GitHub, GitLab, TFS / Team Services, BitBucket and Bitbucket Server and optionally posts them to a markdown file, Atlassian Confluence or Slack.
+    </summary>
+    <language>en-AU</language>
+    <releaseNotes>Fixed pull request label exclusion feature
+    </releaseNotes>
+    <tags>Git PullRequestReleaseNotes GitHub GitLab BitBucket TFS TeamServices Team Services History RelaseNotes Changelog GitVersion Atlassian Confluence Slack Markdown Pull Request PullRequest SemanticReleaseNotes</tags>
+  </metadata>
+</package>

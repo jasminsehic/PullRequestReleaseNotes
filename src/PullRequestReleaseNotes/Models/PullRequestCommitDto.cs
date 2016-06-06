@@ -1,4 +1,4 @@
-namespace UnreleasedGitHubHistory.Models
+namespace PullRequestReleaseNotes.Models
 {
     public class PullRequestCommitDto
     {

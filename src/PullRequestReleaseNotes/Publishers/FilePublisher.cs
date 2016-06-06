@@ -1,8 +1,8 @@
 using System;
 using System.IO;
-using UnreleasedGitHubHistory.Models;
+using PullRequestReleaseNotes.Models;
 
-namespace UnreleasedGitHubHistory.Publishers
+namespace PullRequestReleaseNotes.Publishers
 {
     public static class FilePublisher
     {

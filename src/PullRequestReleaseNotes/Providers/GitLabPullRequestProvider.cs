@@ -8,9 +8,9 @@ using System.Text.RegularExpressions;
 using LibGit2Sharp;
 using Newtonsoft.Json;
 using RestSharp;
-using UnreleasedGitHubHistory.Models;
+using PullRequestReleaseNotes.Models;
 
-namespace UnreleasedGitHubHistory.Providers
+namespace PullRequestReleaseNotes.Providers
 {
     public class GitLabPullRequestProvider : IPullRequestProvider
     {
@@ -83,6 +83,7 @@ namespace UnreleasedGitHubHistory.Providers
                 MergedAt = mergeRequest.UpdatedAt,
                 Author = mergeRequest.Author.Name,
                 AuthorUrl = mergeRequest.Author.WebUrl,
+                Url = PullRequestUrl(mergeRequest.Iid),
                 Labels = new List<string>()
             };
             foreach (var label in mergeRequest.Labels)

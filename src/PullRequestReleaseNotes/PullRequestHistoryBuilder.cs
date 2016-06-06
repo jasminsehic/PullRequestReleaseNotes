@@ -2,10 +2,10 @@
 using System.Linq;
 using LibGit2Sharp;
 using System.Collections.Generic;
-using UnreleasedGitHubHistory.Models;
-using UnreleasedGitHubHistory.Providers;
+using PullRequestReleaseNotes.Models;
+using PullRequestReleaseNotes.Providers;
 
-namespace UnreleasedGitHubHistory
+namespace PullRequestReleaseNotes
 {
     public class PullRequestHistoryBuilder
     {
@@ -31,7 +31,7 @@ namespace UnreleasedGitHubHistory
                 else
                     releaseHistory.Add(pullRequestDto);
             }
-            return OrderReleaseNotes(releaseHistory.Distinct(new PullRequestDtoEqualityComparer()).ToList());
+            return releaseHistory.Distinct(new PullRequestDtoEqualityComparer()).ToList();
         }
 
         private void FollowChildPullRequests(int parentPullRequest, List<PullRequestDto> releaseHistory)
@@ -49,24 +49,9 @@ namespace UnreleasedGitHubHistory
             }
         }
 
-        private List<PullRequestDto> OrderReleaseNotes(List<PullRequestDto> releaseHistory)
-        {
-            var orderWhenKey = OrderWhenKey();
-            if (_programArgs.ReleaseNoteOrderAscending.Value)
-                return releaseHistory.OrderByDescending(orderWhenKey).ToList();
-            return releaseHistory.OrderBy(orderWhenKey).ToList();
-        }
-
-        private Func<PullRequestDto, DateTimeOffset?> OrderWhenKey()
-        {
-            if (_programArgs.ReleaseNoteOrderWhen.CaseInsensitiveContains("created"))
-                return r => r.CreatedAt;
-            return r => r.MergedAt;
-        }
-
         private IEnumerable<Commit> GetAllUnreleasedCommits()
         {
-            IEnumerable<Commit> releasedAndUnreleasedCommits = new List<Commit>();
+            IEnumerable<Commit> unreleasedCommits = new List<Commit>();
             var tags = _programArgs.LocalGitRepository.Tags.Where(LightOrAnnotatedTags())
                .Select(tag => tag.Target as Commit).Where(x => x != null);
             var tagCommits = tags as IList<Commit> ?? tags.ToList();
@@ -77,7 +62,7 @@ namespace UnreleasedGitHubHistory
                     Since = _programArgs.LocalGitRepository.Branches[_programArgs.ReleaseBranchRef],
                 });
             }
-            // get all released and unreleased commits down to tagged (release) commits
+            // first fill it with all released and unreleased commits down to all tagged (release) commits
             foreach (var tagCommit in tagCommits)
             {
                 var commits = _programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter
@@ -85,16 +70,16 @@ namespace UnreleasedGitHubHistory
                     Since = _programArgs.LocalGitRepository.Branches[_programArgs.ReleaseBranchRef],
                     Until = tagCommit
                 });
-                releasedAndUnreleasedCommits = releasedAndUnreleasedCommits.Concat(commits);
+                unreleasedCommits = unreleasedCommits.Concat(commits);
             }
-            releasedAndUnreleasedCommits = releasedAndUnreleasedCommits.Distinct();
+            unreleasedCommits = unreleasedCommits.Distinct();
             // then for each tagged commit traverse further down all its parents and remove them from released/unreleased commits as they have been included in a release
             foreach (var tagCommit in tagCommits)
             {
                 var releasedCommits = _programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter { Since = tagCommit.Id });
-                releasedAndUnreleasedCommits = releasedAndUnreleasedCommits.Except(releasedCommits);
+                unreleasedCommits = unreleasedCommits.Except(releasedCommits);
             }
-            return releasedAndUnreleasedCommits;
+            return unreleasedCommits;
         }
 
         private Func<Tag, bool> LightOrAnnotatedTags()

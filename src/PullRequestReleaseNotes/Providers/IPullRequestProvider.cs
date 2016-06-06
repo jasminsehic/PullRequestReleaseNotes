@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using UnreleasedGitHubHistory.Models;
+using PullRequestReleaseNotes.Models;
 
-namespace UnreleasedGitHubHistory.Providers
+namespace PullRequestReleaseNotes.Providers
 {
     public interface IPullRequestProvider
     {

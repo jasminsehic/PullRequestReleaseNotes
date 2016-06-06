@@ -6,9 +6,9 @@ using System.Text.RegularExpressions;
 using Infinity;
 using Infinity.Models;
 using LibGit2Sharp;
-using UnreleasedGitHubHistory.Models;
+using PullRequestReleaseNotes.Models;
 
-namespace UnreleasedGitHubHistory.Providers
+namespace PullRequestReleaseNotes.Providers
 {
     public class TfsPullRequestProvider : IPullRequestProvider
     {
@@ -70,6 +70,7 @@ namespace UnreleasedGitHubHistory.Providers
                 MergedAt = pullRequest.ClosedDate,
                 Author = pullRequest.CreatedBy.DisplayName,
                 AuthorUrl = pullRequest.CreatedBy.Url.ToString(),
+                Url = PullRequestUrl(pullRequest.Id),
                 BaseCommitSha = pullRequest.LastMergeTargetCommit.Id.ToString(),
                 MergeCommitSha = pullRequest.LastMergeSourceCommit.Id.ToString(),
                 Labels = new List<string>()

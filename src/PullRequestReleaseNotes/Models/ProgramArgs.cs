@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using LibGit2Sharp;
 using PowerArgs;
-using UnreleasedGitHubHistory.Providers;
+using PullRequestReleaseNotes.Providers;
 using YamlDotNet.Serialization;
 
-namespace UnreleasedGitHubHistory.Models
+namespace PullRequestReleaseNotes.Models
 {
     public class ProgramArgs
     {
@@ -244,6 +244,18 @@ namespace UnreleasedGitHubHistory.Models
         [YamlMember(Alias = "bitbucket-repository")]
         public string BitBucketRepository { get; set; }
 
+        [ArgShortcut("-pts")]
+        [YamlMember(Alias = "slack-publish")]
+        public bool PublishToSlack { get; set; }
+
+        [ArgShortcut("-sc")]
+        [YamlMember(Alias = "slack-channels")]
+        public string SlackChannels { get; set; }
+
+        [ArgShortcut("-st")]
+        [YamlMember(Alias = "slack-token")]
+        public string SlackToken { get; set; }
+
         // Not direct parameters
 
         [ArgIgnore]
@@ -251,6 +263,7 @@ namespace UnreleasedGitHubHistory.Models
 
         [ArgIgnore]
         public IPullRequestProvider PullRequestProvider { get; set; }
+
 
         public bool HeadBranchRestrictionApplies()
         {
