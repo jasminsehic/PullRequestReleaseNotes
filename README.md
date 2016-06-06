@@ -29,32 +29,32 @@ $ PullRequestReleaseNotes
 ```
 
 ### Command Line Parameters
-- `PullRequestProviderName` (`-prpn`) : Default is github. gitlab, tfs, bitbucket and bitbucketserver are also supported.
-- `GitHubToken` (`-ghpt`) : Required parameter if PullRequestProviderName is github. Can be supplied as parameter or UNRELEASED_HISTORY_GITHUB_TOKEN environment variable.
+- `PullRequestProviderName` (`-prpn`) : Default is `github`. `gitlab`, `tfs`, `bitbucket` and `bitbucketserver` are also supported.
+- `GitHubToken` (`-ghpt`) : Required parameter if PullRequestProviderName is `github`. Can be supplied as parameter or `UNRELEASED_HISTORY_GITHUB_TOKEN` environment variable.
 - `GitHubOwner` (`-gho`) : Default is extracted from remote url.
 - `GitHubRepository` (`-ghr`) : Default is extracted from remote url.
 - `GitHubApiUrl` (`-glau`) : Default is https://github.com
-- `GitLabToken` (`-glpt`) : Required parameter if PullRequestProviderName is gitlab. Can be supplied as parameter or UNRELEASED_HISTORY_GITLAB_TOKEN environment variable.
+- `GitLabToken` (`-glpt`) : Required parameter if PullRequestProviderName is `gitlab`. Can be supplied as parameter or `UNRELEASED_HISTORY_GITLAB_TOKEN` environment variable.
 - `GitLabOwner` (`-glo`) : Default is extracted from remote url.
 - `GitLabRepository` (`-glr`) : Default is extracted from remote url.
 - `GitLabApiUrl` (`-glau`) : Default is https://gitlab.com
-- `GitLabProjectId` (`-glpi`) : Required parameter if PullRequestProviderName is gitlab. Set it to your GitLab project identifier.
-- `TfsUsername` (`-tu`) : Required parameter if PullRequestProviderName is tfs. For VSO personal tokens use anything, for VSO alternate credentials and on-prem TFS use the username.
-- `TfsToken` (`-tpt`) : Required parameter if PullRequestProviderName is tfs. Can be supplied as parameter or UNRELEASED_HISTORY_TFS_TOKEN environment variable. For VSO personal tokens use the token itself and for VSO alternate credentials and on-prem TFS use the user password.
+- `GitLabProjectId` (`-glpi`) : Required parameter if PullRequestProviderName is `gitlab`. Set it to your GitLab project identifier.
+- `TfsUsername` (`-tu`) : Required parameter if PullRequestProviderName is `tfs`. For Team Services personal tokens use anything, for Team Services alternate credentials and on-premise TFS use the username.
+- `TfsToken` (`-tpt`) : Required parameter if PullRequestProviderName is `tfs`. Can be supplied as parameter or `UNRELEASED_HISTORY_TFS_TOKEN` environment variable. For Team Services personal tokens use the token itself and for Team Services alternate credentials and on-premise TFS use the user password.
 - `TfsCollection` (`-tc`) : Default is extracted from remote url.
 - `TfsRepository` (`-tr`) : Default is extracted from remote url.
-- `TfsApiUr`l (`-tau`) : Required parameter if PullRequestProviderName is tfs.
-- `BitBucketServerUrl` (`-bbsu`) : Required parameter if PullRequestProviderName is bitbucketserver.
-- `BitBucketServerUsername` (`-bbsun`) : Required parameter if PullRequestProviderName is bitbucketserver.
-- `BitBucketServerPassword` (`-bbsp`) : Required parameter if PullRequestProviderName is bitbucketserver. Can be supplied as parameter or UNRELEASED_HISTORY_BITBUCKETSERVER_PASSWORD environment variable.
-- `BitBucketServerProject` (`-bbspk`) : Required parameter if PullRequestProviderName is bitbucketserver.
-- `BitBucketServerRepository` (`-bbsr`) : Required parameter if PullRequestProviderName is bitbucketserver. 
-- `BitBucketApiKey` (`-bbak`) : Required parameter if PullRequestProviderName is bitbucket.
-- `BitBucketApiSecret` (`-bbas`) : Required parameter if PullRequestProviderName is bitbucket. Can be supplied as parameter or UNRELEASED_HISTORY_BITBUCKET_SECRET environment variable.
-- `BitBucketAccount` (`-bba`) : Required parameter if PullRequestProviderName is bitbucket.
-- `BitBucketRepository` (`-bbr`) : Required parameter if PullRequestProviderName is bitbucket. 
+- `TfsApiUr`l (`-tau`) : Required parameter if PullRequestProviderName is `tfs`.
+- `BitBucketServerUrl` (`-bbsu`) : Required parameter if PullRequestProviderName is `bitbucketserver`.
+- `BitBucketServerUsername` (`-bbsun`) : Required parameter if PullRequestProviderName is `bitbucketserver`.
+- `BitBucketServerPassword` (`-bbsp`) : Required parameter if PullRequestProviderName is `bitbucketserver`. Can be supplied as parameter or `UNRELEASED_HISTORY_BITBUCKETSERVER_PASSWORD` environment variable.
+- `BitBucketServerProject` (`-bbspk`) : Required parameter if PullRequestProviderName is `bitbucketserver`.
+- `BitBucketServerRepository` (`-bbsr`) : Required parameter if PullRequestProviderName is `bitbucketserver`. 
+- `BitBucketApiKey` (`-bbak`) : Required parameter if PullRequestProviderName is `bitbucket`.
+- `BitBucketApiSecret` (`-bbas`) : Required parameter if PullRequestProviderName is `bitbucket`. Can be supplied as parameter or `UNRELEASED_HISTORY_BITBUCKET_SECRET` environment variable.
+- `BitBucketAccount` (`-bba`) : Required parameter if PullRequestProviderName is `bitbucket`.
+- `BitBucketRepository` (`-bbr`) : Required parameter if PullRequestProviderName is `bitbucket`. 
 - `GitRemote` (`-gr`) : Default ("origin"). If not found it will search through all remotes.
-- `GitVersion` (`-gv`) : Default ("Unreleased"). Can be supplied as parameter or GITVERSION_MAJORMINORPATCH environment variable.
+- `GitVersion` (`-gv`) : Default ("Unreleased"). Can be supplied as parameter or `GITVERSION_MAJORMINORPATCH` environment variable.
 - `GitTagsAnnotated` (`-gta`) : Default ("false"). Set to "true" to only consider annotated tags as releases.
 - `ReleaseBranchRef` (`-ghb`) : Default is head branch.
 - `ReleaseBranchHeadsOnly` (`-rbho`) : Default is ("true"). Set to false to generate notes from any branch.
@@ -72,20 +72,20 @@ $ PullRequestReleaseNotes
 - `ReleaseNoteHighlightLabels` (`-rnhl`) : Default is (""). Comma-separated list of labels which a pull request without will be marked up as code to highlight the item in release notes.'
 - `PublishToConfluence` (`-ptc`) : Default ("false"). Set to "true" for all other Confluence related parameters to become active.
 - `ConfluenceReleaseParentPageId` (`-cpp`) : Confluence parent page identifer. Pulished page will be its child page.
-- `ConfluenceSpaceKey` (`-csk`) : Required parameter if PublishToConfluence is true.
-- `ConfluenceUser` (`-cu`) : Required parameter if PublishToConfluence is true.
-- `ConfluencePassword` (`-cp`) : Required parameter if PublishToConfluence is true.
-- `ConfluenceApiUrl` (`-cau`) : Required parameter if PublishToConfluence is true.
+- `ConfluenceSpaceKey` (`-csk`) : Required parameter if `PublishToConfluence` is true.
+- `ConfluenceUser` (`-cu`) : Required parameter if `PublishToConfluence` is true.
+- `ConfluencePassword` (`-cp`) : Required parameter if `PublishToConfluence` is true.
+- `ConfluenceApiUrl` (`-cau`) : Required parameter if `PublishToConfluence` is true.
 - `PublishToSlack` (`-pts`) : Default ("false"). Set to "true" for all other Slack related parameters to become active.
-- `SlackToken` (`-st`) : Required parameter if PublishToSlack is true. Set to your personal Slack token.
-- `SlackChannels` (`-cau`) : Required parameter if PublishToSlack is true. Set to a comma-separated list of channel identifiers.
+- `SlackToken` (`-st`) : Required parameter if `PublishToSlack` is true. Set to your personal Slack token.
+- `SlackChannels` (`-cau`) : Required parameter if `PublishToSlack` is true. Set to a comma-separated list of channel identifiers.
 - `VerboseOutput` (`-v`) : Default ("false"). Set to "true" to output more information about what the utility is doing.
 - `AcceptInvalidCertificates` (`-aic`) : Default ("false"). Set to "true" to help when using Fiddler to debug HTTP responses.
-- `PublishToFile` (`-ptf`) : Default ("false"). Set to "true" to output markdown to a local filename supplied by OutputFileName parameter.
+- `PublishToFile` (`-ptf`) : Default ("false"). Set to "true" to output markdown to a local filename supplied by `OutputFileName` parameter.
 - `OutputFileName` (`-o`) : Default ("Unreleased.md").
 - `ExcludeLabel` (`-el`) : Default ("Exclude Note"). Pull request label which once found will cause the entire pull request to be excluded from release notes.
 - F`ollowLabel` (`-fl`) : Default ("Follow Note"). Pull request label which once found will cause the tool to recursively follow all other pull request merge commits within the pull request.
-- `Init` (`-init`) : When provided the utility will generate a sample PullRequestReleaseNotes.yml file at the root of the Git repository and not generate any notes.
+- `Init` (`-init`) : When provided the utility will generate a sample `PullRequestReleaseNotes.yml` file at the root of the Git repository and not generate any notes.
 
 ### YAML File Parameters
 
