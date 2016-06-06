@@ -84,7 +84,7 @@ $ PullRequestReleaseNotes
 - `PublishToFile` (`-ptf`) : Default ("false"). Set to "true" to output markdown to a local filename supplied by `OutputFileName` parameter.
 - `OutputFileName` (`-o`) : Default ("Unreleased.md").
 - `ExcludeLabel` (`-el`) : Default ("Exclude Note"). Pull request label which once found will cause the entire pull request to be excluded from release notes.
-- F`ollowLabel` (`-fl`) : Default ("Follow Note"). Pull request label which once found will cause the tool to recursively follow all other pull request merge commits within the pull request.
+- 'FollowLabel` (`-fl`) : Default ("Follow Note"). Pull request label which once found will cause the tool to recursively follow all other pull request merge commits within the pull request.
 - `Init` (`-init`) : When provided the utility will generate a sample `PullRequestReleaseNotes.yml` file at the root of the Git repository and not generate any notes.
 
 ### YAML File Parameters
