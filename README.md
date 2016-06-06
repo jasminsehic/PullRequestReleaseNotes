@@ -3,6 +3,8 @@
 PullRequestReleaseNotes
 =======================
 
+[![Join the chat at https://gitter.im/jasminsehic/PullRequestReleaseNotes](https://badges.gitter.im/jasminsehic/PullRequestReleaseNotes.svg)](https://gitter.im/jasminsehic/PullRequestReleaseNotes?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build status](https://ci.appveyor.com/api/projects/status/github/jasminsehic/pullrequestreleasenotes?svg=true)](https://ci.appveyor.com/project/jasminsehic/unreleasedgithubhistory)
 [![Chocolatey](https://img.shields.io/chocolatey/vpre/PullRequestReleaseNotes.portable.svg)](https://chocolatey.org/packages/PullRequestReleaseNotes.Portable)
 [![Release](https://img.shields.io/github/release/jasminsehic/PullRequestReleaseNotes.svg)]()
