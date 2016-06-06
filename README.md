@@ -29,7 +29,7 @@ $ PullRequestReleaseNotes
 Utility can have command line parameters passed to it or have the parameters supplied via a YAML based config or a mixture of both. You can generate a sample YAML file by passing -init parameter to the utility.
 
 ### Command Line Parameters
-- `-PullRequestProviderName` (`-prpn`) : Default is `github`. `gitlab`, `tfs`, `bitbucket` and `bitbucketserver` are also supported.
+- `-PullRequestProviderName` (`-prpn`) : Default is `github`. Other providers supported are `gitlab`, `tfs`, `bitbucket` and `bitbucketserver`.
 - `-GitHubToken` (`-ghpt`) : Required parameter if PullRequestProviderName is `github`. Can be supplied as parameter or `UNRELEASED_HISTORY_GITHUB_TOKEN` environment variable.
 - `-GitHubOwner` (`-gho`) : Default is extracted from remote url.
 - `-GitHubRepository` (`-ghr`) : Default is extracted from remote url.
