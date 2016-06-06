@@ -118,10 +118,6 @@ namespace PullRequestReleaseNotes.Models
         [YamlMember(Alias = "release-note-exclude")]
         public string ExcludeLabel { get; set; }
 
-        [ArgShortcut("-fl")]
-        [YamlMember(Alias = "release-note-follow")]
-        public string FollowLabel { get; set; }
-
         [ArgShortcut("-gv")]
         [YamlMember(Alias = "git-version")]
         public string GitVersion { get; set; }

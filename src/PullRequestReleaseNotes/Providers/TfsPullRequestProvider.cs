@@ -31,8 +31,8 @@ namespace PullRequestReleaseNotes.Providers
             if (!string.IsNullOrWhiteSpace(_programArgs.TfsToken))
                 return;
             if (_programArgs.VerboseOutput)
-                Console.WriteLine($"TFS password was not supplied. Trying UNRELEASED_HISTORY_TFS_TOKEN environment variable.");
-            _programArgs.TfsToken = Environment.GetEnvironmentVariable("UNRELEASED_HISTORY_TFS_TOKEN");
+                Console.WriteLine($"TFS password was not supplied. Trying PRRN_TFS_TOKEN environment variable.");
+            _programArgs.TfsToken = Environment.GetEnvironmentVariable("PRRN_TFS_TOKEN");
             if (!string.IsNullOrWhiteSpace(_programArgs.TfsToken))
                 return;
             Console.WriteLine($"TfsToken was not supplied and could not be found.");

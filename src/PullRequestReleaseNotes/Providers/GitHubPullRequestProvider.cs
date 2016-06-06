@@ -28,8 +28,8 @@ namespace PullRequestReleaseNotes.Providers
             if (!string.IsNullOrWhiteSpace(_programArgs.GitHubToken))
                 return;
             if (_programArgs.VerboseOutput)
-                Console.WriteLine($"GitHubToken was not supplied. Trying UNRELEASED_HISTORY_GITHUB_TOKEN environment variable.");
-            _programArgs.GitHubToken = Environment.GetEnvironmentVariable("UNRELEASED_HISTORY_GITHUB_TOKEN");
+                Console.WriteLine($"GitHubToken was not supplied. Trying PRRN_GITHUB_TOKEN environment variable.");
+            _programArgs.GitHubToken = Environment.GetEnvironmentVariable("PRRN_GITHUB_TOKEN");
             if (!string.IsNullOrWhiteSpace(_programArgs.GitHubToken))
                 return;
             Console.WriteLine($"GitHubToken was not supplied and could not be found.");

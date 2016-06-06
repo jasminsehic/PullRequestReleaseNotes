@@ -80,7 +80,6 @@ namespace PullRequestReleaseNotes
         {
             // general settings
             _programArgs.ExcludeLabel = _programArgs.ExcludeLabel ?? args.ExcludeLabel;
-            _programArgs.FollowLabel = _programArgs.FollowLabel ?? args.FollowLabel;
             _programArgs.GitRemote = _programArgs.GitRemote ?? args.GitRemote;
             _programArgs.GitRepositoryPath = _programArgs.GitRepositoryPath ?? args.GitRepositoryPath;
             _programArgs.GitVersion = _programArgs.GitVersion ?? args.GitVersion;
@@ -143,7 +142,6 @@ namespace PullRequestReleaseNotes
         private void MergeDefaults()
         {
             _programArgs.ExcludeLabel = _programArgs.ExcludeLabel ?? "Exclude Note";
-            _programArgs.FollowLabel = _programArgs.FollowLabel ?? "Follow Note";
             _programArgs.GitRemote = _programArgs.GitRemote ?? "origin";
             _programArgs.OutputFileName = _programArgs.OutputFileName ?? "Unreleased.md";
             _programArgs.ReleaseNoteCategoryPrefix = _programArgs.ReleaseNoteCategoryPrefix ?? "#";
@@ -222,7 +220,6 @@ namespace PullRequestReleaseNotes
                 writer.WriteLine("# pull-request-provider-name: github | tfs | gitlab | bitbucketserver | bitbucket");
                 writer.WriteLine("# release-branch-heads-only: true");
                 writer.WriteLine("# release-note-exclude: Exclude Note");
-                writer.WriteLine("# release-note-follow: Follow Note");
                 writer.WriteLine("# release-note-format: \"{0} {1}\"");
                 writer.WriteLine("# release-note-date-format: \"MMM dd, yyyy HH:mm\"");
                 writer.WriteLine("# release-note-sectioned: true");

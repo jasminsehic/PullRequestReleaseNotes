@@ -15,7 +15,7 @@
     <summary>Builds release history notes from unreleased pull requests on GitHub, GitLab, TFS / Team Services, BitBucket and Bitbucket Server and optionally posts them to a markdown file, Atlassian Confluence or Slack.
     </summary>
     <language>en-AU</language>
-    <releaseNotes>Fixed pull request label exclusion feature
+    <releaseNotes>Added support for larger Slack post files
     </releaseNotes>
     <tags>Git PullRequestReleaseNotes GitHub GitLab BitBucket TFS TeamServices Team Services History RelaseNotes Changelog GitVersion Atlassian Confluence Slack Markdown Pull Request PullRequest SemanticReleaseNotes</tags>
   </metadata>

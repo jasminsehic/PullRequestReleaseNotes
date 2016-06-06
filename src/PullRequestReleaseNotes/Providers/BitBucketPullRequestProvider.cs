@@ -29,8 +29,8 @@ namespace PullRequestReleaseNotes.Providers
             if (!string.IsNullOrWhiteSpace(_programArgs.BitBucketApiSecret))
                 return;
             if (_programArgs.VerboseOutput)
-                Console.WriteLine($"BitBucket consumer secret was not supplied. Trying UNRELEASED_HISTORY_BITBUCKET_SECRET environment variable.");
-            _programArgs.BitBucketApiSecret = Environment.GetEnvironmentVariable("UNRELEASED_HISTORY_BITBUCKET_SECRET");
+                Console.WriteLine($"BitBucket consumer secret was not supplied. Trying PRRN_BITBUCKET_SECRET environment variable.");
+            _programArgs.BitBucketApiSecret = Environment.GetEnvironmentVariable("PRRN_BITBUCKET_SECRET");
             if (!string.IsNullOrWhiteSpace(_programArgs.BitBucketApiSecret))
                 return;
             Console.WriteLine($"BitBucket consumer secret was not supplied and could not be found.");

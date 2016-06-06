@@ -20,33 +20,11 @@ namespace PullRequestReleaseNotes
 
         public List<PullRequestDto> BuildHistory()
         {
-            var releaseHistory = new List<PullRequestDto>();
             var unreleasedCommits = GetAllUnreleasedCommits();
-            foreach (var mergeCommit in unreleasedCommits.Where(commit => commit.Parents.Count() > 1))
-            {
-                var pullRequestDto = _pullRequestProvider.Get(mergeCommit.Message);
-                if (pullRequestDto == null) continue;
-                if (pullRequestDto.Labels.Contains(_programArgs.FollowLabel, StringComparer.InvariantCultureIgnoreCase))
-                    FollowChildPullRequests(pullRequestDto.Number, releaseHistory);
-                else
-                    releaseHistory.Add(pullRequestDto);
-            }
+            var releaseHistory = unreleasedCommits.Where(commit => commit.Parents.Count() > 1)
+                .Select(mergeCommit => _pullRequestProvider.Get(mergeCommit.Message))
+                .Where(pullRequestDto => pullRequestDto != null).ToList();
             return releaseHistory.Distinct(new PullRequestDtoEqualityComparer()).ToList();
-        }
-
-        private void FollowChildPullRequests(int parentPullRequest, List<PullRequestDto> releaseHistory)
-        {
-            var commits = _pullRequestProvider.Commits(parentPullRequest);
-            foreach (var commit in commits.Where(c => c.Merge))
-            {
-                var pullRequestDto = _pullRequestProvider.Get(commit.Message);
-                if (pullRequestDto == null)
-                    continue;
-                if (pullRequestDto.Labels.Contains(_programArgs.FollowLabel, StringComparer.InvariantCultureIgnoreCase))
-                    FollowChildPullRequests(pullRequestDto.Number, releaseHistory);
-                else
-                    releaseHistory.Add(pullRequestDto);
-            }
         }
 
         private IEnumerable<Commit> GetAllUnreleasedCommits()

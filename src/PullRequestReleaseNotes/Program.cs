@@ -15,7 +15,7 @@ namespace PullRequestReleaseNotes
 
         private static void Main(string[] args)
         {
-            var exitCode = SuccessExitCode;
+            int exitCode;
             _programArgs = ValidateConfiguration(args);
             if (_programArgs.AcceptInvalidCertificates)
                 ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
@@ -25,60 +25,54 @@ namespace PullRequestReleaseNotes
             else if (!releaseHistory.Any())
                 exitCode = SuccessExitCode;
             else
-                exitCode = BuildAndPublish(releaseHistory, exitCode);
+                exitCode = BuildAndPublish(releaseHistory);
             Environment.Exit(exitCode);
         }
 
-        private static int BuildAndPublish(List<PullRequestDto> releaseHistory, int exitCode)
+        private static int BuildAndPublish(List<PullRequestDto> releaseHistory)
         {
             var buildVersion = BuildVersion();
             var semanticReleaseNotes = new SemanticReleaseNotesBuilder(releaseHistory, buildVersion, _programArgs).Build();
             var releaseHistoryMarkdown = new MarkdownFormatter(_programArgs).Format(semanticReleaseNotes);
-            var combinedMarkdown = $"# {MarkdownFormatter.EscapeMarkdown(buildVersion)}{releaseHistoryMarkdown}";
-            // always output markdown to stdout by default
+            var combinedMarkdown = $"# {MarkdownFormatter.EscapeMarkdown(buildVersion)}\n{releaseHistoryMarkdown}";
             Console.WriteLine(combinedMarkdown);
-            return Publish(combinedMarkdown, buildVersion, releaseHistoryMarkdown, exitCode);
+            if (Publish(combinedMarkdown, buildVersion, releaseHistoryMarkdown))
+                return SuccessExitCode;
+            Console.WriteLine("ERROR: Failed to publish release notes ...");
+            return FailureExitCode;
         }
 
-        private static int Publish(string combinedMarkdown, string buildVersion, string releaseHistoryMarkdown, int exitCode)
+        private static bool Publish(string combinedMarkdown, string buildVersion, string releaseHistoryMarkdown)
         {
-            exitCode = PublishFile(combinedMarkdown, exitCode);
-            exitCode = PublishConfluence(buildVersion, releaseHistoryMarkdown, exitCode);
-            exitCode = PublishSlack(buildVersion, releaseHistoryMarkdown, exitCode);
-            return exitCode;
+            var publishedFile = PublishFile(combinedMarkdown);
+            var publishedConfluencePage = PublishConfluence(buildVersion, releaseHistoryMarkdown);
+            var publishedSlackPost = PublishSlack(buildVersion, releaseHistoryMarkdown);
+            if (!publishedFile && !publishedConfluencePage && !publishedSlackPost)
+                return false;
+            if (!publishedFile || !publishedConfluencePage || !publishedSlackPost)
+                Console.WriteLine("WARNING: Failed to publish release notes  ...");
+            return true;
         }
 
-        private static int PublishSlack(string buildVersion, string releaseHistoryMarkdown, int exitCode)
+        private static bool PublishSlack(string buildVersion, string releaseHistoryMarkdown)
         {
             if (!_programArgs.PublishToSlack)
-                return exitCode;
-            if (SlackPublisher.PublishPost(buildVersion, releaseHistoryMarkdown, _programArgs))
-                exitCode = SuccessExitCode;
-            else
-                exitCode = FailureExitCode;
-            return exitCode;
+                return true;
+            return SlackPublisher.PublishPost(buildVersion, releaseHistoryMarkdown, _programArgs);
         }
 
-        private static int PublishConfluence(string buildVersion, string releaseHistoryMarkdown, int exitCode)
+        private static bool PublishConfluence(string buildVersion, string releaseHistoryMarkdown)
         {
             if (!_programArgs.PublishToConfluence)
-                return exitCode;
-            if (ConfluencePublisher.PublishMarkdownPage(buildVersion, releaseHistoryMarkdown, _programArgs))
-                exitCode = SuccessExitCode;
-            else
-                exitCode = FailureExitCode;
-            return exitCode;
+                return true;
+            return ConfluencePublisher.PublishMarkdownPage(buildVersion, releaseHistoryMarkdown, _programArgs);
         }
 
-        private static int PublishFile(string combinedMarkdown, int exitCode)
+        private static bool PublishFile(string combinedMarkdown)
         {
             if (!_programArgs.PublishToFile)
-                return exitCode;
-            if (FilePublisher.PublishMarkdownReleaseHistoryFile(combinedMarkdown, _programArgs))
-                exitCode = SuccessExitCode;
-            else
-                exitCode = FailureExitCode;
-            return exitCode;
+                return true;
+            return FilePublisher.PublishMarkdownReleaseHistoryFile(combinedMarkdown, _programArgs);
         }
 
         private static ProgramArgs ValidateConfiguration(string[] args)

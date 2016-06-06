@@ -29,8 +29,8 @@ namespace PullRequestReleaseNotes.Providers
             if (!string.IsNullOrWhiteSpace(_programArgs.GitLabToken))
                 return;
             if (_programArgs.VerboseOutput)
-                Console.WriteLine($"GitLabToken was not supplied. Trying UNRELEASED_HISTORY_GITLAB_TOKEN environment variable.");
-            _programArgs.GitHubToken = Environment.GetEnvironmentVariable("UNRELEASED_HISTORY_GITLAB_TOKEN");
+                Console.WriteLine($"GitLabToken was not supplied. Trying PRRN_GITLAB_TOKEN environment variable.");
+            _programArgs.GitHubToken = Environment.GetEnvironmentVariable("PRRN_GITLAB_TOKEN");
             if (!string.IsNullOrWhiteSpace(_programArgs.GitLabToken))
                 return;
             Console.WriteLine($"GitLabToken was not supplied and could not be found.");

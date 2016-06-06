@@ -25,7 +25,7 @@ namespace PullRequestReleaseNotes.Models
 
         public bool Highlighted(List<string> highlightLabels)
         {
-            if (highlightLabels.All(string.IsNullOrWhiteSpace))
+            if (highlightLabels == null || highlightLabels.All(string.IsNullOrWhiteSpace))
                 return false;
             return Labels.Intersect(highlightLabels, StringComparer.InvariantCultureIgnoreCase).Count() != highlightLabels.Count;
         }

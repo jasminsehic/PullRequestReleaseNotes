@@ -32,8 +32,8 @@ namespace PullRequestReleaseNotes.Providers
             if (!string.IsNullOrWhiteSpace(_programArgs.BitBucketServerPassword))
                 return;
             if (_programArgs.VerboseOutput)
-                Console.WriteLine($"BitBucketServer password was not supplied. Trying UNRELEASED_HISTORY_BITBUCKETSERVER_PASSWORD environment variable.");
-            _programArgs.BitBucketServerPassword = Environment.GetEnvironmentVariable("UNRELEASED_HISTORY_BITBUCKETSERVER_PASSWORD");
+                Console.WriteLine($"BitBucketServer password was not supplied. Trying PRRN_BITBUCKETSERVER_PASSWORD environment variable.");
+            _programArgs.BitBucketServerPassword = Environment.GetEnvironmentVariable("PRRN_BITBUCKETSERVER_PASSWORD");
             if (!string.IsNullOrWhiteSpace(_programArgs.BitBucketServerPassword))
                 return;
             Console.WriteLine($"BitBucketServer password was not supplied and could not be found.");
