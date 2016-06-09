@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>PullRequestReleaseNotes.Portable</id>
+    <id>pullrequestreleasenotes</id>
     <version>$version$</version>
     <title>PullRequestReleaseNotes</title>
     <authors>Jasmin Sehic</authors>
@@ -11,12 +11,12 @@
     <projectSourceUrl>https://github.com/jasminsehic/PullRequestReleaseNotes</projectSourceUrl>
     <bugTrackerUrl>https://github.com/jasminsehic/PullRequestReleaseNotes/issues</bugTrackerUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Builds release history notes from unreleased pull requests on GitHub, GitLab, TFS / Team Services, BitBucket and Bitbucket Server and optionally posts them to a markdown file, Atlassian Confluence or Slack.</description>
-    <summary>Builds release history notes from unreleased pull requests on GitHub, GitLab, TFS / Team Services, BitBucket and Bitbucket Server and optionally posts them to a markdown file, Atlassian Confluence or Slack.
+    <description>Builds release history notes from unreleased pull requests on GitHub, GitLab, TFS / Team Services, BitBucket Cloud and Bitbucket Server and optionally posts them to a markdown file, Atlassian Confluence and Slack.</description>
+    <summary>Builds release history notes from unreleased pull requests on GitHub, GitLab, TFS / Team Services, BitBucket Cloud and Bitbucket Server and optionally posts them to a markdown file, Atlassian Confluence and Slack.
     </summary>
     <language>en-AU</language>
     <releaseNotes>Added support for larger Slack post files
     </releaseNotes>
-    <tags>Git PullRequestReleaseNotes GitHub GitLab BitBucket TFS TeamServices Team Services History RelaseNotes Changelog GitVersion Atlassian Confluence Slack Markdown Pull Request PullRequest SemanticReleaseNotes</tags>
+    <tags>git pullrequestreleasenotes pullrequest github gitlab bitbucket tfs teamservices history notes releasenotes changelog gitversion atlassian confluence slack markdown</tags>
   </metadata>
 </package>

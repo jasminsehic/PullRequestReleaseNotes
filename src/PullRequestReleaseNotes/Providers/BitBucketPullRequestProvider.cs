@@ -106,30 +106,6 @@ namespace PullRequestReleaseNotes.Providers
                 .Aggregate(title, (current, @group) => current.Replace(@group.Value, string.Empty)).Trim();
         }
 
-        public List<PullRequestCommitDto> Commits(int pullRequestId)
-        {
-            var pullRequest = GetPullRequest(pullRequestId);
-            if (pullRequest == null)
-                return null;
-            var pullRequestDto = GetPullRequestDto(pullRequest);
-            if (pullRequestDto == null)
-                return null;
-            var pullRequestCommits = GetPullRequestCommits(pullRequestDto);
-            return pullRequestCommits?.Select(commit => new PullRequestCommitDto
-            {
-                Merge = commit.parents.Count > 1,
-                Message = commit.message,
-                Sha = commit.hash
-            }).ToList();
-        }
-
-        private IEnumerable<SharpBucket.V2.Pocos.Commit> GetPullRequestCommits(PullRequestDto pullRequestDto)
-        {
-            var pullRequests = _bitBucketClient.RepositoriesEndPoint()
-              .PullReqestsResource(_programArgs.BitBucketAccount, _programArgs.BitBucketRepository);
-            return pullRequests.PullRequestResource(pullRequestDto.Number).ListPullRequestCommits() as IEnumerable<SharpBucket.V2.Pocos.Commit>;
-        }
-
         public string PullRequestUrl(int pullRequestId)
         {
             return $@"{BitBucketUrl}/{_programArgs.BitBucketAccount}/{_programArgs.BitBucketRepository}/pull-requests/{pullRequestId}";

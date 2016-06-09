@@ -102,35 +102,6 @@ namespace PullRequestReleaseNotes.Providers
             return pullRequestDto;
         }
 
-        public List<PullRequestCommitDto> Commits(int pullRequestId)
-        {
-            var commits = new List<GitLabCommit>();
-            var mergeRequest = GetMergeRequest(pullRequestId);
-            var request = PrepareGitLabRequest("projects/{project_id}/merge_requests/{merge_request_id}/commits", pullRequestId);
-            request.AddUrlSegment("merge_request_id", $"{mergeRequest.Id}");
-            var response = _restClient.Execute<List<GitLabCommit>>(request);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                try
-                {
-                    commits = JsonConvert.DeserializeObject<List<GitLabCommit>>(response.Content);
-                }
-                catch (JsonReaderException)
-                {
-                    Console.WriteLine($"Error finding GitLab merge request commits. Response content:\n{response.Content}");
-                    throw;
-                }
-                if (response.StatusCode != HttpStatusCode.OK || commits == null || !commits.Any())
-                    return null;
-            }
-            return commits.Select(c => new PullRequestCommitDto
-            {
-                Merge = c.Title.CaseInsensitiveContains("See merge request !"),
-                Message = c.Title,
-                Sha = c.Id
-            }).ToList();
-        }
-
         public string PullRequestUrl(int pullRequestId)
         {
             return $@"{_programArgs.GitLabApiUrl}/{_programArgs.GitLabOwner}/{_programArgs.GitLabRepository}/merge_requests/{pullRequestId}";

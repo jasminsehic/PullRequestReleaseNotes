@@ -120,7 +120,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="NugetAssets\PullRequestReleaseNotes.Portable.nuspec" />
+    <None Include="NugetAssets\PullRequestReleaseNotes.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="Clean">
@@ -208,7 +208,7 @@ foreach (var item in filesToCleanup)
     <Copy SourceFiles="@(NativeBinaries)" DestinationFiles="@(NativeBinaries->'$(BuildDir)NuGetExeBuild\tools\lib\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="$(OutputPath)PullRequestReleaseNotes.exe" DestinationFolder="$(BuildDir)NuGetExeBuild\tools" />
     <Copy SourceFiles="$(OutputPath)PullRequestReleaseNotes.pdb" DestinationFolder="$(BuildDir)NuGetExeBuild\tools" Condition="Exists('$(OutputPath)PullRequestReleaseNotes.pdb')" />
-    <Copy SourceFiles="$(ProjectDir)NugetAssets\PullRequestReleaseNotes.Portable.nuspec" DestinationFolder="$(BuildDir)NuGetExeBuild" />
+    <Copy SourceFiles="$(ProjectDir)NugetAssets\PullRequestReleaseNotes.nuspec" DestinationFolder="$(BuildDir)NuGetExeBuild" />
     <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(BuildDir)NuGetExeBuild" MetadataAssembly="$(OutputPath)PullRequestReleaseNotes.exe" Version="$(GitVersion_NuGetVersion)" />
   </Target>
   <Import Project="..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets" Condition="Exists('..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets')" />

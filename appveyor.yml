@@ -14,7 +14,7 @@ build_script:
   - cmd: nuget restore src/PullRequestReleaseNotes.sln
   - ps: gitversion /l console /output buildserver /updateAssemblyInfo 
   - cmd: msbuild src/PullRequestReleaseNotes.sln "/p:Configuration=%CONFIGURATION%;Platform=%PLATFORM%" 
-  - cmd: appveyor PushArtifact "build\NuGetExeBuild\PullRequestReleaseNotes.Portable.%GitVersion_NuGetVersion%.nupkg"
+  - cmd: appveyor PushArtifact "build\NuGetExeBuild\PullRequestReleaseNotes.%GitVersion_NuGetVersion%.nupkg"
 
 cache:
   - src\packages -> **\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified

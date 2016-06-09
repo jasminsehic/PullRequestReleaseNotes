@@ -14,8 +14,6 @@ namespace PullRequestReleaseNotes.Models
         public string Author { get; set; }
         public string AuthorUrl { get; set; }
         public string Url { get; set; }
-        public string BaseCommitSha { get; set; }
-        public string MergeCommitSha { get; set; }
 
         public List<string> Categories(string categoryPrefix, Dictionary<string, string> categoryDescriptions)
         {
@@ -28,23 +26,6 @@ namespace PullRequestReleaseNotes.Models
             if (highlightLabels == null || highlightLabels.All(string.IsNullOrWhiteSpace))
                 return false;
             return Labels.Intersect(highlightLabels, StringComparer.InvariantCultureIgnoreCase).Count() != highlightLabels.Count;
-        }
-    }
-
-    public sealed class PullRequestDtoEqualityComparer : IEqualityComparer<PullRequestDto>
-    {
-        public bool Equals(PullRequestDto x, PullRequestDto y)
-        {
-            if (ReferenceEquals(x, y)) return true;
-            if (ReferenceEquals(x, null)) return false;
-            if (ReferenceEquals(y, null)) return false;
-            if (x.GetType() != y.GetType()) return false;
-            return x.Number == y.Number;
-        }
-
-        public int GetHashCode(PullRequestDto obj)
-        {
-            return obj.Number;
         }
     }
 }

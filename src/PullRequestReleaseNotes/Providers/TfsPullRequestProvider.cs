@@ -71,8 +71,6 @@ namespace PullRequestReleaseNotes.Providers
                 Author = pullRequest.CreatedBy.DisplayName,
                 AuthorUrl = pullRequest.CreatedBy.Url.ToString(),
                 Url = PullRequestUrl(pullRequest.Id),
-                BaseCommitSha = pullRequest.LastMergeTargetCommit.Id.ToString(),
-                MergeCommitSha = pullRequest.LastMergeSourceCommit.Id.ToString(),
                 Labels = new List<string>()
             };
             // extract labels from title and description following pattern [#Section] ... [##Category]
@@ -110,34 +108,6 @@ namespace PullRequestReleaseNotes.Providers
             return matches.Cast<Match>()
                 .SelectMany(match => match.Groups.Cast<Group>().ToList())
                 .Aggregate(title, (current, @group) => current.Replace(@group.Value, string.Empty)).Trim();
-        }
-
-        public List<PullRequestCommitDto> Commits(int pullRequestId)
-        {
-            var pullRequest = GetPullRequest(pullRequestId);
-            if (pullRequest == null)
-                return null;
-            var pullRequestDto = GetPullRequestDto(pullRequest);
-            if (pullRequestDto == null)
-                return null;
-            var pullRequestCommits = GetPullRequestCommits(pullRequestDto);
-            return pullRequestCommits?.Select(commit => new PullRequestCommitDto
-            {
-                Merge = commit.Parents.Count() > 1,
-                Message = commit.Message,
-                Sha = commit.Sha
-            }).ToList();
-        }
-
-        private ICommitLog GetPullRequestCommits(PullRequestDto pullRequestDto)
-        {
-            var filter = new CommitFilter
-            {
-                Since = pullRequestDto.MergeCommitSha,
-                Until = pullRequestDto.BaseCommitSha,
-                FirstParentOnly = true
-            };
-            return _programArgs.LocalGitRepository.Commits.QueryBy(filter);
         }
 
         public string PullRequestUrl(int pullRequestId)

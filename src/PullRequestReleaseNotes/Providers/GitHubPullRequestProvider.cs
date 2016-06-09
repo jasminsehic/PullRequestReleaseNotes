@@ -80,16 +80,6 @@ namespace PullRequestReleaseNotes.Providers
             return pullRequestDto;
         }
 
-        public List<PullRequestCommitDto> Commits(int pullRequestId)
-        {
-            var commits = _gitHubClient.PullRequest.Commits(_programArgs.GitHubOwner, _programArgs.GitHubRepository, pullRequestId).Result;
-            return commits.Select(commit => new PullRequestCommitDto
-            {
-                Merge = commit.Parents.Count > 1,
-                Message = commit.Commit.Message,
-                Sha = commit.Sha
-            }).ToList();
-        }
 
         public string PullRequestUrl(int pullRequestId)
         {

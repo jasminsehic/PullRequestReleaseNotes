@@ -4,7 +4,7 @@ PullRequestReleaseNotes
 =======================
 
 [![Build status](https://ci.appveyor.com/api/projects/status/github/jasminsehic/pullrequestreleasenotes?svg=true)](https://ci.appveyor.com/project/jasminsehic/unreleasedgithubhistory)
-[![Chocolatey](https://img.shields.io/chocolatey/vpre/PullRequestReleaseNotes.portable.svg)](https://chocolatey.org/packages/PullRequestReleaseNotes.Portable)
+[![Chocolatey](https://img.shields.io/chocolatey/vpre/PullRequestReleaseNotes.svg)](https://chocolatey.org/packages/PullRequestReleaseNotes)
 [![Release](https://img.shields.io/github/release/jasminsehic/PullRequestReleaseNotes.svg)]()
 [![License](https://img.shields.io/github/license/jasminsehic/PullRequestReleaseNotes.svg)]()
 [![Gitter](https://badges.gitter.im/jasminsehic/PullRequestReleaseNotes.svg)](https://gitter.im/jasminsehic/PullRequestReleaseNotes?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
@@ -19,7 +19,7 @@ NOTE: TFS / Team Services and BitBucket Cloud / Server pull request providers to
 
 ## Install
 
-    choco install PullRequestReleaseNotes.Portable
+    choco install PullRequestReleaseNotes
     
 ## Usage
 

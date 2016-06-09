@@ -126,47 +126,6 @@ namespace PullRequestReleaseNotes.Providers
                 .Aggregate(title, (current, @group) => current.Replace(@group.Value, string.Empty)).Trim();
         }
 
-        public List<PullRequestCommitDto> Commits(int pullRequestId)
-        {
-            var pullRequest = GetPullRequest(pullRequestId);
-            if (pullRequest == null)
-                return null;
-            var pullRequestDto = GetPullRequestDto(pullRequest);
-            if (pullRequestDto == null)
-                return null;
-            var pullRequestCommits = GetPullRequestCommits(pullRequestDto);
-            return pullRequestCommits?.Select(commit => new PullRequestCommitDto
-            {
-                Merge = commit.Parents.Count() > 1,
-                Message = commit.Message,
-                Sha = commit.Id
-            }).ToList();
-        }
-
-        private IEnumerable<BitBucketServerCommit> GetPullRequestCommits(PullRequestDto pullRequestDto)
-        {
-            ResponseWrapper<BitBucketServerCommit> commits;
-            var request = new RestRequest($"/pull-requests/{pullRequestDto.Number}/commits", Method.GET);
-            var response = _restClient.Execute(request);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                try
-                {
-                    commits = JsonConvert.DeserializeObject<ResponseWrapper<BitBucketServerCommit>>(response.Content);
-                }
-                catch (JsonReaderException)
-                {
-                    Console.WriteLine($"Error finding BitBucket Server pull request commits. Response content:\n{response.Content}");
-                    throw;
-                }
-                if (response.StatusCode != HttpStatusCode.OK || commits == null || !commits.Values.Any())
-                    return null;
-            }
-            else
-                return null;
-            return commits.Values;
-        }
-
         public string PullRequestUrl(int pullRequestId)
         {
             return $@"{_programArgs.BitBucketServerUrl}/projects/{_programArgs.BitBucketServerProject}/repos/{_programArgs.BitBucketServerRepository}/pull-requests/{pullRequestId}";
