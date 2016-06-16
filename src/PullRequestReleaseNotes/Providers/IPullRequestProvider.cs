@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using PullRequestReleaseNotes.Models;
 
 namespace PullRequestReleaseNotes.Providers

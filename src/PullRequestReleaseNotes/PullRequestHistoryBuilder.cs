@@ -20,25 +20,30 @@ namespace PullRequestReleaseNotes
 
         public List<PullRequestDto> BuildHistory()
         {
-            var unreleasedCommits = GetAllUnreleasedCommits();
-            return unreleasedCommits.Where(commit => commit.Parents.Count() > 1)
-                .Select(mergeCommit => _pullRequestProvider.Get(mergeCommit.Message))
+            var unreleasedCommits = GetAllUnreleasedMergeCommits();
+            return unreleasedCommits.Select(mergeCommit => _pullRequestProvider.Get(mergeCommit.Message))
                 .Where(pullRequestDto => pullRequestDto != null).ToList();
         }
 
-        private IEnumerable<Commit> GetAllUnreleasedCommits()
+        private IEnumerable<Commit> GetAllUnreleasedMergeCommits()
         {
             var releasedCommitsHash = new Dictionary<string, Commit>();
             var branchReference = _programArgs.LocalGitRepository.Branches[_programArgs.ReleaseBranchRef];
             var tagCommits = _programArgs.LocalGitRepository.Tags.Where(LightOrAnnotatedTags()).Select(tag => tag.Target as Commit).Where(x => x != null).ToList();
-            IEnumerable<Commit> branchAncestors = _programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter { Since = branchReference });
+            var branchAncestors = _programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter { Since = branchReference }).Where(commit => commit.Parents.Count() > 1);
             if (!tagCommits.Any())
                 return branchAncestors;
             // for each tagged commit walk down all its parents and collect a dictionary of unique commits
             foreach (var tagCommit in tagCommits)
             {
-                var releasedCommits =_programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter {Since = tagCommit.Id}).ToDictionary(i => i.Sha, i => i);
-                releasedCommitsHash.MergeOverwrite(releasedCommits);
+                // we only care about tags decending from the branch we are interested in
+                if (_programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter { Since = branchReference }).Any(c => c.Sha == tagCommit.Sha))
+                {
+                    var releasedCommits = _programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter { Since = tagCommit.Id })
+                        .Where(commit => commit.Parents.Count() > 1)
+                        .ToDictionary(i => i.Sha, i => i);
+                    releasedCommitsHash.Merge(releasedCommits);
+                }
             }
             // remove released commits from the branch ancestor commits as they have been previously released
             return branchAncestors.Except(releasedCommitsHash.Values.AsEnumerable());

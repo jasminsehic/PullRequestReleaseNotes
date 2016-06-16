@@ -27,9 +27,36 @@ While inside a git working directory run the application
 
     $ PullRequestReleaseNotes
 
-Utility can have command line parameters passed to it or have the parameters supplied via a YAML based config or a mixture of both. Command line parameter will win if the same parameter is also supplied via YAML. You can generate a sample YAML file by passing -init parameter to the utility.
+## Sample output
+
+```markdown
+# 1.2.1 (MASTER) - XX XXX 2016
+## Enhancements
+### Category A
+- Awesome new feature [\#1854](https://github.com/org/repo/pull/1854)
+
+### Undefined
+- Special feature for Acme Co [\#1855](https://github.com/org/repo/pull/1855)
+
+## Fixes
+### Category Z
+- Fixed problem with widget [\#1792](https://github.com/org/repo/pull/1792)
+
+### Category Y
+- Fixed problem with widget [\#1792](https://github.com/org/repo/pull/1792)
+- Fixed exception with view layout [\#1848](https://github.com/org/repo/pull/1848)
+
+### Undefined
+- Fixed spelling mistake [\#1833](https://github.com/org/repo/pull/1833)
+
+## Unclassified
+### Undefined
+- Added new Category H [\#1843](https://github.com/org/repo/pull/1843)
+```
 
 ### Command Line Parameters
+Utility can have command line parameters passed to it or have the parameters supplied via a YAML based config or a mixture of both. Command line parameter will win if the same parameter is also supplied via YAML. You can generate a sample YAML file by passing -init parameter to the utility.
+
 - `-PullRequestProviderName` (`-prpn`) : Default is `github`. Other providers supported are `gitlab`, `tfs`, `bitbucket` and `bitbucketserver`.
 - `-GitHubToken` (`-ghpt`) : Required parameter if PullRequestProviderName is `github`. Can be supplied as parameter or `PRRN_GITHUB_TOKEN` environment variable.
 - `-GitHubOwner` (`-gho`) : Default is extracted from remote url.
@@ -164,35 +191,8 @@ release-note-sections:
   - enhancement=Enhancements
 ```
 
-## Sample output
-
-```markdown
-# 1.2.1 (MASTER) - XX XXX 2016
-## Enhancements
-### Category A
-- Awesome new feature [\#1854](https://github.com/org/repo/pull/1854)
-
-### Undefined
-- Special feature for Acme Co [\#1855](https://github.com/org/repo/pull/1855)
-
-## Fixes
-### Category Z
-- Fixed problem with widget [\#1792](https://github.com/org/repo/pull/1792)
-
-### Category Y
-- Fixed problem with widget [\#1792](https://github.com/org/repo/pull/1792)
-- Fixed exception with view layout [\#1848](https://github.com/org/repo/pull/1848)
-
-### Undefined
-- Fixed spelling mistake [\#1833](https://github.com/org/repo/pull/1833)
-
-## Unclassified
-### Undefined
-- Added new Category H [\#1843](https://github.com/org/repo/pull/1843)
-```
-
 ## Thanks
-Big thanks to [Jake Ginnivan](http://jake.ginnivan.net/) for inspiring me and this tool with his work on [GitReleaseNotes](https://github.com/GitTools/GitReleaseNotes) and [GitVersion](https://github.com/GitTools/GitVersion)
+Big thanks to [Jake Ginnivan](http://jake.ginnivan.net/) for inspiring this tool with his work on [GitReleaseNotes](https://github.com/GitTools/GitReleaseNotes) and [GitVersion](https://github.com/GitTools/GitVersion)
 
 Also many thanks to:
 - [Edward Thomson](https://github.com/ethomson) for [Infinity.NET](https://github.com/ethomson/infinity.net) that made it super-easy to connect to TFS. 

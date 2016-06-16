@@ -29,15 +29,12 @@ namespace PullRequestReleaseNotes
             return (target.IndexOf(value, StringComparison.InvariantCultureIgnoreCase) >= 0);
         }
 
-        public static void MergeOverwrite<T1, T2>(this IDictionary<T1, T2> dictionary, IDictionary<T1, T2> newElements)
+        public static void Merge<T1, T2>(this IDictionary<T1, T2> dictionary, IDictionary<T1, T2> newElements)
         {
-            if (newElements == null)
-                return;
+            if (newElements == null) return;
             foreach (var e in newElements)
-            {
                 if (!dictionary.ContainsKey(e.Key))
                     dictionary.Add(e);
-            }
         }
     }
 }
