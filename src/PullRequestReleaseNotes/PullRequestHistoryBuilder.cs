@@ -2,6 +2,7 @@
 using System.Linq;
 using LibGit2Sharp;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using PullRequestReleaseNotes.Models;
 using PullRequestReleaseNotes.Providers;
 
@@ -11,6 +12,7 @@ namespace PullRequestReleaseNotes
     {
         private readonly ProgramArgs _programArgs;
         private readonly IPullRequestProvider _pullRequestProvider;
+        private static readonly Regex ParseSemVer = new Regex(@"^(?<SemVer>(?<Major>\d+)(\.(?<Minor>\d+))(\.(?<Patch>\d+))?)(\.(?<FourthPart>\d+))?(-(?<Tag>[^\+]*))?(\+(?<BuildMetaData>.*))?$", RegexOptions.Compiled);
 
         public PullRequestHistoryBuilder(ProgramArgs programArgs)
         {
@@ -29,8 +31,13 @@ namespace PullRequestReleaseNotes
         {
             var releasedCommitsHash = new Dictionary<string, Commit>();
             var branchReference = _programArgs.LocalGitRepository.Branches[_programArgs.ReleaseBranchRef];
-            var tagCommits = _programArgs.LocalGitRepository.Tags.Where(LightOrAnnotatedTags()).Select(tag => tag.Target as Commit).Where(x => x != null).ToList();
-            var branchAncestors = _programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter { Since = branchReference }).Where(commit => commit.Parents.Count() > 1);
+            var tagCommits = _programArgs.LocalGitRepository.Tags
+                .Where(LightOrAnnotatedTags())
+                .Where(t => ParseSemVer.Match(t.Name).Success)
+                .Select(tag => tag.Target as Commit).Where(x => x != null).ToList();
+            var branchAncestors = _programArgs.LocalGitRepository.Commits
+                .QueryBy(new CommitFilter { Since = branchReference })
+                .Where(commit => commit.Parents.Count() > 1);
             if (!tagCommits.Any())
                 return branchAncestors;
             // for each tagged commit walk down all its parents and collect a dictionary of unique commits
@@ -39,7 +46,8 @@ namespace PullRequestReleaseNotes
                 // we only care about tags decending from the branch we are interested in
                 if (_programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter { Since = branchReference }).Any(c => c.Sha == tagCommit.Sha))
                 {
-                    var releasedCommits = _programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter { Since = tagCommit.Id })
+                    var releasedCommits = _programArgs.LocalGitRepository.Commits
+                        .QueryBy(new CommitFilter { Since = tagCommit.Id })
                         .Where(commit => commit.Parents.Count() > 1)
                         .ToDictionary(i => i.Sha, i => i);
                     releasedCommitsHash.Merge(releasedCommits);
