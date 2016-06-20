@@ -9,13 +9,15 @@ PullRequestReleaseNotes
 [![License](https://img.shields.io/github/license/jasminsehic/PullRequestReleaseNotes.svg)]()
 [![Gitter](https://badges.gitter.im/jasminsehic/PullRequestReleaseNotes.svg)](https://gitter.im/jasminsehic/PullRequestReleaseNotes?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-PullRequestReleaseNotes generates release notes for all merged pull requests on a specific branch that have not yet been released or since last release tag. Supported Pull Request providers are [GitHub](https://github.com/), [GitLab](https://gitlab.com/), [TFS / Team Services](https://www.visualstudio.com/en-us/products/visual-studio-team-services-vs.aspx), [BitBucket Cloud](https://bitbucket.org/) and [Bitbucket Server](https://www.atlassian.com/software/bitbucket/download). 
+Pull Request Release Notes utility generates release notes for all merged pull requests, on a specific branch, that have not yet been released replying only on pull request titles and labels to generate the release notes. 
+
+Supported Pull Request providers are [GitHub](https://github.com/), [GitLab](https://gitlab.com/), [TFS / Team Services](https://www.visualstudio.com/en-us/products/visual-studio-team-services-vs.aspx), [BitBucket Cloud](https://bitbucket.org/) and [Bitbucket Server](https://www.atlassian.com/software/bitbucket/download). 
 
 Intention is to run this utility as part of a continuous integration process and generate notes automatically as part of every release branch build. Optionally the utility can also publish the notes to a markdown file, [Atlassian Confluence](https://www.atlassian.com/software/confluence) page or a [Slack](https://slack.com/) post. 
 
-Utility outputs release notes following the [SemanticReleaseNotes.org](http://www.semanticreleasenotes.org/) format and uses the pull request titles and labels to extract semantic release note sections, categories and summaries. For example all pull requests with `Bug` label can be grouped under `Fixes `section and pull requests with `Enhancement` label can be grouped under `Enhancements` section. Category grouping is possible through use of the `#Label` where `#` character is used to signify a category. You can supply the utility with category descriptions so that you can turn label `CategoryA` into `Category A` description. Pull requests without relevant labels will be grouped under `Unclassified` and `Undefined` sections and categories. Pull requests labeled with multiple category labels will cause notes to appear in multiple categories. 
+Utility outputs release notes following the [Semantic Release Notes](http://www.semanticreleasenotes.org/) format and extracts semantic release note sections, categories and summaries from the pull request title and labels. For example all pull requests with `Bug` label can be grouped under `Fixes` section and pull requests with `Enhancement` label can be grouped under `Enhancements` section. Category grouping is possible through use of the `#Label` where `#` character is used to denote a category label as opposed to a section label.
 
-NOTE: TFS / Team Services and BitBucket Cloud / Server pull request providers to not have a label/tag concept on pull requests so for those providers you can type `[#section]` and `[##category]` either in the title or the description of the pull request as a pseudo-label/tag.
+NOTE: TFS / Team Services and BitBucket Cloud / Server pull request providers do not have a label concept yet so for those providers you can type `[#section]` and `[##category]` either in the title or the description of the pull request as a pseudo-label.
 
 ## Install
 
