@@ -9,7 +9,7 @@ PullRequestReleaseNotes
 [![License](https://img.shields.io/github/license/jasminsehic/PullRequestReleaseNotes.svg)]()
 [![Gitter](https://badges.gitter.im/jasminsehic/PullRequestReleaseNotes.svg)](https://gitter.im/jasminsehic/PullRequestReleaseNotes?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Pull Request Release Notes utility generates release notes for all merged pull requests, on a specific branch, that have not yet been released replying only on pull request titles and labels to generate the release notes. 
+Pull Request Release Notes utility generates release notes for all merged pull requests, on a specific branch, that have not yet been released relying solely on pull request titles and labels to generate the release notes. 
 
 Supported Pull Request providers are [GitHub](https://github.com/), [GitLab](https://gitlab.com/), [TFS / Team Services](https://www.visualstudio.com/en-us/products/visual-studio-team-services-vs.aspx), [BitBucket Cloud](https://bitbucket.org/) and [Bitbucket Server](https://www.atlassian.com/software/bitbucket/download). 
 
