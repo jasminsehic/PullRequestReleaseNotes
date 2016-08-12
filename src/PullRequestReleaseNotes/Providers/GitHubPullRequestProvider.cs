@@ -40,28 +40,28 @@ namespace PullRequestReleaseNotes.Providers
             var pullRequestId = ExtractPullRequestNumber(commitMessage);
             if (pullRequestId == null)
                 return null;
-            var pullRequest = _gitHubClient.PullRequest.Get(_programArgs.GitHubOwner, _programArgs.GitHubRepository, (int) pullRequestId).Result;
-            if (pullRequest == null)
-                return null;
-            if (_programArgs.VerboseOutput)
-                Console.WriteLine($"Found #{pullRequest.Number}: {pullRequest.Title}");
-            return GetPullRequestWithLabels(pullRequest);
+            return GetPullRequestWithLabels(pullRequestId.Value);
         }
 
-        private PullRequestDto GetPullRequestWithLabels(PullRequest pullRequest)
+        private PullRequestDto GetPullRequestWithLabels(int pullRequestId)
         {
             // pull requests are actually GitHub issues so we have to use the issue API to get labels
-            var issueNumber = int.Parse(pullRequest.IssueUrl.Segments.Last());
-            var issue = _gitHubClient.Issue.Get(_programArgs.GitHubOwner, _programArgs.GitHubRepository, issueNumber).Result;
+            var issue = _gitHubClient.Issue.Get(_programArgs.GitHubOwner, _programArgs.GitHubRepository, pullRequestId).Result;
+            if(issue == null)
+            {
+                return null;
+            }
+            if (_programArgs.VerboseOutput)
+                Console.WriteLine($"Found #{issue.Number}: {issue.Title}");
             var pullRequestDto = new PullRequestDto
             {
-                Number = pullRequest.Number,
-                Title = pullRequest.Title,
-                CreatedAt = pullRequest.CreatedAt,
-                MergedAt = pullRequest.MergedAt,
-                Author = pullRequest.User.Login,
-                AuthorUrl = pullRequest.User.Url,
-                Url = PullRequestUrl(pullRequest.Number),
+                Number = issue.Number,
+                Title = issue.Title,
+                CreatedAt = issue.CreatedAt,
+                MergedAt = issue.ClosedAt,
+                Author = issue.User.Login,
+                AuthorUrl = issue.User.Url,
+                Url = PullRequestUrl(issue.Number),
                 Labels = new List<string>()
             };
             foreach (var label in issue.Labels)
