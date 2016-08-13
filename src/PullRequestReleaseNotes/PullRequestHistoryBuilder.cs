@@ -23,7 +23,7 @@ namespace PullRequestReleaseNotes
         public List<PullRequestDto> BuildHistory()
         {
             var unreleasedCommits = GetAllUnreleasedMergeCommits();
-            return unreleasedCommits.Select(mergeCommit => _pullRequestProvider.Get(mergeCommit.Message))
+            return unreleasedCommits.AsParallel().Select(mergeCommit => _pullRequestProvider.Get(mergeCommit.Message))
                 .Where(pullRequestDto => pullRequestDto != null).ToList();
         }
 
