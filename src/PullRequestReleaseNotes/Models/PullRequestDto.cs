@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,7 +26,7 @@ namespace PullRequestReleaseNotes.Models
         {
             if (highlightLabels == null || highlightLabels.All(string.IsNullOrWhiteSpace))
                 return false;
-            return Labels.Intersect(highlightLabels, StringComparer.InvariantCultureIgnoreCase).Count() != highlightLabels.Count;
+            return Labels.Intersect(highlightLabels, StringComparer.InvariantCultureIgnoreCase).Count() != 0;
         }
     }
 }
