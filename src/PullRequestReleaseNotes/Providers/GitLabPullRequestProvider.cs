@@ -21,7 +21,7 @@ namespace PullRequestReleaseNotes.Providers
         {
             _programArgs = programArgs;
             DiscoverToken();
-            _restClient = new RestClient($"{_programArgs.GitLabApiUrl}/api/v3");
+            _restClient = new RestClient($"{_programArgs.GitLabApiUrl}/api/v4");
         }
 
         private void DiscoverToken()
@@ -119,7 +119,7 @@ namespace PullRequestReleaseNotes.Providers
         {
             var request = new RestRequest(relativeUrl, Method.GET);
             request.AddUrlSegment("project_id", _programArgs.GitLabProjectId);
-            request.AddQueryParameter("iid", $"{pullRequestId}");
+            request.AddQueryParameter("iids", $"{pullRequestId}");
             request.AddQueryParameter("private_token", $"{_programArgs.GitLabToken}");
             return request;
         }
