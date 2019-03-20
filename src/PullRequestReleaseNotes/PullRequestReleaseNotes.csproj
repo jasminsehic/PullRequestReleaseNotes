@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\LibGit2Sharp.NativeBinaries.1.0.137\build\LibGit2Sharp.NativeBinaries.props" Condition="Exists('..\packages\LibGit2Sharp.NativeBinaries.1.0.137\build\LibGit2Sharp.NativeBinaries.props')" />
-  <Import Project="..\packages\LibGit2Sharp.0.21.0.176\build\net40\LibGit2Sharp.props" Condition="Exists('..\packages\LibGit2Sharp.0.21.0.176\build\net40\LibGit2Sharp.props')" />
+  <Import Project="..\packages\LibGit2Sharp.NativeBinaries.2.0.267\build\net46\LibGit2Sharp.NativeBinaries.props" Condition="Exists('..\packages\LibGit2Sharp.NativeBinaries.2.0.267\build\net46\LibGit2Sharp.NativeBinaries.props')" />
+  <Import Project="..\packages\Costura.Fody.3.3.3\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.3.3.3\build\Costura.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PullRequestReleaseNotes</RootNamespace>
     <AssemblyName>PullRequestReleaseNotes</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BuildDir>$(SolutionDir)..\build\</BuildDir>
     <TargetFrameworkProfile />
@@ -40,59 +40,53 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Costura, Version=3.3.3.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Costura.Fody.3.3.3\lib\net40\Costura.dll</HintPath>
+    </Reference>
     <Reference Include="Infinity, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Infinity.NET.0.1.2\lib\portable-net45+win+wpa81+wp80\Infinity.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="LibGit2Sharp, Version=0.21.0.176, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LibGit2Sharp.0.21.0.176\lib\net40\LibGit2Sharp.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="LibGit2Sharp, Version=0.26.0.0, Culture=neutral, PublicKeyToken=7cbde695407f0333, processorArchitecture=MSIL">
+      <HintPath>..\packages\LibGit2Sharp.0.26.0\lib\net46\LibGit2Sharp.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Octokit, Version=0.19.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Octokit.0.19.0\lib\net45\Octokit.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Octokit, Version=0.32.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Octokit.0.32.0\lib\net45\Octokit.dll</HintPath>
     </Reference>
-    <Reference Include="PowerArgs, Version=2.7.1.0, Culture=neutral, PublicKeyToken=26a276264bbd55b8, processorArchitecture=MSIL">
-      <HintPath>..\packages\PowerArgs.2.7.1.0\lib\net45\PowerArgs.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="PowerArgs, Version=3.6.0.0, Culture=neutral, PublicKeyToken=26a276264bbd55b8, processorArchitecture=MSIL">
+      <HintPath>..\packages\PowerArgs.3.6.0\lib\netstandard2.0\PowerArgs.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.105.2.3\lib\net46\RestSharp.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="RestSharp, Version=106.6.9.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.6.9\lib\net452\RestSharp.dll</HintPath>
     </Reference>
-    <Reference Include="SharpBucket, Version=0.5.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpBucket.0.5.2.0\lib\net40\SharpBucket.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SharpBucket, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpBucket.0.9.0\lib\net452\SharpBucket.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Extensions, Version=2.2.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\net45\System.Net.Http.Extensions.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.Primitives, Version=4.2.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\net45\System.Net.Http.Primitives.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="YamlDotNet, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.3.8.0\lib\net35\YamlDotNet.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="YamlDotNet, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\YamlDotNet.6.0.0\lib\net45\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -133,19 +127,20 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\LibGit2Sharp.0.21.0.176\build\net40\LibGit2Sharp.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\LibGit2Sharp.0.21.0.176\build\net40\LibGit2Sharp.props'))" />
-    <Error Condition="!Exists('..\packages\LibGit2Sharp.NativeBinaries.1.0.137\build\LibGit2Sharp.NativeBinaries.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\LibGit2Sharp.NativeBinaries.1.0.137\build\LibGit2Sharp.NativeBinaries.props'))" />
     <Error Condition="!Exists('..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets'))" />
-    <Error Condition="!Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.29.4\build\dotnet\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Fody.4.0.2\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.4.0.2\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.3.3.3\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.3.3.3\build\Costura.Fody.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('..\packages\LibGit2Sharp.NativeBinaries.2.0.267\build\net46\LibGit2Sharp.NativeBinaries.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\LibGit2Sharp.NativeBinaries.2.0.267\build\net46\LibGit2Sharp.NativeBinaries.props'))" />
   </Target>
   <ItemGroup>
-    <EmbeddedResource Include="$(SolutionDir)\packages\LibGit2Sharp.0.21.0.176\lib\net40\NativeBinaries\amd64\git2-e0902fb.dll">
+    <EmbeddedResource Include="$(SolutionDir)\packages\LibGit2Sharp.NativeBinaries.2.0.267\runtimes\win-x64\native\git2-572e4d8.dll">
       <Link>costura64/%(Filename)%(Extension)</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="$(ProjectDir)\costura64\**\*">
       <Link>costura64/%(RecursiveDir)%(Filename)%(Extension)</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(SolutionDir)\packages\LibGit2Sharp.0.21.0.176\lib\net40\NativeBinaries\x86\git2-e0902fb.dll">
+    <EmbeddedResource Include="$(SolutionDir)\packages\LibGit2Sharp.NativeBinaries.2.0.267\runtimes\win-x86\native\git2-572e4d8.dll">
       <Link>costura32/%(Filename)%(Extension)</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="$(ProjectDir)\costura32\**\*">
@@ -212,10 +207,6 @@ foreach (var item in filesToCleanup)
     <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(BuildDir)NuGetExeBuild" MetadataAssembly="$(OutputPath)PullRequestReleaseNotes.exe" Version="$(GitVersion_NuGetVersion)" />
   </Target>
   <Import Project="..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets" Condition="Exists('..\packages\PepitaPackage.1.21.4\build\PepitaPackage.targets')" />
-  <Import Project="..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />
-  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
-    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
-    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
-  </Target>
+  <Import Project="..\packages\Fody.4.0.2\build\Fody.targets" Condition="Exists('..\packages\Fody.4.0.2\build\Fody.targets')" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
 </Project>
