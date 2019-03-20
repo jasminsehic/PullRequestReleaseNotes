@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using LibGit2Sharp;
+using PowerArgs;
 using PullRequestReleaseNotes.Models;
 using Credentials = Octokit.Credentials;
 
@@ -62,6 +63,7 @@ namespace PullRequestReleaseNotes.Providers
                 Author = issue.User.Login,
                 AuthorUrl = issue.User.Url,
                 Url = PullRequestUrl(issue.Number),
+                DocumentUrl = ExtractPullRequestDocumentUrl(issue.Body),
                 Labels = new List<string>()
             };
             foreach (var label in issue.Labels)
@@ -80,7 +82,6 @@ namespace PullRequestReleaseNotes.Providers
             return pullRequestDto;
         }
 
-
         public string PullRequestUrl(int pullRequestId)
         {
             return $@"{_programArgs.GitHubApiUrl}/{_programArgs.GitHubOwner}/{_programArgs.GitHubRepository}/pull/{pullRequestId}";
@@ -98,6 +99,21 @@ namespace PullRequestReleaseNotes.Providers
             if (match.Groups.Count <= 0 || !match.Groups["pullRequestNumber"].Success)
                 return null;
             return int.Parse(match.Groups["pullRequestNumber"].Value);
+        }
+
+        // convention based link to official documentation, just needs to be prefixed with Doc: or doc: in the pull request body
+        private string ExtractPullRequestDocumentUrl(string issueBody)
+        {
+	        var matches = Regex.Matches(issueBody,
+		        @"\s+(D|d)oc:\s+(http|https):\/\/([\w\-_]+(?:(?:\.[\w\-_]+)+))([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?").ToList();
+	        if (matches.Any())
+	        {
+		        var match = matches.First().Value;
+		        var urlStart = match.IndexOf("http", StringComparison.InvariantCultureIgnoreCase);
+		        if (urlStart > 0)
+			        return match.Substring(urlStart);
+	        }
+	        return string.Empty;
         }
 
         public bool DiscoverRemote()

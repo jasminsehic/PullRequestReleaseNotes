@@ -14,6 +14,7 @@ namespace PullRequestReleaseNotes.Models
         public string Author { get; set; }
         public string AuthorUrl { get; set; }
         public string Url { get; set; }
+        public string DocumentUrl { get; set; }
 
         public List<string> Categories(string categoryPrefix, Dictionary<string, string> categoryDescriptions)
         {
