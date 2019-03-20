@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -87,6 +87,7 @@ namespace PullRequestReleaseNotes.Providers
                 Author = pullRequest.Author.User.DisplayName,
                 AuthorUrl = pullRequest.Author.User.Links.Self.First().Href.ToString(),
                 Url = PullRequestUrl(Convert.ToInt32(pullRequest.Id)),
+                DocumentUrl = pullRequest.Description.ExtractDocumentUrl(),
                 Labels = new List<string>()
             };
             // extract labels from title and description following pattern [#Section] ... [##Category]

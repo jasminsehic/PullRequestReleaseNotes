@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -67,8 +67,10 @@ namespace PullRequestReleaseNotes.Providers
                 Author = pullRequest.author.display_name,
                 AuthorUrl = pullRequest.author.links.self.href,
                 Url = PullRequestUrl((int)pullRequest.id),
+                DocumentUrl = pullRequest.description.ExtractDocumentUrl(),
                 Labels = new List<string>()
             };
+
             // extract labels from title and description following pattern [#Section] ... [##Category]
             var labelPattern = new Regex(@"\#(?:[^\[\]]+)*");
             var matches = labelPattern.Matches($"{pullRequest.title}{pullRequest.description}");

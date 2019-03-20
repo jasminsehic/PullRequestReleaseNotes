@@ -107,7 +107,10 @@ namespace PullRequestReleaseNotes
             var pullRequestMergedAt = item.MergedAt?.ToString(_programArgs.ReleaseNoteDateFormat);
             var pullRequestAuthor = item.Author;
             var pullRequestAuthorUrl = $@"[{item.Author}]({item.AuthorUrl})";
-            return string.Format($@"- {_programArgs.ReleaseNoteFormat}", pullRequestTitle, pullRequestUrl, pullRequestNumber, pullRequestCreatedAt, pullRequestMergedAt, pullRequestAuthor, pullRequestAuthorUrl);
+            var pullRequestDocumentUrl = string.Empty;
+            if (!string.IsNullOrWhiteSpace(item.DocumentUrl))
+				pullRequestDocumentUrl = $@"[Docs]({item.DocumentUrl})";
+            return string.Format($@"- {_programArgs.ReleaseNoteFormat}", pullRequestTitle, pullRequestUrl, pullRequestNumber, pullRequestCreatedAt, pullRequestMergedAt, pullRequestAuthor, pullRequestAuthorUrl, pullRequestDocumentUrl);
         }
 
         private static string FormatReleaseNoteTitle(SemanticReleaseItemSummary item)

@@ -62,6 +62,7 @@ namespace PullRequestReleaseNotes.Providers
                 Author = issue.User.Login,
                 AuthorUrl = issue.User.Url,
                 Url = PullRequestUrl(issue.Number),
+                DocumentUrl = issue.Body.ExtractDocumentUrl(),
                 Labels = new List<string>()
             };
             foreach (var label in issue.Labels)
@@ -79,7 +80,6 @@ namespace PullRequestReleaseNotes.Providers
             }
             return pullRequestDto;
         }
-
 
         public string PullRequestUrl(int pullRequestId)
         {

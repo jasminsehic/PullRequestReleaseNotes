@@ -39,7 +39,7 @@ Utility can have command line parameters passed to it or have the parameters sup
 - `-ReleaseNoteCategoryPrefix` (`-rncp`) : Default ("#"). Used to differentiate category labels from section labels.
 - `-ReleaseNoteOrderAscending` (`-rnoa`) : Default ("false"). Used to determine the sort order of the release notes.
 - `-ReleaseNoteOrderWhen` (`-rnow`) : Default ("merged"). Set to "created" to order release notes based on pull request creation time rather than merge time.
-- `-ReleaseNoteFormat` (`-rnf`) : Default ("{0} {1}"). Available fields are {0} pull request title, {1} pull request url, {2} pull request number, {3} pull request created date/time, {4} pull request merged date/time, {5} pull request author username, {6} pull request author URL
+- `-ReleaseNoteFormat` (`-rnf`) : Default ("{0} {1}"). Available fields are {0} pull request title, {1} pull request url, {2} pull request number, {3} pull request created date/time, {4} pull request merged date/time, {5} pull request author username, {6} pull request author URL, {7} pull request documentation URL
 - `-ReleaseNoteDateFormat` (`-rndf`) : Default ("MMM dd, yyyy HH:mm"). You can use any [.NET standard](https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx) or [custom date and time format](https://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx) strings.
 - `-ReleaseNoteHighlightLabels` (`-rnhl`) : Default is (""). Comma-separated list of labels which a pull request without will be marked up as code to highlight the item in release notes.'
 - `-PublishToConfluence` (`-ptc`) : Default ("false"). Set to "true" for all other Confluence related parameters to become active.
