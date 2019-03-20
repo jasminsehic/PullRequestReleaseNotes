@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>pullrequestreleasenotes</id>
-    <version>$version$</version>
+    <version>$version$-beta</version>
     <title>PullRequestReleaseNotes</title>
     <authors>Jasmin Sehic</authors>
     <owners>Jasmin Sehic</owners>
