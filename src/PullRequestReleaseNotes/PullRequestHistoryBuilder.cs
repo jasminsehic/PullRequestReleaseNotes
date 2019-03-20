@@ -33,21 +33,21 @@ namespace PullRequestReleaseNotes
             var branchReference = _programArgs.LocalGitRepository.Branches[_programArgs.ReleaseBranchRef];
             var tagCommits = _programArgs.LocalGitRepository.Tags
                 .Where(LightOrAnnotatedTags())
-                .Where(t => ParseSemVer.Match(t.Name).Success)
+                .Where(t => ParseSemVer.Match(t.FriendlyName).Success)
                 .Select(tag => tag.Target as Commit).Where(x => x != null).ToList();
             var branchAncestors = _programArgs.LocalGitRepository.Commits
-                .QueryBy(new CommitFilter { Since = branchReference })
+                .QueryBy(new CommitFilter { ExcludeReachableFrom = branchReference })
                 .Where(commit => commit.Parents.Count() > 1);
             if (!tagCommits.Any())
                 return branchAncestors;
             // for each tagged commit walk down all its parents and collect a dictionary of unique commits
             foreach (var tagCommit in tagCommits)
             {
-                // we only care about tags decending from the branch we are interested in
-                if (_programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter { Since = branchReference }).Any(c => c.Sha == tagCommit.Sha))
+                // we only care about tags descending from the branch we are interested in
+                if (_programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter { ExcludeReachableFrom = branchReference }).Any(c => c.Sha == tagCommit.Sha))
                 {
                     var releasedCommits = _programArgs.LocalGitRepository.Commits
-                        .QueryBy(new CommitFilter { Since = tagCommit.Id })
+                        .QueryBy(new CommitFilter { ExcludeReachableFrom = tagCommit.Id })
                         .Where(commit => commit.Parents.Count() > 1)
                         .ToDictionary(i => i.Sha, i => i);
                     releasedCommitsHash.Merge(releasedCommits);

@@ -52,7 +52,7 @@ namespace PullRequestReleaseNotes.Providers
         private PullRequest GetPullRequest(int pullRequestId)
         {
             var pullRequests = _bitBucketClient.RepositoriesEndPoint()
-                .PullReqestsResource(_programArgs.BitBucketAccount, _programArgs.BitBucketRepository);
+	            .PullRequestsResource(_programArgs.BitBucketAccount, _programArgs.BitBucketRepository);
             return pullRequests.PullRequestResource(pullRequestId).GetPullRequest() as PullRequest;
         }
 
