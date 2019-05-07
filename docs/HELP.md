@@ -46,7 +46,7 @@ Utility can have command line parameters passed to it or have the parameters sup
 - `-ConfluenceReleaseParentPageId` (`-cpp`) : Confluence parent page identifer. Pulished page will be its child page.
 - `-ConfluenceSpaceKey` (`-csk`) : Required parameter if `PublishToConfluence` is true.
 - `-ConfluenceUser` (`-cu`) : Required parameter if `PublishToConfluence` is true.
-- `-ConfluencePassword` (`-cp`) : Required parameter if `PublishToConfluence` is true.
+- `-ConfluencePassword` (`-cp`) : This is the Confluence API Token. User passwords are no longer supported on Confluence for API interactions. Required parameter if `PublishToConfluence` is true.
 - `-ConfluenceApiUrl` (`-cau`) : Required parameter if `PublishToConfluence` is true.
 - `-PublishToSlack` (`-pts`) : Default ("false"). Set to "true" for all other Slack related parameters to become active.
 - `-SlackToken` (`-st`) : Required parameter if `PublishToSlack` is true. Set to your personal Slack token.
