@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PullRequestReleaseNotes.Models;
@@ -68,7 +68,8 @@ namespace PullRequestReleaseNotes
                         MergedAt = pullRequest.MergedAt,
                         Number = pullRequest.Number,
                         Url = pullRequest.Url,
-                        Highlight = pullRequest.Highlighted(_programArgs.ReleaseNoteHighlightlLabels)
+                        Highlight = pullRequest.Highlighted(_programArgs.ReleaseNoteHighlightlLabels),
+                        DocumentUrl = pullRequest.DocumentUrl
                     },
                     Categories = pullRequest.Categories(_programArgs.ReleaseNoteCategoryPrefix, _categoryDescriptions)
                 };
@@ -137,5 +138,6 @@ namespace PullRequestReleaseNotes
         public string Author;
         public string AuthorUrl;
         public bool Highlight;
+        public string DocumentUrl;
     }
 }

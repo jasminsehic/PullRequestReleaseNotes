@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -84,6 +84,7 @@ namespace PullRequestReleaseNotes.Providers
                 Author = mergeRequest.Author.Name,
                 AuthorUrl = mergeRequest.Author.WebUrl,
                 Url = PullRequestUrl(mergeRequest.Iid),
+                DocumentUrl = mergeRequest.Description.ExtractDocumentUrl(),
                 Labels = new List<string>()
             };
             foreach (var label in mergeRequest.Labels)

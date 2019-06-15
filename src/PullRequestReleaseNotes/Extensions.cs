@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using PowerArgs;
 
 namespace PullRequestReleaseNotes
 {
@@ -24,7 +27,22 @@ namespace PullRequestReleaseNotes
             return (long)delta.TotalMilliseconds;
         }
 
-        public static bool CaseInsensitiveContains(this string target, string value)
+        // convention based link extraction to official documentation, just needs to be prefixed with Doc: or doc: in the pull request body
+        public static string ExtractDocumentUrl(this string target)
+        {
+	        var matches = Regex.Matches(target,
+		        @"\s*(D|d)oc:\s*(http|https):\/\/([\w\-_]+(?:(?:\.[\w\-_]+)+))([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?").ToList();
+	        if (matches.Any())
+	        {
+		        var match = matches.First().Value;
+		        var urlStart = match.IndexOf("http", StringComparison.InvariantCultureIgnoreCase);
+		        if (urlStart > 0)
+			        return match.Substring(urlStart);
+	        }
+	        return string.Empty;
+        }
+
+		public static bool CaseInsensitiveContains(this string target, string value)
         {
             return (target.IndexOf(value, StringComparison.InvariantCultureIgnoreCase) >= 0);
         }

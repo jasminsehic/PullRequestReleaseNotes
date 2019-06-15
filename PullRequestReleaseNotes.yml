@@ -4,7 +4,6 @@ github-repo: PullRequestReleaseNotes
 git-remote-name: origin
 release-branch-heads-only: true
 release-note-exclude: Exclude Note
-release-note-follow: Follow Note
 release-note-format: "{0} {1}"
 release-note-date-format: "MMM dd, yyyy HH:mm"
 release-note-sectioned: true
