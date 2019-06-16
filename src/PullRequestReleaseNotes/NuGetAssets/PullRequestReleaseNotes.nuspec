@@ -8,15 +8,12 @@
     <owners>Jasmin Sehic</owners>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <projectUrl>https://github.com/jasminsehic/PullRequestReleaseNotes</projectUrl>
-    <projectSourceUrl>https://github.com/jasminsehic/PullRequestReleaseNotes</projectSourceUrl>
+	<iconUrl>https://raw.githubusercontent.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/logo.png</iconUrl>
     <bugTrackerUrl>https://github.com/jasminsehic/PullRequestReleaseNotes/issues</bugTrackerUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Builds release history notes from unreleased pull requests on GitHub, GitLab, TFS / Team Services, BitBucket Cloud and Bitbucket Server and optionally posts them to a markdown file, Atlassian Confluence and Slack.</description>
-    <summary>Builds release history notes from unreleased pull requests on GitHub, GitLab, TFS / Team Services, BitBucket Cloud and Bitbucket Server and optionally posts them to a markdown file, Atlassian Confluence and Slack.
-    </summary>
     <language>en-AU</language>
-    <releaseNotes>Fixed issues where non-release tags and tags outside of the release branch hid unreleased commits from notes
-    </releaseNotes>
     <tags>git pullrequestreleasenotes pullrequest github gitlab bitbucket tfs teamservices history notes releasenotes changelog gitversion atlassian confluence slack markdown</tags>
+	<releaseNotes>https://github.com/jasminsehic/PullRequestReleaseNotes/releases</releaseNotes>
   </metadata>
 </package>

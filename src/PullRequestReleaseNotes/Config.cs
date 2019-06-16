@@ -45,9 +45,7 @@ namespace PullRequestReleaseNotes
                     MergeWithYamlInput((new Deserializer()).Deserialize<ProgramArgs>(reader));
             MergeDefaults();
             GetEnvironmentVariableInput();
-            if (!SetupPullRequestProvider())
-                return false;
-            return true;
+            return SetupPullRequestProvider();
         }
 
         private void GetEnvironmentVariableInput()
