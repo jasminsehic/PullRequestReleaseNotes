@@ -8,10 +8,11 @@
     <Company>Jasmin Sehic</Company>
     <Product>PullRequestReleaseNotes</Product>
     <Description>PullRequestReleaseNotes is a utility which generates release notes for all merged pull requests on a specific branch that have not yet been released (since last tag)</Description>
-    <Copyright>Copyright © Jasmin Sehic 2016</Copyright>
-    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <Copyright>Copyright © Jasmin Sehic 2019</Copyright>
+    <AssemblyVersion>1.2.1.0</AssemblyVersion>
     <FileVersion>1.2.0.0</FileVersion>
     <BuildDependsOn>$(BuildDependsOn);AfterBuildMigrated</BuildDependsOn>
+    <Version>1.2.1</Version>
   </PropertyGroup>
   <Target Name="Clean">
     <ItemGroup>

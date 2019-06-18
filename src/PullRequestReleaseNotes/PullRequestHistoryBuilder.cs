@@ -36,7 +36,7 @@ namespace PullRequestReleaseNotes
                 .Where(t => ParseSemVer.Match(t.FriendlyName).Success)
                 .Select(tag => tag.Target as Commit).Where(x => x != null).ToList();
             var branchAncestors = _programArgs.LocalGitRepository.Commits
-                .QueryBy(new CommitFilter { ExcludeReachableFrom = branchReference })
+                .QueryBy(new CommitFilter { IncludeReachableFrom = branchReference })
                 .Where(commit => commit.Parents.Count() > 1);
             if (!tagCommits.Any())
                 return branchAncestors;
@@ -44,10 +44,10 @@ namespace PullRequestReleaseNotes
             foreach (var tagCommit in tagCommits)
             {
                 // we only care about tags descending from the branch we are interested in
-                if (_programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter { ExcludeReachableFrom = branchReference }).Any(c => c.Sha == tagCommit.Sha))
+                if (_programArgs.LocalGitRepository.Commits.QueryBy(new CommitFilter { IncludeReachableFrom = branchReference }).Any(c => c.Sha == tagCommit.Sha))
                 {
                     var releasedCommits = _programArgs.LocalGitRepository.Commits
-                        .QueryBy(new CommitFilter { ExcludeReachableFrom = tagCommit.Id })
+                        .QueryBy(new CommitFilter { IncludeReachableFrom = tagCommit.Id })
                         .Where(commit => commit.Parents.Count() > 1)
                         .ToDictionary(i => i.Sha, i => i);
                     releasedCommitsHash.Merge(releasedCommits);
