@@ -68,7 +68,7 @@ namespace PullRequestReleaseNotes
                         MergedAt = pullRequest.MergedAt,
                         Number = pullRequest.Number,
                         Url = pullRequest.Url,
-                        Highlight = pullRequest.Highlighted(_programArgs.ReleaseNoteHighlightlLabels),
+                        Highlight = pullRequest.Highlighted(_programArgs.ReleaseNoteHighlightLabels),
                         DocumentUrl = pullRequest.DocumentUrl
                     },
                     Categories = pullRequest.Categories(_programArgs.ReleaseNoteCategoryPrefix, _categoryDescriptions)

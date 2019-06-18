@@ -50,7 +50,7 @@ namespace PullRequestReleaseNotes.Models
         [ArgShortcut("-rnhl")]
         [YamlMember(Alias = "release-note-highlight-labels")]
         [ArgExample("Label1,Label2", "List of labels which a pull request without will be marked up as code to highlight the item in release notes.")]
-        public List<string> ReleaseNoteHighlightlLabels { get; set; }
+        public List<string> ReleaseNoteHighlightLabels { get; set; }
 
         [ArgShortcut("-ghb")]
         [YamlMember(Alias = "git-branch-ref")]

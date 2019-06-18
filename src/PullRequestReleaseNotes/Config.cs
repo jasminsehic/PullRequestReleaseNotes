@@ -88,7 +88,7 @@ namespace PullRequestReleaseNotes
             _programArgs.ReleaseNoteOrderWhen = _programArgs.ReleaseNoteOrderWhen ?? args.ReleaseNoteOrderWhen;
             _programArgs.ReleaseNoteSectionlessDescription = _programArgs.ReleaseNoteSectionlessDescription ?? args.ReleaseNoteSectionlessDescription;
             _programArgs.ReleaseNoteUncategorisedDescription = _programArgs.ReleaseNoteUncategorisedDescription ?? args.ReleaseNoteUncategorisedDescription;
-            _programArgs.ReleaseNoteHighlightlLabels = _programArgs.ReleaseNoteHighlightlLabels ?? args.ReleaseNoteHighlightlLabels;
+            _programArgs.ReleaseNoteHighlightLabels = _programArgs.ReleaseNoteHighlightLabels ?? args.ReleaseNoteHighlightLabels;
             _programArgs.ReleaseNoteCategorised = _programArgs.ReleaseNoteCategorised ?? args.ReleaseNoteCategorised;
             _programArgs.ReleaseNoteOrderAscending = _programArgs.ReleaseNoteOrderAscending ?? args.ReleaseNoteOrderAscending;
             _programArgs.ReleaseNoteSectioned = _programArgs.ReleaseNoteSectioned ?? args.ReleaseNoteSectioned;
