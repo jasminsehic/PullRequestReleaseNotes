@@ -3,60 +3,24 @@
     <ProjectGuid>{B7A7DF45-4248-4784-8417-594F15B7484A}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <TargetFramework>net472</TargetFramework>
-    <BuildDir>$(SolutionDir)..\build\</BuildDir>
     <AssemblyTitle>PullRequestReleaseNotes</AssemblyTitle>
     <Company>Jasmin Sehic</Company>
     <Product>PullRequestReleaseNotes</Product>
     <Description>PullRequestReleaseNotes is a utility which generates release notes for all merged pull requests on a specific branch that have not yet been released (since last tag)</Description>
     <Copyright>Copyright © Jasmin Sehic 2019</Copyright>
     <AssemblyVersion>1.2.1.0</AssemblyVersion>
-    <FileVersion>1.2.0.0</FileVersion>
-    <BuildDependsOn>$(BuildDependsOn);AfterBuildMigrated</BuildDependsOn>
+    <FileVersion>1.2.1.0</FileVersion>
     <Version>1.2.1</Version>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<RestorePackagesPath>$(SolutionDir)\packages</RestorePackagesPath>
   </PropertyGroup>
-  <Target Name="Clean">
-    <ItemGroup>
-      <ExeFilesToDelete Include="$(BuildDir)NuGetExeBuild\**\*.*" />
-    </ItemGroup>
-    <Delete Files="@(ExeFilesToDelete)" />
-  </Target>
-  <Target Name="AfterBuildMigrated" DependsOnTargets="Clean" Condition="$(NCrunch)=='' And '$(OS)' != 'Unix'">
-    <PropertyGroup>
-      <Runtime Condition="'$(OS)'=='Unix'">mono</Runtime>
-    </PropertyGroup>
-    <ItemGroup>
-      <NativeBinaries Include="$(TargetDir)lib\**\*.*" />
-      <WindowsBinaries Include="$(TargetDir)lib\**\*.dll" />
-    </ItemGroup>
-    <!-- NugetExeBuild -->
-    <MakeDir Directories="$(BuildDir)NuGetExeBuild" />
-    <Copy SourceFiles="@(NativeBinaries)" DestinationFiles="@(NativeBinaries->'$(BuildDir)NuGetExeBuild\tools\lib\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="$(OutputPath)PullRequestReleaseNotes.exe" DestinationFolder="$(BuildDir)NuGetExeBuild\tools" />
-    <Copy SourceFiles="$(OutputPath)PullRequestReleaseNotes.pdb" DestinationFolder="$(BuildDir)NuGetExeBuild\tools" Condition="Exists('$(OutputPath)PullRequestReleaseNotes.pdb')" />
-    <Copy SourceFiles="$(ProjectDir)NugetAssets\PullRequestReleaseNotes.nuspec" DestinationFolder="$(BuildDir)NuGetExeBuild" />
-    <Copy SourceFiles="$(ProjectDir)NugetAssets\LICENSE.txt" DestinationFolder="$(BuildDir)NuGetExeBuild" />
-    <Copy SourceFiles="$(ProjectDir)NugetAssets\VERIFICATION.txt" DestinationFolder="$(BuildDir)NuGetExeBuild" />
-    <PepitaPackage.CreatePackageTask NuGetBuildDirectory="$(BuildDir)NuGetExeBuild" MetadataAssembly="$(OutputPath)PullRequestReleaseNotes.exe" Version="$(GitVersion_NuGetVersion)" />
-  </Target>
   <ItemGroup>
     <PackageReference Include="Costura.Fody" Version="4.0.0" />
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Infinity.NET" Version="0.1.2" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.0" />
     <PackageReference Include="LibGit2Sharp.NativeBinaries" Version="2.0.267" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
-    <PackageReference Include="Microsoft.Bcl" Version="1.1.10" />
-    <PackageReference Include="Microsoft.Bcl.Build" Version="1.0.21" />
-    <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Octokit" Version="0.32.0" />
-    <PackageReference Include="PepitaPackage" Version="1.21.4">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="PowerArgs" Version="3.6.0" />
     <PackageReference Include="RestSharp" Version="106.6.9" />
     <PackageReference Include="SharpBucket" Version="0.10.0" />
@@ -67,13 +31,13 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(SolutionDir)\packages\LibGit2Sharp.NativeBinaries.2.0.267\runtimes\win-x64\native\git2-572e4d8.dll">
+    <EmbeddedResource Include="$(SolutionDir)\packages\LibGit2Sharp.NativeBinaries\2.0.267\runtimes\win-x64\native\git2-572e4d8.dll">
       <Link>costura64/%(Filename)%(Extension)</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="$(ProjectDir)\costura64\**\*">
       <Link>costura64/%(RecursiveDir)%(Filename)%(Extension)</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(SolutionDir)\packages\LibGit2Sharp.NativeBinaries.2.0.267\runtimes\win-x86\native\git2-572e4d8.dll">
+    <EmbeddedResource Include="$(SolutionDir)\packages\LibGit2Sharp.NativeBinaries\2.0.267\runtimes\win-x86\native\git2-572e4d8.dll">
       <Link>costura32/%(Filename)%(Extension)</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="$(ProjectDir)\costura32\**\*">

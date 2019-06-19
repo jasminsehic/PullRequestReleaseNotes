@@ -16,6 +16,9 @@ build_script:
   - cmd: nuget restore src/PullRequestReleaseNotes.sln
   - ps: gitversion /l console /output buildserver /updateAssemblyInfo 
   - cmd: msbuild src/PullRequestReleaseNotes.sln "/p:Configuration=%CONFIGURATION%;Platform=%PLATFORM%" 
+  - cmd: xcopy /S /Y src\PullRequestReleaseNotes\bin\Debug\net472 build\NuGetExeBuild\tools\
+  - cmd: xcopy /S /Y src\PullRequestReleaseNotes\NuGetAssets build\NuGetExeBuild\
+  - cmd: choco pack build\NuGetExeBuild\PullRequestReleaseNotes.nuspec --outputdirectory build\NuGetExeBuild version=%GitVersion_NuGetVersion%
   - cmd: appveyor PushArtifact "build\NuGetExeBuild\PullRequestReleaseNotes.%GitVersion_NuGetVersion%.nupkg"
 
 cache:
