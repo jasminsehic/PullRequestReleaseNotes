@@ -18,6 +18,7 @@ build_script:
   - cmd: msbuild src/PullRequestReleaseNotes.sln "/p:Configuration=%CONFIGURATION%;Platform=%PLATFORM%" 
   - cmd: xcopy /S /Y src\PullRequestReleaseNotes\bin\Debug\net472 build\NuGetExeBuild\tools\
   - cmd: xcopy /S /Y src\PullRequestReleaseNotes\NuGetAssets build\NuGetExeBuild\
+  - cmd: del build\NuGetExeBuild\tools\*.dll /F /Q
   - cmd: choco pack build\NuGetExeBuild\PullRequestReleaseNotes.nuspec --outputdirectory build\NuGetExeBuild version=%GitVersion_NuGetVersion%
   - cmd: appveyor PushArtifact "build\NuGetExeBuild\PullRequestReleaseNotes.%GitVersion_NuGetVersion%.nupkg"
 
