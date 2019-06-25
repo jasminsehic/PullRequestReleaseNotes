@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{B7A7DF45-4248-4784-8417-594F15B7484A}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472;netcoreapp2.2</TargetFrameworks>
     <AssemblyTitle>PullRequestReleaseNotes</AssemblyTitle>
     <Company>Jasmin Sehic</Company>
     <Product>PullRequestReleaseNotes</Product>
@@ -15,20 +15,14 @@
 	<RestorePackagesPath>$(SolutionDir)\packages</RestorePackagesPath>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Costura.Fody" Version="4.0.0" />
-    <PackageReference Include="Infinity.NET" Version="0.1.2" />
+    <PackageReference Include="Infinity.NET" Version="0.2.0" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.0" />
-    <PackageReference Include="LibGit2Sharp.NativeBinaries" Version="2.0.267" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Octokit" Version="0.32.0" />
     <PackageReference Include="PowerArgs" Version="3.6.0" />
     <PackageReference Include="RestSharp" Version="106.6.9" />
-    <PackageReference Include="SharpBucket" Version="0.10.0" />
+    <PackageReference Include="SharpBucket" Version="0.11.0" />
     <PackageReference Include="YamlDotNet" Version="6.1.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Net.Http.WebRequest" />
-    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(SolutionDir)\packages\LibGit2Sharp.NativeBinaries\2.0.267\runtimes\win-x64\native\git2-572e4d8.dll">

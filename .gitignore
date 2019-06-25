@@ -238,3 +238,5 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 src/.idea/
+
+**/Properties/launchSettings.json

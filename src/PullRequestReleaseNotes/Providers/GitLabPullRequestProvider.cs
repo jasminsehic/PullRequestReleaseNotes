@@ -163,6 +163,7 @@ namespace PullRequestReleaseNotes.Providers
         }
     }
 
+#pragma warning disable 0649
     [DataContract]
     internal class MergeRequest
     {
@@ -306,4 +307,5 @@ namespace PullRequestReleaseNotes.Providers
         [DataMember(Name = "created_at")]
         public DateTime CreatedAt;
     }
+#pragma warning restore 0649
 }
