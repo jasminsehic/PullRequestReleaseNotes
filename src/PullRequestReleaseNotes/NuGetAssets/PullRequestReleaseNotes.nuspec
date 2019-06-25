@@ -5,13 +5,15 @@
     <version>$version$</version>
     <title>PullRequestReleaseNotes</title>
     <authors>Jasmin Sehic</authors>
-    <owners>Jasmin Sehic</owners>
+    <owners>JasminSehic</owners>
     <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
     <projectUrl>https://github.com/jasminsehic/PullRequestReleaseNotes</projectUrl>
-	<iconUrl>https://raw.githubusercontent.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/logo.png</iconUrl>
+    <packageSourceUrl>https://github.com/jasminsehic/PullRequestReleaseNotes/tree/master/src</packageSourceUrl>
+    <iconUrl>https://raw.githubusercontent.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/logo.png</iconUrl>
     <bugTrackerUrl>https://github.com/jasminsehic/PullRequestReleaseNotes/issues</bugTrackerUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Builds release history notes from unreleased pull requests on GitHub, GitLab, TFS / Team Services, BitBucket Cloud and Bitbucket Server and optionally posts them to a markdown file, Atlassian Confluence and Slack.</description>
+    <summary>Builds release history notes from unreleased pull requests on GitHub, GitLab, TFS / Team Services, BitBucket Cloud and Bitbucket Server and optionally posts them to a markdown file, Atlassian Confluence and Slack.</summary>
     <language>en-AU</language>
     <tags>git pullrequestreleasenotes pullrequest github gitlab bitbucket tfs teamservices history notes releasenotes changelog gitversion atlassian confluence slack markdown</tags>
 	<releaseNotes>https://github.com/jasminsehic/PullRequestReleaseNotes/releases</releaseNotes>

@@ -21,7 +21,9 @@ namespace PullRequestReleaseNotes.Providers
         {
             _programArgs = programArgs;
             DiscoverBitBucketServerCredentials();
+#pragma warning disable 618
             _bitBucketClient.OAuth2LeggedAuthentication(_programArgs.BitBucketApiKey, _programArgs.BitBucketApiSecret);
+#pragma warning restore 618
         }
 
         private void DiscoverBitBucketServerCredentials()
