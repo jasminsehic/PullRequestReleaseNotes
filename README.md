@@ -101,8 +101,7 @@ Also many thanks to:
 - [Edward Thomson](https://github.com/ethomson) for [Infinity.NET](https://github.com/ethomson/infinity.net) that made it super-easy to connect to TFS. 
 - [Adam Abdelhamed](https://github.com/adamabdelhamed) for [PowerArgs](https://github.com/adamabdelhamed/PowerArgs) that made command line argument parsing so easy it hurts.
 - [Mitja Bezenšek](https://github.com/MitjaBezensek) for [SharpBucket](https://github.com/MitjaBezensek/SharpBucket) that provided a pain-free way to connect to BitBucket.
-- [Antoine Aubry](https://github.com/aaubry) for [YamlDotNet](https://github.com/aaubry/YamlDotNet) which made use of YAML format for the application configuration file as trivial as a yawn
-- [Simon Cropp](https://github.com/SimonCropp) for [PepitaPackage](https://github.com/SimonCropp/Pepita) which made NuGet packages for me before I even realised what was happening.
-- Anthony van der Hoorn & Nik Molnar for creating [Semantic Release Notes](http://www.semanticreleasenotes.org/)
+- [Antoine Aubry](https://github.com/aaubry) for [YamlDotNet](https://github.com/aaubry/YamlDotNet) which made use of YAML format for the application configuration file as trivial as a yawn.
+- Anthony van der Hoorn & Nik Molnar for creating [Semantic Release Notes](https://web.archive.org/web/20161013175123/http://www.semanticreleasenotes.org/)
 - All contributors of [RestSharp](https://github.com/restsharp/RestSharp) which is a swiss-army knife of REST clients and life without it would be meaningless. (bows)
 - All contributors of [LibGit2Sharp](https://github.com/libgit2/libgit2sharp) which made it possible to traverse a Git repo history to find all unreleased commits
