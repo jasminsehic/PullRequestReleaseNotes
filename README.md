@@ -21,15 +21,25 @@ You can also define a label to exclude pull request from release notes. Also you
 
 Release note formatting can be customised where you can turn off grouping by section and category, order the release notes based on merged or created time of pull request and the format of the release note itself. Other cool things it can do includes supplying a version number via GitVersion and ability to consider only annotated tags as releases or any kind of tag. See [HELP.md](https://github.com/jasminsehic/PullRequestReleaseNotes/blob/master/docs/HELP.md) for all the details on how perform these customisations. 
 
-## Install
+## Chocolatey Install
 
     choco install PullRequestReleaseNotes
-    
-## Usage
+	
+## Chocolatey Usage
 
 While inside a git working directory run the application
 
     $ PullRequestReleaseNotes
+
+## .NET Core Global Tool Install
+
+    dotnet tool install -g PullRequestReleaseNotes.DotNetCore
+	
+## .NET Core Global Tool Usage
+
+While inside a git working directory run the application
+
+    $ dotnet-pullrequestreleasenotes
 
 ## PullRequestReleaseNotes in action
 

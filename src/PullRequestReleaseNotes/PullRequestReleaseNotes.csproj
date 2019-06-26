@@ -12,7 +12,8 @@
     <FileVersion>1.2.1.0</FileVersion>
     <Version>1.2.1</Version>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<RestorePackagesPath>$(SolutionDir)\packages</RestorePackagesPath>
+    <RestorePackagesPath>$(SolutionDir)\packages</RestorePackagesPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Infinity.NET" Version="0.2.0" />

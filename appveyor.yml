@@ -16,11 +16,20 @@ build_script:
   - cmd: nuget restore src/PullRequestReleaseNotes.sln
   - ps: gitversion /l console /output buildserver /updateAssemblyInfo 
   - cmd: msbuild src/PullRequestReleaseNotes.sln "/p:Configuration=%CONFIGURATION%;Platform=%PLATFORM%" 
-  - cmd: xcopy /S /Y src\PullRequestReleaseNotes\bin\Debug\net472 build\NuGetExeBuild\tools\
-  - cmd: xcopy /S /Y src\PullRequestReleaseNotes\NuGetAssets build\NuGetExeBuild\
-  - cmd: del build\NuGetExeBuild\tools\*.dll /F /Q
-  - cmd: choco pack build\NuGetExeBuild\PullRequestReleaseNotes.nuspec --outputdirectory build\NuGetExeBuild version=%GitVersion_NuGetVersion%
+  - cmd: xcopy /S /Y src\PullRequestReleaseNotes\bin\Debug\net472 build\NuGetExeBuild\net\tools\
+  - cmd: xcopy /S /Y src\PullRequestReleaseNotes\NuGetAssets build\NuGetExeBuild\net\
+  - cmd: del build\NuGetExeBuild\net\PullRequestReleaseNotes.DotNetCore.nuspec /F /Q
+  - cmd: del build\NuGetExeBuild\net\DotnetToolSettings.xml /F /Q
+  - cmd: xcopy /S /Y src\PullRequestReleaseNotes\bin\Debug\netcoreapp2.2 build\NuGetExeBuild\netcore\tools\netcoreapp2.2\any\
+  - cmd: xcopy /S /Y src\PullRequestReleaseNotes\NuGetAssets build\NuGetExeBuild\netcore\
+  - cmd: xcopy /E /Y src\packages\LibGit2Sharp.NativeBinaries\2.0.267\runtimes build\NuGetExeBuild\netcore\tools\netcoreapp2.2\any\runtimes\
+  - cmd: move /Y build\NuGetExeBuild\netcore\DotnetToolSettings.xml build\NuGetExeBuild\netcore\tools\netcoreapp2.2\any\DotnetToolSettings.xml
+  - cmd: del build\NuGetExeBuild\netcore\PullRequestReleaseNotes.nuspec /F /Q
+  - cmd: del build\NuGetExeBuild\netcore\*.txt /F /Q
+  - cmd: choco pack build\NuGetExeBuild\net\PullRequestReleaseNotes.nuspec --outputdirectory build\NuGetExeBuild version=%GitVersion_NuGetVersion%
+  - cmd: nuget pack build\NuGetExeBuild\netcore\PullRequestReleaseNotes.DotNetCore.nuspec -OutputDirectory build\NuGetExeBuild -Version %GitVersion_NuGetVersion%
   - cmd: appveyor PushArtifact "build\NuGetExeBuild\PullRequestReleaseNotes.%GitVersion_NuGetVersion%.nupkg"
+  - cmd: appveyor PushArtifact "build\NuGetExeBuild\PullRequestReleaseNotes.DotNetCore.%GitVersion_NuGetVersion%.nupkg"
 
 cache:
   - src\packages -> **\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
