@@ -20,6 +20,7 @@ build_script:
   - cmd: xcopy /S /Y src\PullRequestReleaseNotes\NuGetAssets build\NuGetExeBuild\net\
   - cmd: del build\NuGetExeBuild\net\PullRequestReleaseNotes.DotNetCore.nuspec /F /Q
   - cmd: del build\NuGetExeBuild\net\DotnetToolSettings.xml /F /Q
+  - cmd: del build\NuGetExeBuild\net\tools\*.dll /F /Q
   - cmd: xcopy /S /Y src\PullRequestReleaseNotes\bin\Debug\netcoreapp2.2 build\NuGetExeBuild\netcore\tools\netcoreapp2.2\any\
   - cmd: xcopy /S /Y src\PullRequestReleaseNotes\NuGetAssets build\NuGetExeBuild\netcore\
   - cmd: xcopy /E /Y src\packages\LibGit2Sharp.NativeBinaries\2.0.267\runtimes build\NuGetExeBuild\netcore\tools\netcoreapp2.2\any\runtimes\
