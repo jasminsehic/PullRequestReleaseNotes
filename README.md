@@ -35,6 +35,10 @@ While inside a git working directory run the application
 ## .NET Core Global Tool Install
 
     dotnet tool install -g PullRequestReleaseNotes.DotNetCore
+    
+### Linux note
+
+Only tested on Ubuntu 18.04 (Bionic). You may need to run `sudo apt-get install libgit2-dev` and `sudo ln -s /usr/lib/x86_64-linux-gnu/libgit2.so /usr/lib/x86_64-linux-gnu/libgit2-572e4d8.so` to ensure libgit2 library can be found by the app. This is expected to be resolved in future version of LibGit2Sharp
 	
 ## .NET Core Global Tool Usage
 
