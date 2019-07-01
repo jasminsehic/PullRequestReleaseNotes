@@ -29,6 +29,8 @@ namespace PullRequestReleaseNotes.Providers
 
         private void DiscoverBitBucketServerCredentials()
         {
+            if (_programArgs.BitBucketServerPassword == null)
+                _programArgs.BitBucketServerPassword = string.Empty;
             if (!string.IsNullOrWhiteSpace(_programArgs.BitBucketServerPassword))
                 return;
             if (_programArgs.VerboseOutput)
@@ -36,7 +38,7 @@ namespace PullRequestReleaseNotes.Providers
             _programArgs.BitBucketServerPassword = Environment.GetEnvironmentVariable("PRRN_BITBUCKETSERVER_PASSWORD");
             if (!string.IsNullOrWhiteSpace(_programArgs.BitBucketServerPassword))
                 return;
-            Console.WriteLine($"BitBucketServer password was not supplied and could not be found.");
+            throw new ArgumentException("BitBucketServer password was not supplied and could not be found", "BitBucketServerPassword");
         }
 
         public PullRequestDto Get(string commitMessage)

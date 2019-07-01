@@ -26,6 +26,8 @@ namespace PullRequestReleaseNotes.Providers
 
         private void DiscoverToken()
         {
+            if (_programArgs.GitLabToken == null)
+                _programArgs.GitLabToken = string.Empty;
             if (!string.IsNullOrWhiteSpace(_programArgs.GitLabToken))
                 return;
             if (_programArgs.VerboseOutput)
@@ -33,7 +35,7 @@ namespace PullRequestReleaseNotes.Providers
             _programArgs.GitLabToken = Environment.GetEnvironmentVariable("PRRN_GITLAB_TOKEN");
             if (!string.IsNullOrWhiteSpace(_programArgs.GitLabToken))
                 return;
-            Console.WriteLine($"GitLabToken was not supplied and could not be found.");
+            throw new ArgumentException("GitLabToken was not supplied and could not be found", "GitLabToken");
         }
 
         public PullRequestDto Get(string commitMessage)

@@ -77,14 +77,21 @@ namespace PullRequestReleaseNotes
 
         private static ProgramArgs ValidateConfiguration(string[] args)
         {
-            ProgramArgs programArgs;
-            if (!Config.GetCommandLineInput(args, out programArgs))
+            if (!Config.GetCommandLineInput(args, out var programArgs))
                 Environment.Exit(FailureExitCode);
+
+            var config = new Config(programArgs);
 
             if (programArgs.InitConfig)
             {
-                new Config(programArgs).WriteSampleConfig();
+                config.WriteSampleConfig();
                 Environment.Exit(SuccessExitCode);
+            }
+
+            if (!config.SetupPullRequestProvider())
+            {
+                Console.WriteLine($"Failed to setup the pull request provider. Please check the supplied parameters.");
+                Environment.Exit(FailureExitCode);
             }
 
             if (programArgs.HeadBranchRestrictionApplies())
