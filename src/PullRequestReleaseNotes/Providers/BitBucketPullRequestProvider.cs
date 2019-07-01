@@ -28,6 +28,8 @@ namespace PullRequestReleaseNotes.Providers
 
         private void DiscoverBitBucketServerCredentials()
         {
+            if (_programArgs.BitBucketApiSecret == null)
+                _programArgs.BitBucketApiSecret = string.Empty;
             if (!string.IsNullOrWhiteSpace(_programArgs.BitBucketApiSecret))
                 return;
             if (_programArgs.VerboseOutput)
@@ -36,6 +38,7 @@ namespace PullRequestReleaseNotes.Providers
             if (!string.IsNullOrWhiteSpace(_programArgs.BitBucketApiSecret))
                 return;
             Console.WriteLine($"BitBucket consumer secret was not supplied and could not be found.");
+            throw new ArgumentException("BitBucket consumer secret was not supplied and could not be found", "BitBucketApiSecret");
         }
 
         public PullRequestDto Get(string commitMessage)

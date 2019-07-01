@@ -26,14 +26,16 @@ namespace PullRequestReleaseNotes.Providers
 
         private void DiscoverToken()
         {
+            if (_programArgs.GitLabToken == null)
+                _programArgs.GitLabToken = string.Empty;
             if (!string.IsNullOrWhiteSpace(_programArgs.GitLabToken))
                 return;
             if (_programArgs.VerboseOutput)
                 Console.WriteLine($"GitLabToken was not supplied. Trying PRRN_GITLAB_TOKEN environment variable.");
-            _programArgs.GitHubToken = Environment.GetEnvironmentVariable("PRRN_GITLAB_TOKEN");
+            _programArgs.GitLabToken = Environment.GetEnvironmentVariable("PRRN_GITLAB_TOKEN");
             if (!string.IsNullOrWhiteSpace(_programArgs.GitLabToken))
                 return;
-            Console.WriteLine($"GitLabToken was not supplied and could not be found.");
+            throw new ArgumentException("GitLabToken was not supplied and could not be found", "GitLabToken");
         }
 
         public PullRequestDto Get(string commitMessage)
@@ -153,7 +155,7 @@ namespace PullRequestReleaseNotes.Providers
                 remote = _programArgs.LocalGitRepository.Network.Remotes.First(r => r.Url.CaseInsensitiveContains(remoteDomain));
             if (remote == null)
             {
-                Console.WriteLine($"GitHubOwner and GitHubRepository were not supplied and could not be discovered");
+                Console.WriteLine($"GitLabOwner and GitLabRepository were not supplied and could not be discovered");
                 return false;
             }
             var remoteUrl = new Uri(remote.Url);

@@ -25,6 +25,8 @@ namespace PullRequestReleaseNotes.Providers
 
         private void DiscoverToken()
         {
+            if (_programArgs.GitHubToken == null)
+                _programArgs.GitHubToken = string.Empty;
             if (!string.IsNullOrWhiteSpace(_programArgs.GitHubToken))
                 return;
             if (_programArgs.VerboseOutput)
@@ -32,7 +34,7 @@ namespace PullRequestReleaseNotes.Providers
             _programArgs.GitHubToken = Environment.GetEnvironmentVariable("PRRN_GITHUB_TOKEN");
             if (!string.IsNullOrWhiteSpace(_programArgs.GitHubToken))
                 return;
-            Console.WriteLine($"GitHubToken was not supplied and could not be found.");
+            throw new ArgumentException("GitHubToken was not supplied and could not be found", "GitHubToken");
         }
 
         public PullRequestDto Get(string commitMessage)

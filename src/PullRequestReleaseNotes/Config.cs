@@ -45,7 +45,7 @@ namespace PullRequestReleaseNotes
                     MergeWithYamlInput((new Deserializer()).Deserialize<ProgramArgs>(reader));
             MergeDefaults();
             GetEnvironmentVariableInput();
-            return SetupPullRequestProvider();
+            return true;
         }
 
         private void GetEnvironmentVariableInput()
@@ -159,29 +159,37 @@ namespace PullRequestReleaseNotes
             _programArgs.ReleaseNoteSections = _programArgs.ReleaseNoteSections ?? new List<string>() { "bug=Fixes", "enhancement=Enhancements" };
         }
 
-        private bool SetupPullRequestProvider()
+        public bool SetupPullRequestProvider()
         {
             _programArgs.PullRequestProviderName = _programArgs.PullRequestProviderName ?? "github";
-            switch (_programArgs.PullRequestProviderName.ToLower())
+            try
             {
-                case "github":
-                    _programArgs.PullRequestProvider = new GitHubPullRequestProvider(_programArgs);
-                    break;
-                case "gitlab":
-                    _programArgs.PullRequestProvider = new GitLabPullRequestProvider(_programArgs);
-                    break;
-                case "tfs":
-                    _programArgs.PullRequestProvider = new TfsPullRequestProvider(_programArgs);
-                    break;
-                case "bitbucket":
-                    _programArgs.PullRequestProvider = new BitBucketPullRequestProvider(_programArgs);
-                    break;
-                case "bitbucketserver":
-                    _programArgs.PullRequestProvider = new BitBucketServerPullRequestProvider(_programArgs);
-                    break;
-                default:
-                    Console.WriteLine($"Unsupported pull request provider: {_programArgs.PullRequestProvider}.");
-                    return false;
+                switch (_programArgs.PullRequestProviderName.ToLower())
+                {
+                    case "github":
+                        _programArgs.PullRequestProvider = new GitHubPullRequestProvider(_programArgs);
+                        break;
+                    case "gitlab":
+                        _programArgs.PullRequestProvider = new GitLabPullRequestProvider(_programArgs);
+                        break;
+                    case "tfs":
+                        _programArgs.PullRequestProvider = new TfsPullRequestProvider(_programArgs);
+                        break;
+                    case "bitbucket":
+                        _programArgs.PullRequestProvider = new BitBucketPullRequestProvider(_programArgs);
+                        break;
+                    case "bitbucketserver":
+                        _programArgs.PullRequestProvider = new BitBucketServerPullRequestProvider(_programArgs);
+                        break;
+                    default:
+                        Console.WriteLine($"Unsupported pull request provider: {_programArgs.PullRequestProvider}.");
+                        return false;
+                }
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine($"{e.Message}.");
+                return false;
             }
             return _programArgs.PullRequestProvider.DiscoverRemote();
         }
