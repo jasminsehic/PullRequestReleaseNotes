@@ -12,15 +12,17 @@ PullRequestReleaseNotes
 
 Pull Request Release Notes utility generates release notes for all merged pull requests, on a specific branch, that have not yet been released relying solely on pull request titles and labels to generate the release notes. 
 
-Supported Pull Request providers are [GitHub](https://github.com/), [GitLab](https://gitlab.com/), [TFS / Team Services](https://www.visualstudio.com/en-us/products/visual-studio-team-services-vs.aspx), [BitBucket Cloud](https://bitbucket.org/) and [Bitbucket Server](https://www.atlassian.com/software/bitbucket/download). 
+Supported Pull Request providers are [GitHub](https://github.com/), [GitLab](https://gitlab.com/), [Azure DevOps Services / Server](https://azure.microsoft.com/en-au/services/devops/), [BitBucket Cloud](https://bitbucket.org/) and [Bitbucket Server](https://www.atlassian.com/software/bitbucket/download). 
 
 Intention is to run this utility as part of a continuous integration process and generate notes automatically as part of every release branch build. Optionally the utility can also publish the notes to a markdown file, [Atlassian Confluence](https://www.atlassian.com/software/confluence) page or a [Slack](https://slack.com/) post. 
 
-Utility outputs release notes following the [Semantic Release Notes](http://www.semanticreleasenotes.org/) format and extracts semantic release note sections, categories and summaries from the pull request title and labels. For example all pull requests with `Bug` label can be grouped under `Fixes` section and pull requests with `Enhancement` label can be grouped under `Enhancements` section. Category grouping is possible through use of the `#Label` where `#` character is used to denote a category label as opposed to a section label. TFS / Team Services and BitBucket Cloud / Server pull request providers do not have a label concept yet so for those providers you can type `[#section]` and `[##category]` either in the title or the description of the pull request as a pseudo-label.
+Utility outputs release notes following the [Semantic Release Notes](https://web.archive.org/web/20161013175123/http://www.semanticreleasenotes.org/) format and extracts semantic release note sections, categories and summaries from the pull request title and labels. For example all pull requests with `Bug` label can be grouped under `Fixes` section and pull requests with `Enhancement` label can be grouped under `Enhancements` section. Category grouping is possible through use of the `#Label` where `#` character is used to denote a category label as opposed to a section label. Azure DevOps Service / Server and BitBucket Cloud / Server pull request providers do not have a label concept yet so for those providers you can type `[#section]` and `[##category]` either in the title or the description of the pull request as a pseudo-label.
+
+Release note formatting can be further customised where you can turn off grouping by section and category, order the release notes based on merged or created time of pull request and the format of the release note itself. Version number can be supplied via [GitVersion](https://github.com/GitTools/GitVersion) tool. 
 
 You can also define a label to exclude pull request from release notes. Also you can define a label that when not added to a pull request will add a release note highlighted as code. This can be useful for scenarios such as QA team adding a QC label to a pull request so then it is easy to spot which items haven't gone through QC.
 
-Release note formatting can be customised where you can turn off grouping by section and category, order the release notes based on merged or created time of pull request and the format of the release note itself. Other cool things it can do includes supplying a version number via GitVersion and ability to consider only annotated tags as releases or any kind of tag. See [HELP.md](https://github.com/jasminsehic/PullRequestReleaseNotes/blob/master/docs/HELP.md) for all the details on how perform these customisations. 
+See [HELP.md](https://github.com/jasminsehic/PullRequestReleaseNotes/blob/master/docs/HELP.md) for all the details on how perform these customisations. 
 
 ## Chocolatey Install
 
@@ -38,7 +40,7 @@ While inside a git working directory run the application
     
 ### Linux note
 
-Only tested on Ubuntu 18.04 (Bionic). You may need to run `sudo apt-get install libgit2-dev` and `sudo ln -s /usr/lib/x86_64-linux-gnu/libgit2.so /usr/lib/x86_64-linux-gnu/libgit2-572e4d8.so` to ensure libgit2 library can be found by the app. This is expected to be resolved in future version of LibGit2Sharp
+Only tested on Ubuntu 18.04 (Bionic). You may need to run `sudo apt-get install libgit2-dev` and `sudo ln -s /usr/lib/x86_64-linux-gnu/libgit2.so /usr/lib/x86_64-linux-gnu/libgit2-572e4d8.so` to ensure libgit2 library can be found by the app. This is expected to be resolved in a future version of LibGit2Sharp.
 	
 ## .NET Core Global Tool Usage
 
@@ -73,21 +75,38 @@ While inside a git working directory run the application
 ### Undefined
 - Added new Category H [\#1843](https://github.com/org/repo/pull/1843)
 ```
+#### Sample Actual Markdown
+
+# 1.2.1 (MASTER) - XX XXX 2016
+## Enhancements
+### Category A
+- Awesome new feature [\#1854](https://github.com/org/repo/pull/1854)
+
+### Undefined
+- Special feature for Acme Co [\#1855](https://github.com/org/repo/pull/1855)
+
+## Fixes
+### Category Z
+- Fixed problem with widget [\#1792](https://github.com/org/repo/pull/1792)
+
+### Category Y
+- Fixed exception with view layout [\#1848](https://github.com/org/repo/pull/1848)
+
+### Undefined
+- Fixed spelling mistake [\#1833](https://github.com/org/repo/pull/1833)
+
+## Unclassified
+### Undefined
+- Added new Category H [\#1843](https://github.com/org/repo/pull/1843)
 
 #### Sample GitHub Input
 ![GITHUB](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/github.png)
 
-#### Sample GitLab Input
-![GITLAB](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/gitlab.png)
-
-#### Sample BitBucket Cloud Input
-![BITBUCKETCLOUD](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/bitbucket_cloud.png)
-
-#### Sample BitBucket Server Input
-![BITBUCKETSERVER](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/bitbucket_server.png)
-
-#### Sample TFS / Team Services Input
-![TFS](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/tfs.png)
+#### Other pull request provider samples
+[GitLab](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/gitlab.png)
+[BitBucket Cloud](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/bitbucket_cloud.png)
+[BitBucket Server](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/bitbucket_server.png)
+[Azure DevOps Services & Server](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/tfs.png)
 
 #### Sample Confluence Output
 ![CONFLUENCE](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/confluence.png)
