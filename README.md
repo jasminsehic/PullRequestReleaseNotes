@@ -104,8 +104,11 @@ While inside a git working directory run the application
 
 #### Other pull request provider samples
 [GitLab](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/gitlab.png)
+
 [BitBucket Cloud](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/bitbucket_cloud.png)
+
 [BitBucket Server](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/bitbucket_server.png)
+
 [Azure DevOps Services & Server](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/tfs.png)
 
 #### Sample Confluence Output
