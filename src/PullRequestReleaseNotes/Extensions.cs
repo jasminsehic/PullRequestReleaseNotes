@@ -30,7 +30,9 @@ namespace PullRequestReleaseNotes
         // convention based link extraction to official documentation, just needs to be prefixed with Doc: or doc: in the pull request body
         public static string ExtractDocumentUrl(this string target)
         {
-	        var matches = Regex.Matches(target,
+            if (string.IsNullOrEmpty(target))
+                return string.Empty;
+            var matches = Regex.Matches(target,
 		        @"\s*(D|d)oc:\s*(http|https):\/\/([\w\-_]+(?:(?:\.[\w\-_]+)+))([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?").ToList();
 	        if (matches.Any())
 	        {
