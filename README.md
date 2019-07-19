@@ -24,6 +24,20 @@ You can also define a label to exclude pull request from release notes. Also you
 
 See [HELP.md](https://github.com/jasminsehic/PullRequestReleaseNotes/blob/master/docs/HELP.md) for all the details on how perform these customisations. 
 
+## .NET Core Global Tool Install
+
+    dotnet tool install -g PullRequestReleaseNotes.DotNetCore
+	
+## .NET Core Global Tool Usage
+
+While inside a git working directory run the application
+
+    $ dotnet-pullrequestreleasenotes
+
+### Linux note
+
+Only tested on Ubuntu 18.04 (Bionic). You may need to run `sudo apt-get install libgit2-dev` and `sudo ln -s /usr/lib/x86_64-linux-gnu/libgit2.so /usr/lib/x86_64-linux-gnu/libgit2-572e4d8.so` to ensure libgit2 library can be found by the app. This is expected to be resolved in a future version of LibGit2Sharp.
+
 ## Chocolatey Install
 
     choco install PullRequestReleaseNotes
@@ -34,26 +48,12 @@ While inside a git working directory run the application
 
     $ PullRequestReleaseNotes
 
-## .NET Core Global Tool Install
-
-    dotnet tool install -g PullRequestReleaseNotes.DotNetCore
-    
-### Linux note
-
-Only tested on Ubuntu 18.04 (Bionic). You may need to run `sudo apt-get install libgit2-dev` and `sudo ln -s /usr/lib/x86_64-linux-gnu/libgit2.so /usr/lib/x86_64-linux-gnu/libgit2-572e4d8.so` to ensure libgit2 library can be found by the app. This is expected to be resolved in a future version of LibGit2Sharp.
-	
-## .NET Core Global Tool Usage
-
-While inside a git working directory run the application
-
-    $ dotnet-pullrequestreleasenotes
-
 ## PullRequestReleaseNotes in action
 
 #### Sample Markdown Output
 
 ```markdown
-# 1.2.1 (MASTER) - XX XXX 2016
+# 1.2.5 (MASTER) - XX XXX 2016
 ## Enhancements
 ### Category A
 - Awesome new feature [\#1854](https://github.com/org/repo/pull/1854)
