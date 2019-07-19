@@ -77,7 +77,7 @@ While inside a git working directory run the application
 ```
 #### Sample Actual Markdown
 
-# 1.2.1 (MASTER) - XX XXX 2016
+# 1.2.5 (MASTER) - XX XXX 2016
 ## Enhancements
 ### Category A
 - Awesome new feature [\#1854](https://github.com/org/repo/pull/1854)
