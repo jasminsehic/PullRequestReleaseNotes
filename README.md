@@ -1,7 +1,7 @@
 ![Icon](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/logo.png)
 
-PullRequestReleaseNotes
-=======================
+Pull Request Release Notes
+==========================
 
 [![Build status](https://ci.appveyor.com/api/projects/status/github/jasminsehic/pullrequestreleasenotes?svg=true)](https://ci.appveyor.com/project/jasminsehic/unreleasedgithubhistory)
 [![Chocolatey](https://img.shields.io/chocolatey/vpre/PullRequestReleaseNotes.svg)](https://chocolatey.org/packages/PullRequestReleaseNotes)
