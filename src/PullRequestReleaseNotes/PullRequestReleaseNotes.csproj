@@ -8,9 +8,9 @@
     <Product>PullRequestReleaseNotes</Product>
     <Description>PullRequestReleaseNotes is a utility which generates release notes for all merged pull requests on a specific branch that have not yet been released (since last tag)</Description>
     <Copyright>Copyright © Jasmin Sehic 2019</Copyright>
-    <AssemblyVersion>1.2.1.0</AssemblyVersion>
-    <FileVersion>1.2.1.0</FileVersion>
-    <Version>1.2.1</Version>
+    <AssemblyVersion>1.2.4.0</AssemblyVersion>
+    <FileVersion>1.2.4.0</FileVersion>
+    <Version>1.2.4</Version>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RestorePackagesPath>$(SolutionDir)\packages</RestorePackagesPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
