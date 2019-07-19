@@ -10,9 +10,9 @@
     <projectUrl>https://github.com/jasminsehic/PullRequestReleaseNotes</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Builds release history notes from unreleased pull requests on GitHub, GitLab, TFS / Team Services, BitBucket Cloud and Bitbucket Server and optionally posts them to a markdown file, Atlassian Confluence and Slack.</description>
+    <description>Builds release history notes from unreleased pull requests on GitHub, GitLab, Azure DevOps Services / Server, BitBucket Cloud and Bitbucket Server and optionally posts them to a markdown file, Atlassian Confluence and Slack.</description>
     <language>en-AU</language>
-    <tags>git pullrequestreleasenotes pullrequest github gitlab bitbucket tfs teamservices history notes releasenotes changelog gitversion atlassian confluence slack markdown</tags>
+    <tags>git pullrequestreleasenotes pullrequest github gitlab bitbucket tfs teamservices azure devops history notes releasenotes changelog gitversion atlassian confluence slack markdown</tags>
     <packageTypes>
       <packageType name="DotnetTool" />
     </packageTypes>
