@@ -109,7 +109,7 @@ namespace PullRequestReleaseNotes.Providers
             if (!string.IsNullOrWhiteSpace(_programArgs.GitHubOwner) && !string.IsNullOrWhiteSpace(_programArgs.GitHubRepository))
                 return true;
             if (_programArgs.VerboseOutput)
-                Console.WriteLine($"GitHubOwner and GitHubRepository were not supplied. Trying to discover it from remotes.");
+                Console.WriteLine($"GitHubOwner or GitHubRepository were not supplied. Trying to discover it from remotes.");
             if (!_programArgs.LocalGitRepository.Network.Remotes.Any(r => r.Url.CaseInsensitiveContains(remoteDomain)))
                 return false;
             if (!string.IsNullOrWhiteSpace(_programArgs.GitRemote))
