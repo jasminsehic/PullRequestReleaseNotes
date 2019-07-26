@@ -57,7 +57,19 @@ namespace PullRequestReleaseNotes.Providers
                 .First(r => string.Equals(r.Name, _programArgs.TfsRepository, StringComparison.CurrentCultureIgnoreCase));
             if (repository == null)
                 return null;
-            return _tfsClient.Git.GetPullRequest(repository.Id, pullRequestId).Result;
+            var pullRequest = _tfsClient.Git.GetPullRequest(repository.Id, pullRequestId).Result;
+            if (pullRequest.Labels == null || !pullRequest.Labels.Any())
+            {
+                try
+                {
+                    pullRequest.Labels = _tfsClient.Git.GetPullRequestLabels(repository.Id, pullRequestId).Result.ToList();
+                }
+                catch (Exception)
+                {
+                    // ignore because older versions of TFS may not have this API end-point
+                }
+            }
+            return pullRequest;
         }
 
         private PullRequestDto GetPullRequestDto(PullRequest pullRequest)
@@ -74,11 +86,27 @@ namespace PullRequestReleaseNotes.Providers
                 DocumentUrl = pullRequest.Description.ExtractDocumentUrl(),
                 Labels = new List<string>()
             };
-            // extract labels from title and description following pattern [#Section] ... [##Category]
+
+            foreach (var label in pullRequest.Labels)
+            {
+                // filter out any unwanted pull requests
+                if (label.Name.CaseInsensitiveContains(_programArgs.ExcludeLabel))
+                {
+                    if (_programArgs.VerboseOutput)
+                        Console.WriteLine($"   - Excluding Pull Request");
+                    return null;
+                }
+                pullRequestDto.Labels.Add(label.Name);
+                if (_programArgs.VerboseOutput)
+                    Console.WriteLine($"   - Label : {label.Name}");
+            }
+
+            // fallback to extract labels from title and description following pattern [#Section] ... [##Category]
             var labelPattern = new Regex(@"\#(?:[^\[\]]+)*");
             var matches = labelPattern.Matches($"{pullRequest.Title}{pullRequest.Description}");
             if (matches.Count <= 0)
-                return null;
+                return pullRequestDto.Labels.Any() ? pullRequestDto : null;
+
             foreach (Match match in matches)
             {
                 foreach (var group in match.Groups.Cast<Group>().Distinct().ToList())
@@ -96,6 +124,8 @@ namespace PullRequestReleaseNotes.Providers
                         Console.WriteLine($"   - Label : {label}");
                 }
             }
+
+            // de-duplicate anything
             pullRequestDto.Labels = pullRequestDto.Labels.Distinct().ToList();
             return pullRequestDto;
         }
@@ -128,7 +158,7 @@ namespace PullRequestReleaseNotes.Providers
             if (!string.IsNullOrWhiteSpace(_programArgs.TfsCollection) && !string.IsNullOrWhiteSpace(_programArgs.TfsRepository))
                 return true;
             if (_programArgs.VerboseOutput)
-                Console.WriteLine($"TfsCollection and TfsRepository were not supplied. Trying to discover it from remotes.");
+                Console.WriteLine($"TfsCollection or TfsRepository were not supplied. Trying to discover it from remotes.");
             if (!_programArgs.LocalGitRepository.Network.Remotes.Any(r => r.Url.CaseInsensitiveContains(remoteDomain)))
                 return false;
             if (!string.IsNullOrWhiteSpace(_programArgs.GitRemote))
@@ -147,14 +177,17 @@ namespace PullRequestReleaseNotes.Providers
                 return false;
             }
             var remoteUrl = new Uri(remote.Url);
-            _programArgs.TfsCollection = remoteUrl.Segments[2].Replace(@"/", string.Empty);
+            if (string.Equals(remoteUrl.Host, "dev.azure.com", StringComparison.OrdinalIgnoreCase))
+                _programArgs.TfsCollection = remoteUrl.Segments[1].Replace(@"/", string.Empty);
+            else
+                _programArgs.TfsCollection = remoteUrl.Segments[2].Replace(@"/", string.Empty);
             _programArgs.TfsRepository = remoteUrl.Segments[4];
             return true;
         }
 
         private static int? ExtractPullRequestNumber(string commitMessage)
         {
-            var pattern = new Regex(@"Merge pull request (?<pullRequestNumber>\d+).*");
+            var pattern = new Regex(@"[Merge pull request|Merged PR] (?<pullRequestNumber>\d+).*");
             var match = pattern.Match(commitMessage);
             if (match.Groups.Count <= 0 || !match.Groups["pullRequestNumber"].Success)
                 return null;

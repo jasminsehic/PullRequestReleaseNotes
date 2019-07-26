@@ -153,7 +153,7 @@ namespace PullRequestReleaseNotes
 
             _programArgs.ReleaseNoteCategorised = _programArgs.ReleaseNoteCategorised ?? false;
             _programArgs.ReleaseNoteOrderAscending = _programArgs.ReleaseNoteOrderAscending ?? false;
-            _programArgs.ReleaseNoteSectioned = _programArgs.ReleaseNoteSectioned ?? false;
+            _programArgs.ReleaseNoteSectioned = _programArgs.ReleaseNoteSectioned ?? true;
             _programArgs.ReleaseBranchHeadsOnly = _programArgs.ReleaseBranchHeadsOnly ?? true;
 
             _programArgs.ReleaseNoteSections = _programArgs.ReleaseNoteSections ?? new List<string>() { "bug=Fixes", "enhancement=Enhancements" };

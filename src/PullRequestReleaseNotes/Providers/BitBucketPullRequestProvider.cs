@@ -130,7 +130,7 @@ namespace PullRequestReleaseNotes.Providers
             if (!string.IsNullOrWhiteSpace(_programArgs.BitBucketAccount) && !string.IsNullOrWhiteSpace(_programArgs.BitBucketRepository))
                 return true;
             if (_programArgs.VerboseOutput)
-                Console.WriteLine($"BitBucketAccount and BitBucketRepository were not supplied. Trying to discover it from remotes.");
+                Console.WriteLine($"BitBucketAccount or BitBucketRepository were not supplied. Trying to discover it from remotes.");
             if (!_programArgs.LocalGitRepository.Network.Remotes.Any(r => r.Url.CaseInsensitiveContains(remoteDomain)))
                 return false;
             if (!string.IsNullOrWhiteSpace(_programArgs.GitRemote))

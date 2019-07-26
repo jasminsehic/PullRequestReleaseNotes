@@ -146,7 +146,7 @@ namespace PullRequestReleaseNotes.Providers
             if (!string.IsNullOrWhiteSpace(_programArgs.BitBucketServerProject) && !string.IsNullOrWhiteSpace(_programArgs.BitBucketServerRepository))
                 return true;
             if (_programArgs.VerboseOutput)
-                Console.WriteLine($"BitBucketServerProject and BitBucketServerRepository were not supplied. Trying to discover it from remotes.");
+                Console.WriteLine($"BitBucketServerProject or BitBucketServerRepository were not supplied. Trying to discover it from remotes.");
             if (!_programArgs.LocalGitRepository.Network.Remotes.Any(r => r.Url.CaseInsensitiveContains(remoteDomain)))
                 return false;
             if (!string.IsNullOrWhiteSpace(_programArgs.GitRemote))
