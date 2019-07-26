@@ -21,7 +21,7 @@ namespace PullRequestReleaseNotes.Providers
         {
             _programArgs = programArgs;
             DiscoverToken();
-            _restClient = new RestClient($"{_programArgs.GitLabApiUrl}/api/v3");
+            _restClient = new RestClient($"{_programArgs.GitLabApiUrl}/api/v4");
         }
 
         private void DiscoverToken()
@@ -69,7 +69,7 @@ namespace PullRequestReleaseNotes.Providers
                 }
                 if (response.StatusCode != HttpStatusCode.OK || mergeRequests == null || !mergeRequests.Any())
                     return null;
-            } 
+            }
             else
                 return null;
             return mergeRequests.First();
@@ -119,14 +119,14 @@ namespace PullRequestReleaseNotes.Providers
         {
             var request = new RestRequest(relativeUrl, Method.GET);
             request.AddUrlSegment("project_id", _programArgs.GitLabProjectId);
-            request.AddQueryParameter("iid", $"{pullRequestId}");
+            request.AddQueryParameter("iids", $"{pullRequestId}");
             request.AddQueryParameter("private_token", $"{_programArgs.GitLabToken}");
             return request;
         }
 
         private static int? ExtractPullRequestNumber(string commitMessage)
         {
-            var pattern = new Regex(@"See merge request !(?<pullRequestNumber>\d+).*");
+            var pattern = new Regex(@"See merge request .*!(?<pullRequestNumber>\d+).*");
             var match = pattern.Match(commitMessage);
             if (match.Groups.Count <= 0 || !match.Groups["pullRequestNumber"].Success)
                 return null;
@@ -223,7 +223,7 @@ namespace PullRequestReleaseNotes.Providers
         [DataMember(Name = "labels")]
         public Collection<string> Labels;
     }
-    
+
     [DataContract]
     internal class User
     {
