@@ -22,6 +22,8 @@ namespace PullRequestReleaseNotes.Providers
             _programArgs = programArgs;
             DiscoverToken();
             _restClient = new RestClient($"{_programArgs.GitLabApiUrl}/api/v4");
+            if (string.IsNullOrWhiteSpace(_programArgs.GitLabProjectId))
+                throw new ArgumentException("GitLabProjectId was not supplied", "GitLabProjectId");
         }
 
         private void DiscoverToken()
