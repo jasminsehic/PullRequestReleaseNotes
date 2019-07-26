@@ -15,6 +15,10 @@ namespace PullRequestReleaseNotes
 
         private static void Main(string[] args)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                SecurityProtocolType.Tls11 |
+                SecurityProtocolType.Tls12;
+
             int exitCode;
             _programArgs = ValidateConfiguration(args);
             if (_programArgs.AcceptInvalidCertificates)
