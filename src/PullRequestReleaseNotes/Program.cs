@@ -26,8 +26,6 @@ namespace PullRequestReleaseNotes
             var releaseHistory = new PullRequestHistoryBuilder(_programArgs).BuildHistory();
             if (releaseHistory == null)
                 exitCode = FailureExitCode;
-            else if (!releaseHistory.Any())
-                exitCode = SuccessExitCode;
             else
                 exitCode = BuildAndPublish(releaseHistory);
             Environment.Exit(exitCode);
