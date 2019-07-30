@@ -132,5 +132,5 @@ Also many thanks to:
 - All contributors of [RestSharp](https://github.com/restsharp/RestSharp) which is a swiss-army knife of REST clients and life without it would be meaningless. (bows)
 - All contributors of [LibGit2Sharp](https://github.com/libgit2/libgit2sharp) which made it possible to traverse a Git repo history to find all unreleased commits
 - [JetBrains](https://www.jetbrains.com/?from=PullRequestReleaseNotes) for supporting this open source project by donating a free ReSharper license 
-![Icon](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/jetbrains.svg)
+<img src="./docs/img/jetbrains.svg">
 
