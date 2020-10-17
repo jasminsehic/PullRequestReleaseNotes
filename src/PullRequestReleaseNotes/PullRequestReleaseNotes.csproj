@@ -16,6 +16,7 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Costura.Fody" Version="4.1.0" />
     <PackageReference Include="Infinity.NET" Version="0.2.1" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
