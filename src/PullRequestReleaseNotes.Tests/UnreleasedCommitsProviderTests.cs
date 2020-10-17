@@ -304,6 +304,50 @@ namespace PullRequestReleaseNotes.Tests
 
         /// <summary>
         /// init
+        ///   | tag 1.0.0
+        ///   |-----
+        ///   |    |
+        ///   |    |
+        ///   |    | - fix 1
+        ///   |    |
+        ///   |   /
+        ///   |  /
+        ///   | /
+        ///   |/
+        ///   | tag 1.0.1
+        ///   |\         
+        ///   | \__________________
+        ///   |                    \  
+        ///   |                     |
+        ///   |                     |
+        ///   |                     | - fix 2
+        ///   |                     |
+        ///   |                     | tag 1.0.2 
+        ///   | - head is here
+        /// </summary>
+        [Test]
+        public void TagShouldBeIncludedIfReachableFromAnotherUnreachableTag()
+        {
+            var main = RepoHelper.CreateAndCheckoutBranch("main");
+            RepoHelper.CreateTag("1.0.0");
+            var fix1 = CreateBranchAndCommit("fix-1");
+            RepoHelper.CheckoutBranch(main);
+            RepoHelper.MergeBranch(fix1);
+            RepoHelper.CreateTag("1.0.1");
+
+            var fix2 = CreateBranchAndCommit("fix-2");
+            RepoHelper.CreateTag("1.0.2");
+
+            RepoHelper.CheckoutBranch(main);
+
+            var commits = _unreleasedCommitsProvider.GetAllUnreleasedMergeCommits(RepoHelper.Repo, main,
+                annotatedTagOnly: false).ToList();
+
+            commits.ShouldBeEmpty();
+        }
+
+        /// <summary>
+        /// init
         ///   |-----------
         ///   |          |                
         ///   |          |-feature 1 commit
