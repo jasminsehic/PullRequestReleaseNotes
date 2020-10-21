@@ -9,12 +9,7 @@ namespace PullRequestReleaseNotes
     public class UnreleasedCommitsProvider
     {
         private static readonly Regex ParseSemVer = new Regex(@"^(?<SemVer>(?<Major>\d+)(\.(?<Minor>\d+))(\.(?<Patch>\d+))?)(\.(?<FourthPart>\d+))?(-(?<Tag>[^\+]*))?(\+(?<BuildMetaData>.*))?$", RegexOptions.Compiled);
-        private static Func<Tag, bool> LightOrAnnotatedTags(bool annotatedTagOnly)
-        {
-            if (annotatedTagOnly)
-                return t => t.IsAnnotated;
-            return t => true;
-        }
+
         public IEnumerable<Commit> GetAllUnreleasedMergeCommits(IRepository repo, string releaseBranchRef, bool annotatedTagOnly)
         {
             var releasedCommitsHash = new Dictionary<string, Commit>();
