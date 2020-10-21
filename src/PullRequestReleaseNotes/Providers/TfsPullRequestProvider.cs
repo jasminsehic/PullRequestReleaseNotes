@@ -104,9 +104,6 @@ namespace PullRequestReleaseNotes.Providers
             // fallback to extract labels from title and description following pattern [#Section] ... [##Category]
             var labelPattern = new Regex(@"\#(?:[^\[\]]+)*");
             var matches = labelPattern.Matches($"{pullRequest.Title}{pullRequest.Description}");
-            if (matches.Count <= 0)
-                return pullRequestDto.Labels.Any() ? pullRequestDto : null;
-
             foreach (Match match in matches)
             {
                 foreach (var group in match.Groups.Cast<Group>().Distinct().ToList())
