@@ -16,7 +16,8 @@ Supported Pull Request providers are [GitHub](https://github.com/), [GitLab](htt
 
 Intention is to run this utility as part of a continuous integration process and generate notes automatically as part of every release branch build. Optionally the utility can also publish the notes to a markdown file, [Atlassian Confluence](https://www.atlassian.com/software/confluence) page or a [Slack](https://slack.com/) post. 
 
-See [HELP.md](https://github.com/jasminsehic/PullRequestReleaseNotes/blob/master/docs/HELP.md) for all the command line and environment variable parameters. 
+## Command line, YAML file parameters and Environment variables
+See [HELP.md](https://github.com/jasminsehic/PullRequestReleaseNotes/blob/master/docs/HELP.md) for details on parameters.
 
 ## Release Notes Format
 
@@ -120,9 +121,6 @@ While inside a git working directory run the application
 
 #### Sample Slack Output
 ![SLACK](https://raw.github.com/jasminsehic/PullRequestReleaseNotes/master/docs/img/slack.png)
-
-## Command line and YAML file parameters
-See [HELP.md](https://github.com/jasminsehic/PullRequestReleaseNotes/blob/master/docs/HELP.md) for details on parameters.
 
 ## Thanks
 Big thanks to [Jake Ginnivan](http://jake.ginnivan.net/) for inspiring this tool with his work on [GitReleaseNotes](https://github.com/GitTools/GitReleaseNotes) and [GitVersion](https://github.com/GitTools/GitVersion)
