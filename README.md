@@ -137,4 +137,3 @@ Also many thanks to:
 - All contributors of [LibGit2Sharp](https://github.com/libgit2/libgit2sharp) which made it possible to traverse a Git repo history to find all unreleased commits
 - [JetBrains](https://www.jetbrains.com/?from=PullRequestReleaseNotes) for supporting this open source project by donating a free ReSharper license 
 <img src="./docs/img/jetbrains.svg">
-
