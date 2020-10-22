@@ -36,7 +36,7 @@ See [HELP.md](https://github.com/jasminsehic/PullRequestReleaseNotes/blob/master
 
 While inside a git working directory run the application
 
-    $ dotnet-pullrequestreleasenotes
+    $ dotnet-pullrequestreleasenotes -GitHubToken c03b77a4982d48f0af328312a9b99455
 
 ### Linux note
 
@@ -50,7 +50,7 @@ Only tested on Ubuntu 18.04 (Bionic) and 20.04 (Focal Fossa). You will need to r
 
 While inside a git working directory run the application
 
-    $ PullRequestReleaseNotes
+    $ PullRequestReleaseNotes -GitHubToken c03b77a4982d48f0af328312a9b99455
 
 ## PullRequestReleaseNotes in action
 
