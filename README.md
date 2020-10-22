@@ -8,13 +8,17 @@ Pull Request Release Notes
 [![Chocolatey](https://img.shields.io/chocolatey/vpre/PullRequestReleaseNotes.svg)](https://chocolatey.org/packages/PullRequestReleaseNotes)
 [![Release](https://img.shields.io/github/release/jasminsehic/PullRequestReleaseNotes.svg)](https://github.com/jasminsehic/PullRequestReleaseNotes/releases)
 [![License](https://img.shields.io/github/license/jasminsehic/PullRequestReleaseNotes.svg)](https://github.com/jasminsehic/PullRequestReleaseNotes/blob/master/LICENSE)
-[![Gitter](https://badges.gitter.im/jasminsehic/PullRequestReleaseNotes.svg)](https://gitter.im/jasminsehic/PullRequestReleaseNotes?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Gitter](https://badges.gitter.im/jasminsehic/PullRequestReleaseNotes.svg)](https://gitter.im/jasminsehic/PullRequestReleaseNotes)
 
 Pull Request Release Notes utility generates release notes for all merged pull requests, on a specific branch, that have not yet been released relying solely on pull request titles and labels to generate the release notes and publish them in markdown format.
 
 Supported Pull Request providers are [GitHub](https://github.com/), [GitLab](https://gitlab.com/), [Azure DevOps Services / Server](https://azure.microsoft.com/en-au/services/devops/), [BitBucket Cloud](https://bitbucket.org/) and [Bitbucket Server](https://www.atlassian.com/software/bitbucket/download). 
 
 Intention is to run this utility as part of a continuous integration process and generate notes automatically as part of every release branch build. Optionally the utility can also publish the notes to a markdown file, [Atlassian Confluence](https://www.atlassian.com/software/confluence) page or a [Slack](https://slack.com/) post. 
+
+See [HELP.md](https://github.com/jasminsehic/PullRequestReleaseNotes/blob/master/docs/HELP.md) for all the command line and environment variable parameters. 
+
+## Release Notes Format
 
 Utility outputs release notes following the [Semantic Release Notes](https://web.archive.org/web/20161013175123/http://www.semanticreleasenotes.org/) format and extracts semantic release note sections, categories and summaries from the pull request title and labels. For example all pull requests with `Bug` label can be grouped under `Fixes` section and pull requests with `Enhancement` label can be grouped under `Enhancements` section. Category grouping is possible through use of the `#Label` where `#` character is used to denote a category label as opposed to a section label. Azure DevOps Service / Server and BitBucket Cloud / Server pull request providers do not have a label concept yet so for those providers you can type `[#section]` and `[##category]` either in the title or the description of the pull request as a pseudo-label.
 
@@ -36,7 +40,7 @@ While inside a git working directory run the application
 
 ### Linux note
 
-Only tested on Ubuntu 18.04 (Bionic). You may need to run `sudo apt-get install libgit2-dev` and `sudo ln -s /usr/lib/x86_64-linux-gnu/libgit2.so /usr/lib/x86_64-linux-gnu/libgit2-572e4d8.so` to ensure libgit2 library can be found by the app. This is expected to be resolved in a future version of LibGit2Sharp.
+Only tested on Ubuntu 18.04 (Bionic) and 20.04 (Focal Fossa). You will need to run `sudo apt-get install libgit2-dev` and `sudo ln -s /usr/lib/x86_64-linux-gnu/libgit2.so /usr/lib/x86_64-linux-gnu/libgit2-572e4d8.so` to ensure libgit2 library can be found by the app. This is expected to be resolved in a future version of LibGit2Sharp.
 
 ## Chocolatey Install
 
