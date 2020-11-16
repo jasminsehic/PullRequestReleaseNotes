@@ -26,7 +26,7 @@ namespace PullRequestReleaseNotes.Models
         {
             if (highlightLabels == null || highlightLabels.All(string.IsNullOrWhiteSpace))
                 return false;
-            return Labels.Intersect(highlightLabels, StringComparer.InvariantCultureIgnoreCase).Count() != 0;
+            return Labels.Intersect(highlightLabels, StringComparer.InvariantCultureIgnoreCase).Count() != highlightLabels.Count;
         }
     }
 }
