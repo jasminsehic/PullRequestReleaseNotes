@@ -57,7 +57,7 @@ namespace PullRequestReleaseNotes.Providers
         private BitBucketServerPullRequest GetPullRequest(int pullRequestId)
         {
             BitBucketServerPullRequest pullRequest;
-            var request = new RestRequest($"/pull-requests/{pullRequestId}", Method.GET);
+            var request = new RestRequest($"/pull-requests/{pullRequestId}", Method.Get);
             var response = _restClient.Execute(request);
             if (response.StatusCode == HttpStatusCode.OK)
             {

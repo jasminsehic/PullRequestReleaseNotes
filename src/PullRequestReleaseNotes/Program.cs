@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using PullRequestReleaseNotes.Models;
 using PullRequestReleaseNotes.Publishers;
@@ -12,6 +11,7 @@ namespace PullRequestReleaseNotes
         private static ProgramArgs _programArgs;
         private const int SuccessExitCode = 0;
         private const int FailureExitCode = -1;
+        private const string ProductVersion = "2.1.0";
 
         private static void Main(string[] args)
         {
@@ -83,6 +83,12 @@ namespace PullRequestReleaseNotes
                 Environment.Exit(FailureExitCode);
 
             var config = new Config(programArgs);
+
+            if (programArgs.ShowVersion)
+            {
+                Console.WriteLine($"PullRequestReleaseNotes version {ProductVersion}");
+                Environment.Exit(SuccessExitCode);
+            }
 
             if (programArgs.InitConfig)
             {

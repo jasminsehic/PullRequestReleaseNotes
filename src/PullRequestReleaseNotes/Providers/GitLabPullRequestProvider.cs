@@ -119,7 +119,7 @@ namespace PullRequestReleaseNotes.Providers
 
         private RestRequest PrepareGitLabRequest(string relativeUrl, int pullRequestId)
         {
-            var request = new RestRequest(relativeUrl, Method.GET);
+            var request = new RestRequest(relativeUrl, Method.Get);
             request.AddUrlSegment("project_id", _programArgs.GitLabProjectId);
             request.AddQueryParameter("iids", $"{pullRequestId}");
             request.AddQueryParameter("private_token", $"{_programArgs.GitLabToken}");

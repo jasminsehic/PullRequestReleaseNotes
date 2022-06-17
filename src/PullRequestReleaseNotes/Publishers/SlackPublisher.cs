@@ -10,7 +10,7 @@ namespace PullRequestReleaseNotes.Publishers
         public static bool PublishPost(string pageTitle, string markdownNotes, ProgramArgs programArgs)
         {
             var restClient = new RestClient("https://slack.com/api");
-            var request = new RestRequest("files.upload", Method.POST) { AlwaysMultipartFormData = true };
+            var request = new RestRequest("files.upload", Method.Post) { AlwaysMultipartFormData = true };
             request.AddQueryParameter("filename", pageTitle);
             request.AddQueryParameter("filetype", "post");
             request.AddQueryParameter("title", pageTitle);

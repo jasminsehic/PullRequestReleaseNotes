@@ -1,6 +1,8 @@
 ### Command Line Parameters
 Utility can have command line parameters passed to it or have the parameters supplied via a YAML based config or a mixture of both. Command line parameter will win if the same parameter is also supplied via YAML. You can generate a sample YAML file by passing -init parameter to the utility.
 
+You can use `--version` as a command line parameter to print the version of the PullRequestReleaseNotes application.
+
 - `-PullRequestProviderName` (`-prpn`) : Default is `github`. Other providers supported are `gitlab`, `tfs`, `bitbucket` and `bitbucketserver`.
 - `-GitHubToken` (`-ghpt`) : Required parameter if PullRequestProviderName is `github`. Can be supplied as parameter or `PRRN_GITHUB_TOKEN` environment variable.
 - `-GitHubOwner` (`-gho`) : Default is extracted from remote url.

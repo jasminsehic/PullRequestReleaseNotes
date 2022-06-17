@@ -21,7 +21,7 @@ namespace PullRequestReleaseNotes.Publishers
         private static Content FindConfluencePage(ProgramArgs programArgs, string pageTitle)
         {
             var client = PrepareConfluenceClient(programArgs);
-            var request = PrepareConfluenceRequest(new RestRequest("content", Method.GET));
+            var request = PrepareConfluenceRequest(new RestRequest("content", Method.Get));
             request.AddQueryParameter("type", "page");
             request.AddQueryParameter("spaceKey", programArgs.ConfluenceSpaceKey);            
             request.AddQueryParameter("title", pageTitle);
@@ -39,7 +39,7 @@ namespace PullRequestReleaseNotes.Publishers
             }
             if (response.StatusCode != HttpStatusCode.OK || contentResult == null || !contentResult.Results.Any() || contentResult.Results.First().Id == null)
                 return null;
-            request = PrepareConfluenceRequest(new RestRequest("content/{id}", Method.GET));
+            request = PrepareConfluenceRequest(new RestRequest("content/{id}", Method.Get));
             request.AddUrlSegment("id", contentResult.Results.First().Id);
             var result = client.Execute<Content>(request);
             if (result.StatusCode == HttpStatusCode.OK)
@@ -86,18 +86,18 @@ namespace PullRequestReleaseNotes.Publishers
             };
         }
 
-        private static IRestResponse<Content> PostConfluenceContent(ProgramArgs programArgs, Content content)
+        private static RestResponse<Content> PostConfluenceContent(ProgramArgs programArgs, Content content)
         {
             var client = PrepareConfluenceClient(programArgs);
-            var request = PrepareConfluenceRequest(new RestRequest("content", Method.POST));
+            var request = PrepareConfluenceRequest(new RestRequest("content", Method.Post));
             AddJsonBodyToRequest(content, request);
             return client.Execute<Content>(request);
         }
 
-        private static IRestResponse<Content> UpdateConfluenceContent(ProgramArgs programArgs, Content content)
+        private static RestResponse<Content> UpdateConfluenceContent(ProgramArgs programArgs, Content content)
         {
             var client = PrepareConfluenceClient(programArgs);
-            var request = PrepareConfluenceRequest(new RestRequest("content/{id}", Method.PUT));
+            var request = PrepareConfluenceRequest(new RestRequest("content/{id}", Method.Put));
             request.AddUrlSegment("id", content.Id);
             AddJsonBodyToRequest(content, request);
             return client.Execute<Content>(request);
