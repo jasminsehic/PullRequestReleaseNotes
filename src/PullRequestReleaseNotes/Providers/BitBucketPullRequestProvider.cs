@@ -21,9 +21,7 @@ namespace PullRequestReleaseNotes.Providers
         {
             _programArgs = programArgs;
             DiscoverBitBucketServerCredentials();
-#pragma warning disable 618
-            _bitBucketClient.OAuth2LeggedAuthentication(_programArgs.BitBucketApiKey, _programArgs.BitBucketApiSecret);
-#pragma warning restore 618
+            _bitBucketClient.OAuth2ClientCredentials(_programArgs.BitBucketApiKey, _programArgs.BitBucketApiSecret);
         }
 
         private void DiscoverBitBucketServerCredentials()
@@ -57,7 +55,8 @@ namespace PullRequestReleaseNotes.Providers
         private PullRequest GetPullRequest(int pullRequestId)
         {
             var pullRequests = _bitBucketClient.RepositoriesEndPoint()
-                .PullRequestsResource(_programArgs.BitBucketAccount, _programArgs.BitBucketRepository);
+                .RepositoryResource(_programArgs.BitBucketAccount, _programArgs.BitBucketRepository)
+                .PullRequestsResource();
             return pullRequests.PullRequestResource(pullRequestId).GetPullRequest() as PullRequest;
         }
 
