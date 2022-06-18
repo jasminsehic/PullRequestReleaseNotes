@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{B7A7DF45-4248-4784-8417-594F15B7484A}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net6.0</TargetFrameworks>
     <AssemblyTitle>PullRequestReleaseNotes</AssemblyTitle>
     <Company>Jasmin Sehic</Company>
     <Product>PullRequestReleaseNotes</Product>
@@ -31,13 +31,13 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Infinity.NET" Version="0.2.1" />
-    <PackageReference Include="LibGit2Sharp" Version="0.26.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="Octokit" Version="0.32.0" />
+    <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Octokit" Version="0.51.0" />
     <PackageReference Include="PowerArgs" Version="3.6.0" />
-    <PackageReference Include="RestSharp" Version="106.6.10" />
-    <PackageReference Include="SharpBucket" Version="0.11.0" />
-    <PackageReference Include="YamlDotNet" Version="6.1.2" />
+    <PackageReference Include="RestSharp" Version="108.0.1" />
+    <PackageReference Include="SharpBucket" Version="0.17.0" />
+    <PackageReference Include="YamlDotNet" Version="11.2.1" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\docs\img\logo.png">
