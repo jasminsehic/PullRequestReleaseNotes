@@ -29,29 +29,18 @@ You can also define a label to exclude pull request from release notes. Also you
 
 See [HELP.md](https://github.com/jasminsehic/PullRequestReleaseNotes/blob/master/docs/HELP.md) for all the details on how perform these customisations. 
 
-## .NET Core Global Tool Install
+## Docker Image
 
-    dotnet tool install -g PullRequestReleaseNotes.DotNetCore
-	
-## .NET Core Global Tool Usage
+You can run `jasminsehic/pullrequestreleasenotes` Linux Docker image on Windows WSL2, Linux or MacOS.
+While inside the root of a working git directory run the Docker image using below command examples.
+GitHubToken used in the example is just an example.
 
-While inside a git working directory run the application
-
-    $ dotnet-pullrequestreleasenotes -GitHubToken c03b77a4982d48f0af328312a9b99455
-
-### Linux note
-
-Only tested on Ubuntu 18.04 (Bionic) and 20.04 (Focal Fossa). You will need to run `sudo apt-get install libgit2-dev` and `sudo ln -s /usr/lib/x86_64-linux-gnu/libgit2.so /usr/lib/x86_64-linux-gnu/libgit2-572e4d8.so` to ensure libgit2 library can be found by the app. This is expected to be resolved in a future version of LibGit2Sharp.
-
-## Chocolatey Install
-
-    choco install PullRequestReleaseNotes
-	
-## Chocolatey Usage
-
-While inside a git working directory run the application
-
-    $ PullRequestReleaseNotes -GitHubToken c03b77a4982d48f0af328312a9b99455
+To run on Windows run this from Command Prompt:
+`docker run --rm -it -v "%cd%:/repo" jasminsehic/pullrequestreleasenotes:latest -grp /repo -GitHubToken c03b77a4982d48f0af328312a9b99455`
+or run this from PowerShell:
+`docker run --rm -it -v "%cd%:/repo" jasminsehic/pullrequestreleasenotes:latest -grp /repo -GitHubToken c03b77a4982d48f0af328312a9b99455`
+To run on Linux or MacOS run :
+`docker run --rm -it -v "$(pwd):/repo" jasminsehic/pullrequestreleasenotes:latest -grp /repo -GitHubToken c03b77a4982d48f0af328312a9b99455`
 
 ## PullRequestReleaseNotes in action
 
