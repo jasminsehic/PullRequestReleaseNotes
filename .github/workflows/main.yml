@@ -36,7 +36,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: ./src/PullRequestReleaseNotes/
-          file: Dockerfile
+          context: .
+          file: ./src/PullRequestReleaseNotes/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/pullrequestreleasenotes:latest
