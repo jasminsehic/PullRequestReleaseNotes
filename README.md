@@ -3,7 +3,7 @@
 Pull Request Release Notes
 ==========================
 
-![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/jasminsehic/pullrequestreleasenotes/CI/master)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/jasminsehic/pullrequestreleasenotes/CI/master)](https://github.com/jasminsehic/PullRequestReleaseNotes/actions/workflows/main.yml)
 [![Release](https://img.shields.io/github/release/jasminsehic/PullRequestReleaseNotes.svg)](https://github.com/jasminsehic/PullRequestReleaseNotes/releases)
 [![License](https://img.shields.io/github/license/jasminsehic/PullRequestReleaseNotes.svg)](https://github.com/jasminsehic/PullRequestReleaseNotes/blob/master/LICENSE)
 [![Gitter](https://badges.gitter.im/jasminsehic/PullRequestReleaseNotes.svg)](https://gitter.im/jasminsehic/PullRequestReleaseNotes)
