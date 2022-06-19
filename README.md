@@ -36,11 +36,17 @@ While inside the root of a working git directory run the Docker image using belo
 GitHubToken used in the example is just an example.
 
 To run on Windows run this from Command Prompt:
-`docker run --rm -it -v "%cd%:/repo" jasminsehic/pullrequestreleasenotes:latest -grp /repo -GitHubToken c03b77a4982d48f0af328312a9b99455`
+```
+docker run --rm -it -v "%cd%:/repo" jasminsehic/pullrequestreleasenotes:latest -grp /repo -GitHubToken c03b77a4982d48f0af328312a9b99455
+```
 or run this from PowerShell:
-`docker run --rm -it -v "%cd%:/repo" jasminsehic/pullrequestreleasenotes:latest -grp /repo -GitHubToken c03b77a4982d48f0af328312a9b99455`
-To run on Linux or MacOS run :
-`docker run --rm -it -v "$(pwd):/repo" jasminsehic/pullrequestreleasenotes:latest -grp /repo -GitHubToken c03b77a4982d48f0af328312a9b99455`
+```
+docker run --rm -it -v "${pwd}:/repo" jasminsehic/pullrequestreleasenotes:latest -grp /repo -GitHubToken c03b77a4982d48f0af328312a9b99455
+```
+To run on Linux or MacOS:
+```
+docker run --rm -it -v "$(pwd):/repo" jasminsehic/pullrequestreleasenotes:latest -grp /repo -GitHubToken c03b77a4982d48f0af328312a9b99455
+```
 
 ## PullRequestReleaseNotes in action
 
