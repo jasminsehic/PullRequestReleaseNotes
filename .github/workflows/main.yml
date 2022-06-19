@@ -40,3 +40,5 @@ jobs:
           context: ./src/PullRequestReleaseNotes
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/pullrequestreleasenotes:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/pullrequestreleasenotes:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/pullrequestreleasenotes:buildcache,mode=max
