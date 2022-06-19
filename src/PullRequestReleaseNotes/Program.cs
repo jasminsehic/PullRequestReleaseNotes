@@ -87,8 +87,10 @@ namespace PullRequestReleaseNotes
 
             if (programArgs.ShowVersion)
             {
-                Console.WriteLine(Assembly.GetCallingAssembly().Location);
-                var productVersion = new Version(FileVersionInfo.GetVersionInfo(Assembly.GetCallingAssembly().Location).ProductVersion).ToString();
+                Console.WriteLine(Assembly.GetEntryAssembly().Location);
+                Console.WriteLine(Assembly.GetExecutingAssembly().Location);
+
+                var productVersion = new Version(FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location).ProductVersion).ToString();
                 Console.WriteLine($"PullRequestReleaseNotes version {productVersion}");
                 Environment.Exit(SuccessExitCode);
             }
