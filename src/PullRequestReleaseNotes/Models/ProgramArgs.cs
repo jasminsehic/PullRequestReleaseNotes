@@ -9,6 +9,9 @@ namespace PullRequestReleaseNotes.Models
 {
     public class ProgramArgs
     {
+        [ArgShortcut("--version")]
+        public bool ShowVersion {  get; set; }
+
         [ArgShortcut("-rnsl")]
         [YamlMember(Alias = "release-note-sections")]
         [ArgExample("'Section1=Description For Section1,Section2=Description For Section2'", "Dictionary of GitHub Pull Request Labels and their descriptions which will be used for release note sections")]

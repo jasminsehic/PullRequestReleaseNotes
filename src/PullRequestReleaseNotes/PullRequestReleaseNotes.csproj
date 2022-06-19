@@ -7,25 +7,19 @@
     <Company>Jasmin Sehic</Company>
     <Product>PullRequestReleaseNotes</Product>
     <Description>Builds release history notes from unreleased pull requests on GitHub, GitLab, Azure DevOps Services / Server, BitBucket Cloud and Bitbucket Server and optionally posts them to a markdown file, Atlassian Confluence and Slack.</Description>
-    <Copyright>Copyright © Jasmin Sehic 2019</Copyright>
-    <AssemblyVersion>1.2.5.0</AssemblyVersion>
-    <FileVersion>1.2.5.0</FileVersion>
-    <Version>1.2.5</Version>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Copyright>Copyright © Jasmin Sehic 2016</Copyright>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <FileVersion>2.1.0.0</FileVersion>
+    <Version>2.1.0.0</Version>
     <RestorePackagesPath>$(SolutionDir)\packages</RestorePackagesPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <PackageProjectUrl>https://github.com/jasminsehic/PullRequestReleaseNotes</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jasminsehic/PullRequestReleaseNotes</RepositoryUrl>
     <PackageTags>git pullrequestreleasenotes pullrequest github gitlab bitbucket tfs teamservices azure devops history notes releasenotes changelog gitversion atlassian confluence slack markdown</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <PackAsTool>true</PackAsTool>
-    <ToolCommandName>dotnet-pullrequestreleasenotes</ToolCommandName>
-    <!--https://github.com/libgit2/libgit2sharp/issues/1754-->
     <IncludeSymbolsInSingleFile>true</IncludeSymbolsInSingleFile>
-    <PackageId>PullRequestReleaseNotes.DotNetCore</PackageId>
     <Authors>Jasmin Sehic</Authors>
     <Owners>Jasmin Sehic</Owners>
-    <Title>PullRequestReleaseNotes.DotNetCore</Title>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageIcon>logo.png</PackageIcon>
   </PropertyGroup>

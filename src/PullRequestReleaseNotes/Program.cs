@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
-using System.Threading;
+using System.Reflection;
 using PullRequestReleaseNotes.Models;
 using PullRequestReleaseNotes.Publishers;
 
@@ -83,6 +84,13 @@ namespace PullRequestReleaseNotes
                 Environment.Exit(FailureExitCode);
 
             var config = new Config(programArgs);
+
+            if (programArgs.ShowVersion)
+            {
+                var productVersion = new Version(FileVersionInfo.GetVersionInfo(Assembly.GetCallingAssembly().Location).ProductVersion).ToString();
+                Console.WriteLine($"PullRequestReleaseNotes version {productVersion}");
+                Environment.Exit(SuccessExitCode);
+            }
 
             if (programArgs.InitConfig)
             {
