@@ -3,9 +3,7 @@
 Pull Request Release Notes
 ==========================
 
-[![Build status](https://ci.appveyor.com/api/projects/status/github/jasminsehic/pullrequestreleasenotes?svg=true)](https://ci.appveyor.com/project/jasminsehic/unreleasedgithubhistory)
-[![Nuget](https://img.shields.io/nuget/v/PullRequestReleaseNotes.DotNetCore.svg)](https://www.nuget.org/packages/PullRequestReleaseNotes.DotNetCore)
-[![Chocolatey](https://img.shields.io/chocolatey/vpre/PullRequestReleaseNotes.svg)](https://chocolatey.org/packages/PullRequestReleaseNotes)
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/jasminsehic/pullrequestreleasenotes/CI/master)
 [![Release](https://img.shields.io/github/release/jasminsehic/PullRequestReleaseNotes.svg)](https://github.com/jasminsehic/PullRequestReleaseNotes/releases)
 [![License](https://img.shields.io/github/license/jasminsehic/PullRequestReleaseNotes.svg)](https://github.com/jasminsehic/PullRequestReleaseNotes/blob/master/LICENSE)
 [![Gitter](https://badges.gitter.im/jasminsehic/PullRequestReleaseNotes.svg)](https://gitter.im/jasminsehic/PullRequestReleaseNotes)
