@@ -124,7 +124,10 @@ namespace PullRequestReleaseNotes.Publishers
         }
         private static void AddJsonBodyToRequest(Content page, RestRequest request)
         {
-            var json = JsonConvert.SerializeObject(page);
+            var json = JsonConvert.SerializeObject(page, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
             request.AddParameter("application/json", json, ParameterType.RequestBody);
         }
     }
