@@ -57,7 +57,12 @@ namespace PullRequestReleaseNotes.Publishers
                 Ancestors = new[] { new Ancestor() { Id = programArgs.ConfluenceReleaseParentPageId, Type = "page" } },
                 Body = new Body { Storage = BuildMarkdownBodyContent(markdown) }
             };
-            return PostConfluenceContent(programArgs, page).StatusCode == HttpStatusCode.OK;
+            var resp = PostConfluenceContent(programArgs, page);
+            if (resp.StatusCode != HttpStatusCode.OK)
+            {
+                Console.Error.WriteLine($"Failed to publish to confluence: {resp.Content}");
+            }
+            return resp.StatusCode == HttpStatusCode.OK;
         }
 
         private static bool UpdateConfluencePage(ProgramArgs programArgs, Content existingPage, string markdown)
@@ -119,7 +124,10 @@ namespace PullRequestReleaseNotes.Publishers
         }
         private static void AddJsonBodyToRequest(Content page, RestRequest request)
         {
-            var json = JsonConvert.SerializeObject(page);
+            var json = JsonConvert.SerializeObject(page, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
             request.AddParameter("application/json", json, ParameterType.RequestBody);
         }
     }
