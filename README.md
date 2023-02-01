@@ -6,8 +6,7 @@ Pull Request Release Notes
 [![Test](https://github.com/jasminsehic/PullRequestReleaseNotes/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/jasminsehic/PullRequestReleaseNotes/actions/workflows/test.yml)
 [![Deploy](https://github.com/jasminsehic/PullRequestReleaseNotes/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/jasminsehic/PullRequestReleaseNotes/actions/workflows/main.yml)
 [![Release](https://img.shields.io/github/release/jasminsehic/PullRequestReleaseNotes.svg)](https://github.com/jasminsehic/PullRequestReleaseNotes/releases)
-[![Docker](https://img.shields.io/docker/image-size/jasminsehic/pullrequestreleasenotes)]
-(https://hub.docker.com/r/jasminsehic/pullrequestreleasenotes)
+[![Docker](https://img.shields.io/docker/image-size/jasminsehic/pullrequestreleasenotes)](https://hub.docker.com/r/jasminsehic/pullrequestreleasenotes)
 [![License](https://img.shields.io/github/license/jasminsehic/PullRequestReleaseNotes.svg)](https://github.com/jasminsehic/PullRequestReleaseNotes/blob/master/LICENSE)
 [![Gitter](https://badges.gitter.im/jasminsehic/PullRequestReleaseNotes.svg)](https://gitter.im/jasminsehic/PullRequestReleaseNotes)
 
