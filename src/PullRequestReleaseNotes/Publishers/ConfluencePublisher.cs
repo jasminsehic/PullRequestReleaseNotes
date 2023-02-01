@@ -57,7 +57,12 @@ namespace PullRequestReleaseNotes.Publishers
                 Ancestors = new[] { new Ancestor() { Id = programArgs.ConfluenceReleaseParentPageId, Type = "page" } },
                 Body = new Body { Storage = BuildMarkdownBodyContent(markdown) }
             };
-            return PostConfluenceContent(programArgs, page).StatusCode == HttpStatusCode.OK;
+            var resp = PostConfluenceContent(programArgs, page);
+            if (resp.StatusCode != HttpStatusCode.OK)
+            {
+                Console.Error.WriteLine($"Failed to publish to confluence: {resp.Content}");
+            }
+            return resp.StatusCode == HttpStatusCode.OK;
         }
 
         private static bool UpdateConfluencePage(ProgramArgs programArgs, Content existingPage, string markdown)
