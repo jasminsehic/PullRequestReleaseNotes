@@ -221,7 +221,7 @@ namespace PullRequestReleaseNotes.Models
         /// Id for the space
         /// </summary>
         [DataMember(Name = "id")]
-        public string Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Test if this space is a personal space, this is true when the Key starts with a ~
